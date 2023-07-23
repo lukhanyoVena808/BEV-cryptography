@@ -1,5 +1,5 @@
 # Cryptography
-Building an Evoting System using Blockchain
+## Building an Evoting System using Blockchain
 
 The COVID19 pandemic has reignited a debate about the use of e-voting systems
 with detractors citing security concerns as the primary reason why they are against
