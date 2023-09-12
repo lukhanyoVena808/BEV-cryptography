@@ -39,10 +39,10 @@ App = {
     loader.show();
     content.hide();
   
-    // Load account data
+    // Load account data frist before showing process
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
-        App.account = account;
+        App.account = account;  //the account loaded
         $("#accountAddress").html("Your Account: " + account);
       }
     });
@@ -62,10 +62,10 @@ App = {
         electionInstance.candidates(i).then(function(candidate) {
           var id = candidate[0];
           var name = candidate[1];
-          var voteCount = candidate[2];
-  
+          var party = candidate[2];
+          var voteCount = candidate[3];
           // Render candidate Result
-          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
+          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td><td>" + voteCount + "</td></tr>"
           candidatesResults.append(candidateTemplate);
   
           // Render candidate ballot option
@@ -87,6 +87,19 @@ App = {
   },
 
   castVote: function() {
+    var candidateId = $('#candidatesSelect').val();
+    App.contracts.Election.deployed().then(function(instance) {
+      return instance.vote(candidateId, { from: App.account });
+    }).then(function(result) {
+      // Wait for votes to update
+      $("#content").hide();
+      $("#loader").show();
+    }).catch(function(err) {
+      console.error(err);
+    });
+  },
+
+  registerVoter: function() {
     var candidateId = $('#candidatesSelect').val();
     App.contracts.Election.deployed().then(function(instance) {
       return instance.vote(candidateId, { from: App.account });

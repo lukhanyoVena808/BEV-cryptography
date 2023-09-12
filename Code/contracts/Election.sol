@@ -1,13 +1,23 @@
-pragma solidity >=0.4.22 <0.8.0;
+pragma solidity >=0.5.0;
 
 contract Election { 
 
-   
+    struct voter {
+        uint personal_id; //their personal id
+        bool hasVoted; //have they voted
+        address public_Address; //public address to wallet
+        string email; //email address for communication
+        string name; //name of voter 
+        string surname; 
+        bool isRegistered;
+    }
+
 
      // Model a Candidate
     struct Candidate {
         uint id;
         string name;
+        string party;
         uint voteCount;
     }
 
@@ -21,15 +31,20 @@ contract Election {
     uint public candidatesCount;
 
     // Constructor
+    address public admin;
+
     constructor() public { 
-        addCandidate("Candidate 1"); 
-        addCandidate("Candidate 2");
+        admin = msg.sender;
+        addCandidate("Candidate 1", "EEF"); 
+        addCandidate("Candidate 2", "ABC");
+        addCandidate("Candidate 3", "BA");
     } 
 
        // Add a candidate
-    function addCandidate (string memory _name) private {
+    function addCandidate (string memory _name, string memory _party) private {
+        require(msg.sender == admin);
         candidatesCount ++;
-        candidates[candidatesCount] = Candidate(candidatesCount, _name, 0);
+        candidates[candidatesCount] = Candidate(candidatesCount, _name, _party, 0);
     }
 
     // voting function, all accounts can vote
