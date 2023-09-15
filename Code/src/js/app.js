@@ -71,8 +71,8 @@ App = {
       // Load contract data
       App.contracts.Election.deployed().then(function(instance) {
         electionInstance = instance;
-        // return electionInstance.candidatesCount();
-        return electionInstance.votersCount();
+        return electionInstance.candidatesCount();
+        // return electionInstance.votersCount();
       }).then(function(candidatesCount) {
         const candidatesResults = $("#candidatesResults");
         candidatesResults.empty();
