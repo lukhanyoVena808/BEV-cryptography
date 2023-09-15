@@ -1,4 +1,6 @@
+const express = require('express');
 App = {
+
   web3Provider: null,
   contracts: {},
   account: '0x0',
@@ -74,9 +76,9 @@ App = {
         });
       }
       return electionInstance.voters(App.account);
-    }).then(function(hasVoted) {
+    }).then(function(voter) {
       // Do not allow a user to vote
-      if(hasVoted) {
+      if(voter.hasVoted) {
         $('form').hide();
       }
       loader.hide();
@@ -99,22 +101,20 @@ App = {
     });
   },
 
-  registerVoter: function() {
-    var candidateId = $('#candidatesSelect').val();
-    App.contracts.Election.deployed().then(function(instance) {
-      return instance.vote(candidateId, { from: App.account });
-    }).then(function(result) {
-      // Wait for votes to update
-      $("#content").hide();
-      $("#loader").show();
-    }).catch(function(err) {
-      console.error(err);
-    });
+  registerVoter: function() {    
+   
+    var name = document.getElementById("name").value;
+    var surname = $("#surname-reg").val();
+    var person_id= $("#personID-reg").val();
+    var email = $("#email-reg").val();  
+
+  
+    
   }
 };
 
 $(function() {
   $(window).load(function() {
-    App.init();
+    App.init();   
   });
 });
