@@ -23,8 +23,7 @@ router.post('/register', urlencodedParser, function(req, res, next) {
             const email_address= req.body.email;
             const personID= req.body.personID;
             const msg ="You are successfully registered!";    
-            res.render('register',{
-            alertMsg:msg});
+            res.render('register');
             
 });
 

@@ -117,8 +117,9 @@ App = {
     if (name != '' && email != ''  && person_id !='' && surname != '') {
       if (result > 10){ 
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
-          $("name") = '';
+          
           alert("Registered. You can now go and vote!.");
+          render('');
           return true;
         } else {
           alert("Invalid Email Address...!!!");
@@ -133,7 +134,6 @@ App = {
       alert("All fields are required.....!");
       return false;
       }
-  
     
   }
 };
@@ -141,6 +141,5 @@ App = {
 $(function() {
   $(window).load(function() {
     App.init();   
-    App.registerVoter();
   });
 });

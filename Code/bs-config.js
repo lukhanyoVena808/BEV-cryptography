@@ -12,8 +12,8 @@ app.use('/img', express.static(__dirname +'src/images'))
 
 
 //Setting Routes
-// const registrationRouter = require('./routes/registeration');
-// app.use('/', registrationRouter);
+const registrationRouter = require('./routes/registeration');
+app.use('/', registrationRouter);
 
 
 //set Views
@@ -55,40 +55,25 @@ app.use(session({
 }))
 
 
-
-
-// module.exports = {
-//   "server": {
-//     "baseDir": ["./src", "./build/contracts"],
-//     "routes": {
-//       "/node_modules": "node_modules"
-//     },
-//     middleware: {
-//       1: app,
-//   },
-// },
-// port:port,
-// };
-
-// module.exports = {
-//   "server": {
-//     "baseDir": ["./src", "./build/contracts"],
-//     "routes": {
-//       "/node_modules": "node_modules"
-//     },
-//     middleware: {
-//       1: app,
-//   },
-// },
-// port:port,
-// };
-
 module.exports = {
   "server": {
     "baseDir": ["./src", "./build/contracts"],
+    "routes": {
+      "/node_modules": "node_modules"
+    },
     middleware: {
       1: app,
   },
 },
 port:port,
 };
+
+// module.exports = {
+//   "server": {
+//     "baseDir": ["./src", "./build/contracts"],
+//     middleware: {
+//       1: app,
+//   },
+// },
+// port:port,
+// };
