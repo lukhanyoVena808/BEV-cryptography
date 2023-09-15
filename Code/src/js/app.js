@@ -71,7 +71,8 @@ App = {
       // Load contract data
       App.contracts.Election.deployed().then(function(instance) {
         electionInstance = instance;
-        return electionInstance.candidatesCount();
+        // return electionInstance.candidatesCount();
+        return electionInstance.votersCount();
       }).then(function(candidatesCount) {
         const candidatesResults = $("#candidatesResults");
         candidatesResults.empty();
@@ -94,10 +95,13 @@ App = {
             candidatesSelect.append(candidateOption);
           });
         }
+     
         return electionInstance.voters(App.account);
       }).then(function(voter) {
         // Do not allow a user to vote
-        if(!voter.isRegistered) {
+
+    
+        if(voter.hasVoted) {
           regSMS.show();
           myform.hide();
         }else{
@@ -125,7 +129,8 @@ App = {
   },
 
   registerVoter: function() {    
-    const name =  $("name").val();
+    var electionInstance;
+    const name =  $("#name-reg").val();
     const surname = $("#surname-reg").val();
     const person_id= $("#personID-reg").val();
     const result = person_id?.length || 0;
@@ -135,19 +140,17 @@ App = {
     // Conditions
     if (name != '' && email != ''  && person_id !='' && surname != '') {
       if (result > 10){ 
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
-          App.contracts.Contest.deployed().then(function(instance){
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){             
+          App.contracts.Election.deployed().then(function(instance){
             return instance.addVoter(person_id, email, name, surname, { from: App.account });
             }).then(function(result){
-              alert(result);
-              if (result){
-                alert("Registered. You can now go and vote!.");
-              }
-              return result;
-
+              
             }).catch(function(err){
               console.error(err);
+              
             })
+
+          alert("Your have been registered!");
 
         } else {
           alert("Invalid Email Address...!!!");

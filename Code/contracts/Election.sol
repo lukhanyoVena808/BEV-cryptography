@@ -10,6 +10,7 @@ contract Election {
         string name; //name of voter 
         string surname; 
         bool isRegistered;
+        uint voterPosition;
     }
 
 
@@ -27,8 +28,14 @@ contract Election {
     // Store accounts that have voted
     mapping(address => voter) public voters;
 
+        // Store accounts that have voted
+    mapping(uint => address) public positions;
+
     // Store Candidates Count
     uint public candidatesCount;
+
+    // Store Candidates Count
+    uint public votersCount;
 
     // Constructor
     address public admin;
@@ -43,33 +50,39 @@ contract Election {
 
        // Add a candidate
     function addCandidate (string memory _name, string memory _party) private {
-        require(msg.sender == admin);
+        require(msg.sender == admin, "Only Admin can add a candidate");
         candidatesCount ++;
         candidates[candidatesCount] = Candidate(candidatesCount, _name, _party, 0);
     }
 
           // Add a candidate
-    function addVoter (string memory _personal_id, string memory _email, string memory _name, string memory _surname) public returns (bool result) {
+    function addVoter (string memory _personal_id, string memory _email, string memory _name, string memory _surname) public {
             address _pAdress = msg.sender; 
-            voters[_pAdress] = voter(_personal_id, false, _pAdress, _email, _name,  _surname, true);
-            if (voters[_pAdress].isRegistered){ result = true;}
-            else{ result = false;}
-            return result;        
-        
+            voter storage user = voters[_pAdress];
+            require(!user.isRegistered); //require that the user is not registered
+            votersCount ++;
+            voters[_pAdress] = voter( {personal_id: _personal_id, 
+                            hasVoted:false, 
+                            public_Address:_pAdress,
+                            email: _email, 
+                            name:_name, 
+                            surname: _surname, 
+                            isRegistered:true,
+                            voterPosition: votersCount
+                    });
+            positions[votersCount] = _pAdress;
     }
 
-    function isRegistered () public view returns (bool) {
-        return voters[msg.sender].isRegistered;
-    }
+
 
     // voting function, all accounts can vote
     function vote (uint _candidateId) public {
 
         //must be registered to vote
-        require(voters[msg.sender].isRegistered);
+        require(voters[msg.sender].isRegistered, "Only registered users can vote");
 
         // require that they haven't voted before
-        require(!voters[msg.sender].hasVoted); 
+        require(!voters[msg.sender].hasVoted, "Already Voted"); 
         
 
         // require a valid candidate
