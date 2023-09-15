@@ -117,7 +117,8 @@ App = {
     if (name != '' && email != ''  && person_id !='' && surname != '') {
       if (result > 10){ 
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
-          alert("All type of validation has done on OnSubmit event.");
+          $("name") = '';
+          alert("Registered. You can now go and vote!.");
           return true;
         } else {
           alert("Invalid Email Address...!!!");
