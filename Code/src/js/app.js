@@ -9,16 +9,32 @@ App = {
     return App.initWeb3();
   },
 
-  initWeb3: function() {
-    if (typeof web3 !== 'undefined') {
-      // If a web3 instance is already provided by Meta Mask.
-      App.web3Provider = web3.currentProvider;
-      web3 = new Web3(web3.currentProvider);
-    } else {
-      // Specify default instance if no web3 instance provided
-      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
-      web3 = new Web3(App.web3Provider);
+  initWeb3: async function() {
+  
+    if (window.ethereum) {
+      App.web3Provider = window.ethereum;
+      try {
+        // Request account access
+        // const accounts = await window.ethereum.request('eth_requestAccounts');
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+      });
+      // console.log(accounts) ;
+        
+      } catch (error) {
+        // User denied account access...
+        console.error("User denied account access")
+      }
     }
+    // Legacy dapp browsers...
+    else if (window.web3) {
+      App.web3Provider = window.web3.currentProvider;
+    }
+    // If no injected web3 instance is detected, fall back to Ganache
+    else {
+      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+    }
+    web3 = new Web3(App.web3Provider);
     return App.initContract();
   },
 
@@ -37,9 +53,12 @@ App = {
     var electionInstance;
     const loader = $("#loader");
     const content = $("#content");
+    const regSMS = $("#isREg");
+    const myform = $("#myVote");
   
     loader.show();
     content.hide();
+    regSMS.hide();
   
     // Load account data frist before showing process
     web3.eth.getCoinbase(function(err, account) {
@@ -49,43 +68,47 @@ App = {
       }
     });
   
-    // Load contract data
-    App.contracts.Election.deployed().then(function(instance) {
-      electionInstance = instance;
-      return electionInstance.candidatesCount();
-    }).then(function(candidatesCount) {
-      const candidatesResults = $("#candidatesResults");
-      candidatesResults.empty();
-  
-      const candidatesSelect = $('#candidatesSelect');
-      candidatesSelect.empty();
-  
-      for (const i = 1; i <= candidatesCount; i++) {
-        electionInstance.candidates(i).then(function(candidate) {
-          const id = candidate[0];
-          const name = candidate[1];
-          const party = candidate[2];
-          const voteCount = candidate[3];
-          // Render candidate Result
-          const candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td><td>" + voteCount + "</td></tr>"
-          candidatesResults.append(candidateTemplate);
-  
-          // Render candidate ballot option
-          const candidateOption = "<option value='" + id + "' >" + name + "</ option>"
-          candidatesSelect.append(candidateOption);
-        });
-      }
-      return electionInstance.voters(App.account);
-    }).then(function(voter) {
-      // Do not allow a user to vote
-      if(voter.hasVoted) {
-        $('form').hide();
-      }
-      loader.hide();
-      content.show();
-    }).catch(function(error) {
-      console.warn(error);
-    });
+      // Load contract data
+      App.contracts.Election.deployed().then(function(instance) {
+        electionInstance = instance;
+        return electionInstance.candidatesCount();
+      }).then(function(candidatesCount) {
+        const candidatesResults = $("#candidatesResults");
+        candidatesResults.empty();
+    
+        const candidatesSelect = $('#candidatesSelect');
+        candidatesSelect.empty();
+    
+        for (let i= 1; i <= candidatesCount; i++) {
+          electionInstance.candidates(i).then(function(candidate) {
+            const id = candidate[0];
+            const name = candidate[1];
+            const party = candidate[2];
+            const voteCount = candidate[3];
+            // Render candidate Result
+            const candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td><td>" + voteCount + "</td></tr>"
+            candidatesResults.append(candidateTemplate);
+    
+            // Render candidate ballot option
+            const candidateOption = "<option value='" + id + "' >" + name + "</ option>"
+            candidatesSelect.append(candidateOption);
+          });
+        }
+        return electionInstance.voters(App.account);
+      }).then(function(voter) {
+        // Do not allow a user to vote
+        if(!voter.isRegistered) {
+          regSMS.show();
+          myform.hide();
+        }else{
+          regSMS.show();
+        }
+        loader.hide();
+        content.show();
+        
+      }).catch(function(error) {
+        console.warn(error);
+      });
   },
 
   castVote: function() {
@@ -102,25 +125,30 @@ App = {
   },
 
   registerVoter: function() {    
-   
     const name =  $("name").val();
     const surname = $("#surname-reg").val();
     const person_id= $("#personID-reg").val();
     const result = person_id?.length || 0;
     const email = $("#email-reg").val();  
 
-    // Regular Expression For Email
-    // const emailReg = /^([w-.]+@([w-]+.)+[w-]{2,4})?$/;
-    // email.match(emailReg)
-    
+
     // Conditions
     if (name != '' && email != ''  && person_id !='' && surname != '') {
       if (result > 10){ 
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
-          
-          alert("Registered. You can now go and vote!.");
-          render('');
-          return true;
+          App.contracts.Contest.deployed().then(function(instance){
+            return instance.addVoter(person_id, email, name, surname, { from: App.account });
+            }).then(function(result){
+              alert(result);
+              if (result){
+                alert("Registered. You can now go and vote!.");
+              }
+              return result;
+
+            }).catch(function(err){
+              console.error(err);
+            })
+
         } else {
           alert("Invalid Email Address...!!!");
           return false;

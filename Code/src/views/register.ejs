@@ -55,15 +55,15 @@
 
                             </div>
                    
-                        <form onsubmit="return App.registerVoter();" method="post" action="register">
+                        <form onsubmit="return App.registerVoter();" method="post" action="register" >
                             <div class="mb-3">
                                 <label for="name-reg" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name-reg" name="name">                        
+                                <input type="text" class="form-control" id="name-reg" name="name" autocomplete="given-name" >                        
                             </div>
 
                             <div class="mb-3">
                                 <label for="surname-reg" class="form-label">Surname</label>
-                                <input type="text" class="form-control" id="surname-reg" name="surname">                        
+                                <input type="text" class="form-control" id="surname-reg" name="surname" autocomplete="family-name" >                        
                             </div>
 
                             <div class="mb-3">
@@ -73,7 +73,7 @@
 
                             <div class="mb-3">
                                 <label for="email-reg" class="form-label">Email</label>
-                                <input type="text" class="form-control" id="email-reg" name="email"> 
+                                <input type="text" class="form-control" id="email-reg" name="email" autocomplete=off> 
 
                             </div>
 

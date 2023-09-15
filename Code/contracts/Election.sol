@@ -49,10 +49,17 @@ contract Election {
     }
 
           // Add a candidate
-    function addVoter (string memory _personal_id, string memory _email, string memory _name, string memory _surname, address _pAdress) public {
-    
-        voters[_pAdress] = voter(_personal_id, false, _pAdress, _email, _name,  _surname, true);
+    function addVoter (string memory _personal_id, string memory _email, string memory _name, string memory _surname) public returns (bool result) {
+            address _pAdress = msg.sender; 
+            voters[_pAdress] = voter(_personal_id, false, _pAdress, _email, _name,  _surname, true);
+            if (voters[_pAdress].isRegistered){ result = true;}
+            else{ result = false;}
+            return result;        
         
+    }
+
+    function isRegistered () public view returns (bool) {
+        return voters[msg.sender].isRegistered;
     }
 
     // voting function, all accounts can vote

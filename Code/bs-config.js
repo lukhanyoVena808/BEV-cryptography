@@ -33,7 +33,6 @@ app.get('/register', (req, res) => {
 })
 
 
-
 //listen on port
 app.listen(port, ()=> console.info('listening on port ${port}'))
 
@@ -41,12 +40,9 @@ app.listen(port, ()=> console.info('listening on port ${port}'))
 //session
 app.use(express.urlencoded());
 const session = require('express-session');
-// var bodyParser = require('body-parser'); 
-// app.use(bodyParser.urlencoded({extended: true}));
-// app.use(bodyParser.json());
+
 
 // web-portion --------------------------------->
-// const randomSecret = Math.floor(Math.random() * (100 - 0 + 1)) + 0;
 app.use(session({ 
     secret: '@wild**blockchain__init%evote!!#system#',
     resave: false,
@@ -67,13 +63,3 @@ module.exports = {
 },
 port:port,
 };
-
-// module.exports = {
-//   "server": {
-//     "baseDir": ["./src", "./build/contracts"],
-//     middleware: {
-//       1: app,
-//   },
-// },
-// port:port,
-// };

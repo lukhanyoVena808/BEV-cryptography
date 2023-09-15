@@ -47,6 +47,9 @@
           <div id="loader">
             <p class="text-center">Load Your E-Wallet to vote...</p>
           </div>
+          <div id="isREg">
+            <p class="text-center">Please go and register to vote.</p>
+          </div>
           <div id="content" style="display: none;">
             <table class="table">
               <thead>
@@ -60,8 +63,8 @@
               <tbody id="candidatesResults">
               </tbody>
             </table>
-
-            <form onSubmit="App.castVote(); return false;">
+       
+            <form onSubmit="App.castVote(); return false;"  id="myVote">
               <div class="form-group">
                 <label for="candidatesSelect">Select Candidate</label>
                 <select class="form-control" id="candidatesSelect">
@@ -70,7 +73,7 @@
               <button type="submit" class="btn btn-primary">Vote</button>
               <hr />
             </form>
-            
+         
             <hr/>
             <p id="accountAddress" class="text-center"></p>
           </div>
