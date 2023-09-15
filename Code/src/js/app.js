@@ -108,6 +108,27 @@ App = {
     var person_id= $("#personID-reg").val();
     var email = $("#email-reg").val();  
 
+    // Regular Expression For Email
+    var emailReg = /^([w-.]+@([w-]+.)+[w-]{2,4})?$/;
+    // Conditions
+    if (name != '' && email != '' && contact != '' && person_id !='' && surname != '') {
+      if (person_id.length > 10){ 
+        if  (email.match(emailReg)) {
+          alert("All type of validation has done on OnSubmit event.");
+          return true;
+        } else {
+          alert("Invalid Email Address...!!!");
+          return false;
+          }
+
+    } else {
+        alert("The Indentification No. must be at least 10 digit long!");
+        return false;
+      }
+  } else {
+      alert("All fields are required.....!");
+      return false;
+      }
   
     
   }
