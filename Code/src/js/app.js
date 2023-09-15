@@ -1,4 +1,4 @@
-const express = require('express');
+
 App = {
 
   web3Provider: null,
@@ -35,8 +35,8 @@ App = {
 
   render: function() {
     var electionInstance;
-    var loader = $("#loader");
-    var content = $("#content");
+    const loader = $("#loader");
+    const content = $("#content");
   
     loader.show();
     content.hide();
@@ -54,24 +54,24 @@ App = {
       electionInstance = instance;
       return electionInstance.candidatesCount();
     }).then(function(candidatesCount) {
-      var candidatesResults = $("#candidatesResults");
+      const candidatesResults = $("#candidatesResults");
       candidatesResults.empty();
   
-      var candidatesSelect = $('#candidatesSelect');
+      const candidatesSelect = $('#candidatesSelect');
       candidatesSelect.empty();
   
-      for (var i = 1; i <= candidatesCount; i++) {
+      for (const i = 1; i <= candidatesCount; i++) {
         electionInstance.candidates(i).then(function(candidate) {
-          var id = candidate[0];
-          var name = candidate[1];
-          var party = candidate[2];
-          var voteCount = candidate[3];
+          const id = candidate[0];
+          const name = candidate[1];
+          const party = candidate[2];
+          const voteCount = candidate[3];
           // Render candidate Result
-          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td><td>" + voteCount + "</td></tr>"
+          const candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td><td>" + voteCount + "</td></tr>"
           candidatesResults.append(candidateTemplate);
   
           // Render candidate ballot option
-          var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
+          const candidateOption = "<option value='" + id + "' >" + name + "</ option>"
           candidatesSelect.append(candidateOption);
         });
       }
@@ -89,7 +89,7 @@ App = {
   },
 
   castVote: function() {
-    var candidateId = $('#candidatesSelect').val();
+    const candidateId = $('#candidatesSelect').val();
     App.contracts.Election.deployed().then(function(instance) {
       return instance.vote(candidateId, { from: App.account });
     }).then(function(result) {
@@ -103,17 +103,20 @@ App = {
 
   registerVoter: function() {    
    
-    var name = document.getElementById("name").value;
-    var surname = $("#surname-reg").val();
-    var person_id= $("#personID-reg").val();
-    var email = $("#email-reg").val();  
+    const name =  $("name").val();
+    const surname = $("#surname-reg").val();
+    const person_id= $("#personID-reg").val();
+    const result = person_id?.length || 0;
+    const email = $("#email-reg").val();  
 
     // Regular Expression For Email
-    var emailReg = /^([w-.]+@([w-]+.)+[w-]{2,4})?$/;
+    // const emailReg = /^([w-.]+@([w-]+.)+[w-]{2,4})?$/;
+    // email.match(emailReg)
+    
     // Conditions
-    if (name != '' && email != '' && contact != '' && person_id !='' && surname != '') {
-      if (person_id.length > 10){ 
-        if  (email.match(emailReg)) {
+    if (name != '' && email != ''  && person_id !='' && surname != '') {
+      if (result > 10){ 
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
           alert("All type of validation has done on OnSubmit event.");
           return true;
         } else {
@@ -137,5 +140,6 @@ App = {
 $(function() {
   $(window).load(function() {
     App.init();   
+    App.registerVoter();
   });
 });

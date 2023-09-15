@@ -12,8 +12,8 @@ app.use('/img', express.static(__dirname +'src/images'))
 
 
 //Setting Routes
-const registrationRouter = require('./routes/registeration');
-app.use('/', registrationRouter);
+// const registrationRouter = require('./routes/registeration');
+// app.use('/', registrationRouter);
 
 
 //set Views
@@ -40,7 +40,7 @@ app.listen(port, ()=> console.info('listening on port ${port}'))
 
 //session
 app.use(express.urlencoded());
-var session = require('express-session');
+const session = require('express-session');
 // var bodyParser = require('body-parser'); 
 // app.use(bodyParser.urlencoded({extended: true}));
 // app.use(bodyParser.json());
@@ -70,12 +70,22 @@ app.use(session({
 // port:port,
 // };
 
+// module.exports = {
+//   "server": {
+//     "baseDir": ["./src", "./build/contracts"],
+//     "routes": {
+//       "/node_modules": "node_modules"
+//     },
+//     middleware: {
+//       1: app,
+//   },
+// },
+// port:port,
+// };
+
 module.exports = {
   "server": {
     "baseDir": ["./src", "./build/contracts"],
-    "routes": {
-      "/node_modules": "node_modules"
-    },
     middleware: {
       1: app,
   },
