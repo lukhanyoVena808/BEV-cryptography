@@ -77,11 +77,6 @@ App = {
       // Load contract data
       App.contracts.Election.deployed().then(function(instance) {
         electionInstance = instance;
-      //   return electionInstance.getTime();
-      // }).then(function(the_durations){
-      //   console.log(parseInt(the_durations, 16))
-      //   const timer = $('setTimer');
-      //   timer.text("Remaining Time: "+  the_durations);
         return electionInstance.candidatesCount();
       }).then(function(candidatesCount) {
         const candidatesResults = $("#candidatesResults");
@@ -132,9 +127,6 @@ App = {
     App.contracts.Election.deployed().then(function(instance) {
       return instance.vote(candidateId, { from: App.account });
     }).then(function(result) {
-      // Wait for votes to update
-      // $("#content").hide();
-      // $("#loader").show();
       return App.render();
     }).catch(function(err) {
       console.error(err);
@@ -142,7 +134,6 @@ App = {
   },
 
   registerVoter:  function() {    
-    var electionInstance;
     const name =  $("#name-reg").val().replace(/[^a-zA-Z0-9 ]/g, '');
     const surname = $("#surname-reg").val().replace(/[^a-zA-Z0-9 ]/g, '');
     const person_id= $("#personID-reg").val();
@@ -158,14 +149,10 @@ App = {
             return instance.addVoter(person_id, email, name, surname, { from: App.account });
             }).then(function(result){        
               voted = true;
-
+              alert("Your have been registered!");
             }).catch(function(err){
               console.error(err);
             })
-
-            if(voted){
-              alert("Your have been registered!");
-            }
 
         } else {
           alert("Invalid Email Address...!!!");
@@ -181,6 +168,23 @@ App = {
       return false;
       }
     
+  },
+
+  getRemainingTime: function() {
+    App.contracts.Election.deployed().then(function(instance) {
+      electionInstance = instance;
+        return electionInstance.getTime();
+      }).then(function(the_durations){
+        console.log(parseInt(the_durations, 16))
+        const timer = $('setTimer');
+        timer.text("Remaining Time: "+  the_durations);
+      })
+    
+  },
+
+  //admin signs in 
+  admin_Signs_In: function(){
+
   },
 
 

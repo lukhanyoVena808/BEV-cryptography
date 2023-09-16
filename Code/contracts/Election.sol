@@ -34,6 +34,9 @@ contract Election {
     // Store Candidates Count
     uint public candidatesCount;
 
+    // Stores Election phase
+    string public phase;
+
     // Store Candidates Count
     uint public votersCount;
 
@@ -49,10 +52,21 @@ contract Election {
         addCandidate("Candidate 2", "ABC");
         addCandidate("Candidate 3", "BA");
         addCandidate("Candidate 4", "NFP");
+        phase = "registration"; //contract is deployed in the registration phase
+        startTime();
+    } 
 
+    //start time of phase
+    function startTime() onlyAdmin internal {
         votingStart = block.timestamp;
         votingEnd = block.timestamp + (90 * 1 minutes); 
-    } 
+    }
+    
+    //change pahse of election
+    function changePhase(string memory _phase) onlyAdmin public {
+        phase = _phase;
+    }
+
 
     modifier onlyAdmin(){
 		require(msg.sender==admin, "Only Admin can perform this function");
@@ -96,7 +110,6 @@ contract Election {
     function has_Voted() public view returns (bool){
         return voters[msg.sender].hasVoted;
     }
-
 
     // voting function, all accounts can vote
     function vote (uint _candidateId) public {
