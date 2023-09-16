@@ -40,12 +40,18 @@ contract Election {
     // Admin is set once, when contract is deployed. Also saves gas fees
     address public admin;
 
+    uint256 public votingStart;
+    uint256 public votingEnd;
+
     constructor() public { 
         admin = msg.sender;
         addCandidate("Candidate 1", "EEF"); 
         addCandidate("Candidate 2", "ABC");
         addCandidate("Candidate 3", "BA");
         addCandidate("Candidate 4", "NFP");
+
+        votingStart = block.timestamp;
+        votingEnd = block.timestamp + (90 * 1 minutes); 
     } 
 
     modifier onlyAdmin(){
@@ -92,7 +98,6 @@ contract Election {
     }
 
 
-
     // voting function, all accounts can vote
     function vote (uint _candidateId) public {
 
@@ -119,6 +124,14 @@ contract Election {
     //hash function
     function keccak256_encrypt(string memory text) public pure returns (bytes32) {
         return keccak256(abi.encode(text));
+    }
+
+    function getTime() public view returns(uint256){
+        require(block.timestamp >= votingStart && block.timestamp < votingEnd, "Voting not in Progress");
+        if (block.timestamp >= votingEnd){
+            return 0;
+        }
+        return votingEnd - block.timestamp;
     }
 
     //<----------------------------------- Verifies signed message -------------------------------->

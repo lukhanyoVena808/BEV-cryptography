@@ -1,10 +1,11 @@
-
+const lk = 0;
 App = {
 
   web3Provider: null,
   contracts: {},
   account: '0x0',
   voted: null,
+  
 
   init: function() {
     return App.initWeb3();
@@ -40,6 +41,7 @@ App = {
   },
 
   initContract: function() {
+    
     $.getJSON("Election.json", function(election) {
       // Instantiate a new truffle contract from the artifact
       App.contracts.Election = TruffleContract(election);
@@ -60,7 +62,10 @@ App = {
     loader.show();
     content.hide();
     regSMS.hide();
+
+   
   
+
     // Load account data frist before showing process
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
@@ -72,8 +77,12 @@ App = {
       // Load contract data
       App.contracts.Election.deployed().then(function(instance) {
         electionInstance = instance;
+      //   return electionInstance.getTime();
+      // }).then(function(the_durations){
+      //   console.log(parseInt(the_durations, 16))
+      //   const timer = $('setTimer');
+      //   timer.text("Remaining Time: "+  the_durations);
         return electionInstance.candidatesCount();
-        // return electionInstance.votersCount();
       }).then(function(candidatesCount) {
         const candidatesResults = $("#candidatesResults");
         candidatesResults.empty();
@@ -100,9 +109,9 @@ App = {
         return electionInstance.isVoter_Registered({from: App.account});
       }).then(function(next) {
         // Do not allow a user to vote
-          
           if(!next) { 
             regSMS.show();
+            myform.hide();
           }
           loader.hide();
           return electionInstance.has_Voted({from: App.account});
@@ -111,9 +120,7 @@ App = {
         if(next2) { 
           myform.hide();
         }
-       
         content.show();
-
       }
       ).catch(function(error) {
         console.warn(error);
@@ -126,14 +133,15 @@ App = {
       return instance.vote(candidateId, { from: App.account });
     }).then(function(result) {
       // Wait for votes to update
-      $("#content").hide();
-      $("#loader").show();
+      // $("#content").hide();
+      // $("#loader").show();
+      return App.render();
     }).catch(function(err) {
       console.error(err);
     });
   },
 
-  registerVoter: function() {    
+  registerVoter:  function() {    
     var electionInstance;
     const name =  $("#name-reg").val().replace(/[^a-zA-Z0-9 ]/g, '');
     const surname = $("#surname-reg").val().replace(/[^a-zA-Z0-9 ]/g, '');
@@ -141,9 +149,6 @@ App = {
     const result = person_id.replace(/[^a-zA-Z0-9 ]/g, '')?.length || 0;
     const result2 = person_id?.length || 0;
     const email = $("#email-reg").val();  
-    // const keccak256 = require('keccak256');
-    // const theHash = keccak256('Registration 2023').toString('hex'); //hashed message to signed
-
 
     // Conditions
     if (name != '' && email != ''  && person_id !='' && surname != '') {
@@ -151,28 +156,16 @@ App = {
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){             
           App.contracts.Election.deployed().then(function(instance){
             return instance.addVoter(person_id, email, name, surname, { from: App.account });
-            }).then(function(result){
-              //sign
-              // const signedData = window.ethereum?.request({
-              //   method: "personal_sign",
-              //   params: [
-              //     theHash,
-              //     //await ethereum?.request({method: "eth_requestAccounts"})[0]
-              //     App.account,
-              //   ],
-              // }).then((result) =>{
-              //   console.log(result)
-              // });
+            }).then(function(result){        
               voted = true;
 
-              alert("Your have been registered!");
-              
             }).catch(function(err){
               console.error(err);
-              
             })
 
-          
+            if(voted){
+              alert("Your have been registered!");
+            }
 
         } else {
           alert("Invalid Email Address...!!!");
@@ -188,7 +181,9 @@ App = {
       return false;
       }
     
-  }
+  },
+
+
 };
 
 $(function() {
@@ -198,4 +193,5 @@ $(function() {
 });
 
 
-// to sign message ethereum.request({method: "personal_sign", param: [account, hashedMessage]}) -> return promise with PromiseResult (signature). The we call verify (address of Signer, string message, PromiseResult (signature)). The return is a boolean
+// to sign message ethereum.request({method: "personal_sign", param: [account, hashedMessage]}) -> return promise with PromiseResult (signature). The we call verify (address of Signer, string message, PromiseResult (signature)). The return is a boolean.
+// Use signature verifier, when Admin adds candidates, add voters, and changes phase.

@@ -13,7 +13,10 @@ app.use('/img', express.static(__dirname +'src/images'))
 
 //Setting Routes
 const registrationRouter = require('./routes/registeration');
+const votingRouter = require('./routes/voting');
 app.use('/', registrationRouter);
+app.use('/', votingRouter);
+
 
 
 //set Views

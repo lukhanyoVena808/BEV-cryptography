@@ -51,6 +51,9 @@
             <p class="text-center">Please go and register to vote.</p>
           </div>
           <div id="content" style="display: none;">
+            <div class="text-center" >
+              <p class="text-center" id="timer2"></p>
+            </div>
             <table class="table">
               <thead>
                 <tr>
@@ -64,7 +67,7 @@
               </tbody>
             </table>
        
-            <form onSubmit="App.castVote(); return false;"  id="myVote">
+            <form onSubmit="App.castVote(); return false;"  id="myVote" method="post" action="vote">
               <div class="form-group">
                 <label for="candidatesSelect">Select Candidate</label>
                 <select class="form-control" id="candidatesSelect">
