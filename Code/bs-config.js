@@ -15,9 +15,12 @@ app.use('/img', express.static(__dirname +'src/images'))
 const registrationRouter = require('./routes/registeration');
 const votingRouter = require('./routes/voting');
 const adminLogin = require('./routes/adminLog');
+const adminView= require('./routes/adminView');
 app.use('/', registrationRouter);
 app.use('/', votingRouter);
 app.use('/', adminLogin);
+app.use('/', adminView);
+
 
 
 
@@ -42,6 +45,9 @@ app.get('/admin', (req, res) => {
   res.render("adminLogin");
 })
 
+app.get('/adminOverView', (req, res) => {
+  res.render("adminOverView");
+})
 
 
 //listen on port

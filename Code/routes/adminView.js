@@ -12,17 +12,14 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false});
 app.use('/css',express.static(__dirname + 'src/css'))
 
 // Render form
-router.get('/vote', function(req, res, next) {
-  setTimeout(function() {
-    res.render('vote');
-}, 500); 
+router.get('/adminOverView', function(req, res, next) {
+  res.render('adminOverView');
 });
 
 // Retrieve User input
-router.post('/vote', urlencodedParser, function(req, res, next) {    
-            setTimeout(function() {
-              res.render('\\');
-          }, 500);  
+router.post('/adminOverView', urlencodedParser, function(req, res, next) {      
+            res.render('adminOverView');
+            
 });
 
 module.exports = router;

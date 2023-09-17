@@ -41,7 +41,7 @@ contract Election {
     uint public votersCount;
 
     // Admin is set once, when contract is deployed. Also saves gas fees
-    address public admin;
+    address private admin;
 
     uint256 public votingStart;
     uint256 public votingEnd;
@@ -148,10 +148,10 @@ contract Election {
     }
 
     //<----------------------------------- Verifies signed message -------------------------------->
-    function verify (string memory _message, bytes memory _sig) onlyAdmin public view returns (bool) {
+    function verify (string memory _message, bytes memory _sig) public view returns (bool) {
         bytes32 hash_SMS = getHash(_message);
         bytes32 ethSignedMessageHash = getEthSignedHash(hash_SMS);
-        return recover(ethSignedMessageHash, _sig) == msg.sender;
+        return recover(ethSignedMessageHash, _sig) == admin;
     }
     
     //has a tring
@@ -168,7 +168,7 @@ contract Election {
     //recover account of original signer of message
     function recover(bytes32 _ethSignedMessageHash, bytes memory _sig) public pure returns (address){
             (bytes32 r, bytes32 s, uint8 v) = _split(_sig); //split signature into params
-            return ecrecover(_ethSignedMessageHash, v, r,s); //returns the address of the signer given the signed message
+            return ecrecover(_ethSignedMessageHash, v, r, s); //returns the address of the signer given the signed message
     }
 
     function _split(bytes memory _sig) internal pure returns (bytes32 r, bytes32 s, uint8 v){

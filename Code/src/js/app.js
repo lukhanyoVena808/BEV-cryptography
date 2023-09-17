@@ -168,43 +168,40 @@ App = {
 
   getRemainingTime: function() {
     App.contracts.Election.deployed().then(function(instance) {
-      electionInstance = instance;
+      const electionInstance = instance;
         return electionInstance.getTime();
       }).then(function(the_durations){
         console.log(parseInt(the_durations, 16))
         const timer = $('setTimer');
         timer.text("Remaining Time: "+  the_durations);
+      }).catch(function(err){
+        console.error(err);
       })
     
   },
 
   //admin signs in 
   admin_Signs_In: function(){
-  
 
-    try {    
-    
-      const clean_message = "elections2023_nationWideSA";
-      // const hashed_message = web3._extend.utils.toHex(clean_message);
-      // console.log(web3.eth.accounts[0]) web3._extend.utils.toHex(
-  
-      web3.eth.sign(App.account, web3.sha3(clean_message),function(err, result){
+    //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
 
-        }).then(console.log);
-   
-    //   App.contracts.Election.deployed().then(function(instance) {
-    //   return instance.verify("elections2023_nationWideSA", hashed_message, { from: App.account });
-    // }).then(function(result) {
-    //   if(result){
-    //     alert("Sign In!");
-    //   }
-    //   else{
-    //     alert("Error might have occurred");
-    //   }
-      
-    //   }).catch(function(err) {
-    //     console.error(err);
-    //   });
+    try {      
+      ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
+        
+        App.contracts.Election.deployed().then(function(instance) {
+            return instance.verify("elections2023_nationWideSA", result, { from: App.account });
+          }).then(function(result2) {
+            if(result2){  //signature valid 
+              alert("Signed In!");
+            }
+            else{
+              alert("Site restricted to Admin only.");
+            }
+            
+            }).catch(function(err){
+              console.error(err);
+            })
+      });
       
     } catch (error) {
         console.warn(error);
