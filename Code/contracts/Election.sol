@@ -148,11 +148,10 @@ contract Election {
     }
 
     //<----------------------------------- Verifies signed message -------------------------------->
-    function verify (address _signer, string memory _message, bytes memory _sig) public pure returns (bool) {
+    function verify (string memory _message, bytes memory _sig) onlyAdmin public view returns (bool) {
         bytes32 hash_SMS = getHash(_message);
         bytes32 ethSignedMessageHash = getEthSignedHash(hash_SMS);
-        return recover(ethSignedMessageHash, _sig) == _signer;
-
+        return recover(ethSignedMessageHash, _sig) == msg.sender;
     }
     
     //has a tring

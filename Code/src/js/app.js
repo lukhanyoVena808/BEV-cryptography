@@ -58,13 +58,9 @@ App = {
     const content = $("#content");
     const regSMS = $("#isREg");
     const myform = $("#myVote");
-  
     loader.show();
     content.hide();
     regSMS.hide();
-
-   
-  
 
     // Load account data frist before showing process
     web3.eth.getCoinbase(function(err, account) {
@@ -184,6 +180,35 @@ App = {
 
   //admin signs in 
   admin_Signs_In: function(){
+  
+
+    try {    
+    
+      const clean_message = "elections2023_nationWideSA";
+      // const hashed_message = web3._extend.utils.toHex(clean_message);
+      // console.log(web3.eth.accounts[0]) web3._extend.utils.toHex(
+  
+      web3.eth.sign(App.account, web3.sha3(clean_message),function(err, result){
+
+        }).then(console.log);
+   
+    //   App.contracts.Election.deployed().then(function(instance) {
+    //   return instance.verify("elections2023_nationWideSA", hashed_message, { from: App.account });
+    // }).then(function(result) {
+    //   if(result){
+    //     alert("Sign In!");
+    //   }
+    //   else{
+    //     alert("Error might have occurred");
+    //   }
+      
+    //   }).catch(function(err) {
+    //     console.error(err);
+    //   });
+      
+    } catch (error) {
+        console.warn(error);
+    }
 
   },
 
@@ -198,4 +223,5 @@ $(function() {
 
 
 // to sign message ethereum.request({method: "personal_sign", param: [account, hashedMessage]}) -> return promise with PromiseResult (signature). The we call verify (address of Signer, string message, PromiseResult (signature)). The return is a boolean.
+
 // Use signature verifier, when Admin adds candidates, add voters, and changes phase.
