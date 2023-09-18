@@ -181,12 +181,12 @@ App = {
     try {  
           // Conditions
           if (name != '' && party != '' && surname != '') {    
-                ethereum.request({method: "personal_sign", params: [App.account,  
-                      web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
-                    App.contracts.Election.deployed().then(function(instance) {
-                          return instance.verify("elections2023_nationWideSA", result, { from: App.account });
-                      }).then(function(result2) {
-                            if(result2){  //signature valid 
+                // ethereum.request({method: "personal_sign", params: [App.account,  
+                //       web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
+                //     App.contracts.Election.deployed().then(function(instance) {
+                //           return instance.verify("elections2023_nationWideSA", result, { from: App.account });
+                //       }).then(function(result2) {
+                //             if(result2){  //signature valid 
                            
                         
                                   App.contracts.Election.deployed().then(function(instance){
@@ -200,15 +200,16 @@ App = {
                                       console.error(err);
                                       return false;
                                     })
-                            }
-                            else{
-                              alert("Site restricted to Admin only.");
-                            }
+                //             }
+                //             else{
+                //               alert("Site restricted to Admin only.");
+                //             }
                           
-                      }).catch(function(err){
-                            console.error(err);
-                          })
-                });
+                //       }).catch(function(err){
+                //             console.error(err);
+                //           })
+                // });
+                
 
             } else {
                 alert("All fields are required.....!");
@@ -263,6 +264,11 @@ App = {
     } catch (error) {
         console.warn(error);
     }
+  },
+
+  startElections: function(){},
+  changePhase: function(){
+    alert("jelloo")
   },
 };
 

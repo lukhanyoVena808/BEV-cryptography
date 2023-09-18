@@ -41,8 +41,8 @@ contract Election {
     // Store Candidates Count
     uint public votersCount;
 
-    string[3] c = ["registration" , "voting", "results"];
-    uint public phasePoinnter;
+    string[3] phases = ["registration" , "voting", "results"];
+    uint public phasePointer;
 
     // Admin is set once, when contract is deployed. Also saves gas fees
     address private admin;
@@ -51,18 +51,13 @@ contract Election {
 
     constructor() public { 
         admin = msg.sender;
-        addCandidate("Candidate 1", "EEF"); 
-        addCandidate("Candidate 2", "ABC");
-        addCandidate("Candidate 3", "BA");
-        addCandidate("Candidate 4", "NFP");
-        phase = "registration"; //contract is deployed in the registration phase
-        // startTime();
+        phase="";
     } 
 
     //start time of phase
     function startTime() onlyAdmin internal {
         votingStart = block.timestamp;
-        votingEnd = block.timestamp + (90 * 1 minutes); 
+        votingEnd = block.timestamp + (180 * 1 minutes); 
     }
     
     //change pahse of election
@@ -136,12 +131,34 @@ contract Election {
         //describe everything fully-> break it down
     }
 
+    //change election phase
+    function changePhase() onlyAdmin public{
+        phasePointer++;
+        if (phasePointer <3) {
+            phase = phases[phasePointer];
+        } else {
+            phase = "";
+        }
+    }
+
+    //start election
+    function startElection() onlyAdmin public {
+            phasePointer = 0;
+            phase = phases[phasePointer]; //contract is deployed in the registration phase
+            addCandidate("Candidate 1", "EEF"); 
+            addCandidate("Candidate 2", "ABC");
+            addCandidate("Candidate 3", "BA");
+            addCandidate("Candidate 4", "NFP");
+            startTime();
+    }
+
 
     //hash function
     function keccak256_encrypt(string memory text) public pure returns (bytes32) {
         return keccak256(abi.encode(text));
     }
 
+    //get blockchain
     function getTime() public view returns(uint256){
         require(block.timestamp >= votingStart && block.timestamp < votingEnd, "Voting not in Progress");
         if (block.timestamp >= votingEnd){
@@ -150,10 +167,7 @@ contract Election {
         return votingEnd - block.timestamp;
     }
 
-        function changePhase() onlyAdmin public view returns(bool){
-        
-    
-    }
+
 
     //<----------------------------------- Verifies signed message -------------------------------->
     function verify (string memory _message, bytes memory _sig) public view returns (bool) {

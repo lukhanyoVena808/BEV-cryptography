@@ -61,24 +61,28 @@
                     </form>
                 </div>
             </div>
+         
         </header>
     </div>
     <div id="dashboard"  class="container">
         <h1>Dashboard</h1>
         <hr class="sidebar-divider my-0">
-        <ul class="nav navbar-nav text-light" id="accordionSidebar">
-            <li class="nav-item" role="presentation"><a class="nav-link" href="candidates"><i class="fas fa-user"></i><span>Add Candidate</span></a></li>
-            <li class="nav-item" role="presentation"><a class="nav-link" href="start"><i class="fas fa-user"></i><span>Start Election</span></a></li>
-            <li class="nav-item" role="presentation"><a class="nav-link" href="phase"><i class="fas fa-user"></i><span>Change Phase</span></a></li>
-            <li class="nav-item" role="presentation"><a class="nav-link" href="results"><i class="fas fa-table"></i><span>View Results</span></a></li>
-        </ul>
+        <ul  id="accordionSidebar">
+            <li role="presentation">
+                <a  href="candidates"><button class="btn btn-primary btn-xl text-uppercase js-scroll-trigger">Add Candidate</button></a>
+            </li>
+            <li role="presentation">
+           <button class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" onclick="App.startElections()">Start Election</button>
+            </li>
+            <li role="presentation">
+                <button class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" onclick="App.changePhase()">Change Phase</button>
+            </li>
+            <li role="presentation">
+                <a  href="results"><button class="btn btn-primary btn-xl text-uppercase js-scroll-trigger">View Results</button></a>
+            </li>
+        </ul>  
     </div>
-    <footer class="bg-white sticky-footer">
-        <div class="container my-auto">
-            <div class="text-center my-auto copyright"><span>Copyright © E-Votez 2023</span></div>
-        </div>
-    </footer>
-
+ 
      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
      <!-- Include all compiled plugins (below), or include individual files as needed -->
