@@ -37,7 +37,10 @@
             <div class="intro-text">
                 <div class="intro-lead-in"><span>BlockChain Evoting</span></div>
                 <div class="intro-heading text-uppercase"><span>Amplify Your Voice!</span></div>
-                <form onsubmit="return App.admin_Signs_In()" method="post" action="admin">
+                <form onsubmit="App.admin_Signs_In(); return false" method="post" action="admin">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="check" style="display: none;" >                        
+                    </div>
                     <button type="submit" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger">Administrator Login</button>
                 </form>
             </div>

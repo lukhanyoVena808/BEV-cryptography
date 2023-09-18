@@ -184,14 +184,15 @@ App = {
   admin_Signs_In: function(){
 
     //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
-
+   
     try {      
       ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
-        
+
         App.contracts.Election.deployed().then(function(instance) {
             return instance.verify("elections2023_nationWideSA", result, { from: App.account });
           }).then(function(result2) {
             if(result2){  //signature valid 
+              $("#check").val("next");
               alert("Signed In!");
             }
             else{
@@ -202,6 +203,7 @@ App = {
               console.error(err);
             })
       });
+      $("#check").val("");
       
     } catch (error) {
         console.warn(error);
