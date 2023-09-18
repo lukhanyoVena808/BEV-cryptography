@@ -16,7 +16,7 @@ const registrationRouter = require('./routes/registeration');
 const votingRouter = require('./routes/voting');
 
 const adminLogin = require('./routes/adminLog');
-// const adminCandidate= require('./routes/adminView');
+const adminCandidate= require('./routes/adminCands');
 // const adminLogin = require('./routes/adminLog');
 // const adminVie= require('./routes/adminView');
 // const adminLogin = require('./routes/adminLog');
@@ -26,7 +26,7 @@ app.use('/', registrationRouter);
 app.use('/', votingRouter);
 
 app.use('/', adminLogin);
-
+app.use('/', adminCandidate);
 
 
 

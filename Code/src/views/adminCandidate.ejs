@@ -14,6 +14,9 @@
 
 
     <style>
+        #cans{
+            margin-top: 100px;
+        }
       
     </style>
 
@@ -33,8 +36,37 @@
         </div>
     </nav>
 
-   <h1>Results</h1>
-    <!-- Use a function like render() to view results -->
+    
+    <div class="col-lg-7" id="cans" >
+        <div class="p-5"> 
+            <div class="text-center">
+                <h4 class="text-dark mb-4">Add Candidate</h4>
+            </div>
+            <!-- Need to add Duration, after which people cannot register -->
+            <form onsubmit="App.AddCandidate(); ; return false;" method="post" action="candidates" >
+                <div class="mb-3">
+                    <label for="name-C" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name-C" name="name" autocomplete=off >                        
+                </div>
+
+                <div class="mb-3">
+                    <label for="surname-C" class="form-label">Surname</label>
+                    <input type="text" class="form-control" id="surname-C" name="surname" autocomplete=off >                        
+                </div>
+
+                <div class="mb-3">
+                    <label for="party-C" class="form-label">Political Party</label>
+                    <input type="text" class="form-control" id="party-C" name="party" autocomplete=off >                        
+                </div>
+
+                <div class="mb-3">
+                <button type="submit" class="btn btn-primary" id="btn-adopt">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+ 
     <footer class="bg-white sticky-footer">
         <div class="container my-auto">
             <div class="text-center my-auto copyright"><span>Copyright © E-Votez 2023</span></div>

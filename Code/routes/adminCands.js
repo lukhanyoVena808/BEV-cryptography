@@ -12,13 +12,13 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false});
 app.use('/css',express.static(__dirname + 'src/css'))
 
 // Render form
-router.get('/adminOverView', function(req, res, next) {
-  res.render('adminOverView');
+router.get('/candidates', function(req, res, next) {
+  res.render('adminCandidate');
 });
 
 // Retrieve User input
-router.post('/adminOverView', urlencodedParser, function(req, res, next) {      
-            res.render('adminOverView');
+router.post('/candidates', urlencodedParser, function(req, res, next) {      
+            res.render('adminCandidate');
             
 });
 

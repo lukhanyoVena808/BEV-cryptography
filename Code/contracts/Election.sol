@@ -54,7 +54,7 @@ contract Election {
         addCandidate("Candidate 3", "BA");
         addCandidate("Candidate 4", "NFP");
         phase = "registration"; //contract is deployed in the registration phase
-        startTime();
+        // startTime();
     } 
 
     //start time of phase

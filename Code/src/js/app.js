@@ -172,6 +172,56 @@ App = {
     
   },
 
+  AddCandidate:  function() {    
+    const name =  $("#name-C").val().replace(/[^a-zA-Z0-9 ]/g, '');
+    const surname = $("#surname-C").val().replace(/[^a-zA-Z0-9 ]/g, '');
+    const party= $("#party-C").val();
+      
+    //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
+    try {  
+          // Conditions
+          if (name != '' && party != '' && surname != '') {    
+                ethereum.request({method: "personal_sign", params: [App.account,  
+                      web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
+                    App.contracts.Election.deployed().then(function(instance) {
+                          return instance.verify("elections2023_nationWideSA", result, { from: App.account });
+                      }).then(function(result2) {
+                            if(result2){  //signature valid 
+                           
+                        
+                                  App.contracts.Election.deployed().then(function(instance){
+                                    return instance.addCandidate(name+ " "+surname, party, { from: App.account });
+                                    }).then(function(result){        
+                                      alert("Candidate Added!");
+                                      return App.render();
+
+                                    }).catch(function(err){
+                                      alert("Candidate Not Added");
+                                      console.error(err);
+                                      return false;
+                                    })
+                            }
+                            else{
+                              alert("Site restricted to Admin only.");
+                            }
+                          
+                      }).catch(function(err){
+                            console.error(err);
+                          })
+                });
+
+            } else {
+                alert("All fields are required.....!");
+                return false;
+                }
+      } catch (error) {
+          console.warn(error);
+      }
+
+
+    
+  },
+
   getRemainingTime: function() {
     App.contracts.Election.deployed().then(function(instance) {
       const electionInstance = instance;
@@ -190,7 +240,6 @@ App = {
   admin_Signs_In: function(){
 
     //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
-   
     try {      
       ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
 
@@ -211,15 +260,10 @@ App = {
               console.error(err);
             })
       });
-
-      
     } catch (error) {
         console.warn(error);
     }
-
   },
-
-
 };
 
 $(function() {
