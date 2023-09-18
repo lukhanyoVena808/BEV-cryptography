@@ -17,7 +17,7 @@ router.get('/results', function(req, res, next) {
 });
 
 // Retrieve User input
-router.post('/candidates', urlencodedParser, function(req, res, next) {      
+router.post('/results', urlencodedParser, function(req, res, next) {      
             res.render('adminResults');
             
 });

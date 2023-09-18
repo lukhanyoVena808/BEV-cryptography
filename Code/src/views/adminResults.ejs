@@ -14,7 +14,9 @@
 
 
     <style>
-      
+      #ewallet{
+        margin-top: 160px;
+      }
     </style>
 
   </head>
@@ -33,7 +35,30 @@
         </div>
     </nav>
 
-   <h1>Results</h1>
+    <div class="container" style="width: 650px;" id="ewallet">
+        <div class="row">
+          <div class="col-lg-12" >
+            <h1 class="text-center">Results</h1>
+            <div id="content2023" >
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Party</th>
+                    <th scope="col">Votes</th>
+                  </tr>
+                </thead>
+                <tbody id="candidatesResults2023">
+                </tbody>
+              </table>
+           
+              <hr/>
+              <p id="details" class="text-center"></p>
+            </div>
+          </div>
+        </div>
+      </div>
     <!-- Use a function like render() to view results, first check phase === if not result phase, dont show results -->
     <footer class="bg-white sticky-footer">
         <div class="container my-auto">

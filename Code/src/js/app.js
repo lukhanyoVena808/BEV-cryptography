@@ -180,37 +180,17 @@ App = {
     //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
     try {  
           // Conditions
-          if (name != '' && party != '' && surname != '') {    
-                // ethereum.request({method: "personal_sign", params: [App.account,  
-                //       web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
-                //     App.contracts.Election.deployed().then(function(instance) {
-                //           return instance.verify("elections2023_nationWideSA", result, { from: App.account });
-                //       }).then(function(result2) {
-                //             if(result2){  //signature valid 
-                           
-                        
-                                  App.contracts.Election.deployed().then(function(instance){
-                                    return instance.addCandidate(name+ " "+surname, party, { from: App.account });
-                                    }).then(function(result){        
-                                      alert("Candidate Added!");
-                                      return App.render();
-
-                                    }).catch(function(err){
-                                      alert("Candidate Not Added");
-                                      console.error(err);
-                                      return false;
-                                    })
-                //             }
-                //             else{
-                //               alert("Site restricted to Admin only.");
-                //             }
-                          
-                //       }).catch(function(err){
-                //             console.error(err);
-                //           })
-                // });
-                
-
+          if (name != '' && party != '' && surname != '') { 
+                App.contracts.Election.deployed().then(function(instance){
+                  return instance.addCandidate(name+ " "+surname, party, { from: App.account });
+                  }).then(function(result){        
+                    alert("Candidate Added!");
+                    return App.render();
+                  }).catch(function(err){
+                    alert("Candidate Not Added");
+                    console.error(err);
+                    return false;
+                  })
             } else {
                 alert("All fields are required.....!");
                 return false;
@@ -218,9 +198,6 @@ App = {
       } catch (error) {
           console.warn(error);
       }
-
-
-    
   },
 
   getRemainingTime: function() {
@@ -251,7 +228,6 @@ App = {
               adminIn.hide();
               adminView.show();
               alert("Signed In!");
-              
             }
             else{
               alert("Site restricted to Admin only.");
@@ -266,9 +242,68 @@ App = {
     }
   },
 
-  startElections: function(){},
+  startElections: function(){
+    alert("Helloo");
+  },
+
   changePhase: function(){
-    alert("jelloo")
+    alert("Helloo");
+  },
+
+  viewData: function(){
+    var electionInstance;
+   
+        //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
+        try {     
+       
+          ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
+            App.contracts.Election.deployed().then(function(instance) {
+              electionInstance = instance;
+               
+                return instance.verify("elections2023_nationWideSA", result, { from: App.account });
+              }).then(function(result2) {
+               
+                if(result2){  //signature valid
+                  return electionInstance.candidatesCount().then(function(candidatesCount) {
+                    const candidatesResults = $("#candidatesResults2023");
+                    candidatesResults.empty();
+                    for (let i= 1; i <= candidatesCount; i++) {
+                      electionInstance.candidates(i).then(function(candidate) {
+                        const id = candidate[0];
+                        const name = candidate[1];
+                        const party = candidate[2];
+                        const voteCount = candidate[3];
+                        // Render candidate Result
+                        const candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td><td>" + voteCount + "</td></tr>"
+                        candidatesResults.append(candidateTemplate);
+                      });
+                    }
+                    return electionInstance.phase();
+                  }).then(function(currentPhase) {
+                    console.log(currentPhase)
+                    if (currentPhase == "results"){
+                      $("#details").html("Winner: ");
+                    }
+                    else{
+                      $("#details").html("Top runnner: ");
+                    }
+                      
+                  });
+                 
+                  
+                }
+                else{
+                  alert("Site restricted to Admin only.");
+                }
+                
+                }).catch(function(err){
+                  console.error(err);
+                })
+          });
+        } catch (error) {
+            console.warn(error);
+        }
+
   },
 };
 
