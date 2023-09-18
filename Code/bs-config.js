@@ -14,12 +14,19 @@ app.use('/img', express.static(__dirname +'src/images'))
 //Setting Routes
 const registrationRouter = require('./routes/registeration');
 const votingRouter = require('./routes/voting');
+
 const adminLogin = require('./routes/adminLog');
-const adminView= require('./routes/adminView');
+// const adminCandidate= require('./routes/adminView');
+// const adminLogin = require('./routes/adminLog');
+// const adminVie= require('./routes/adminView');
+// const adminLogin = require('./routes/adminLog');
+
+
 app.use('/', registrationRouter);
 app.use('/', votingRouter);
+
 app.use('/', adminLogin);
-app.use('/', adminView);
+
 
 
 
@@ -40,14 +47,32 @@ app.get('/register', (req, res) => {
   res.render("register");
 })
 
-
 app.get('/admin', (req, res) => {
   res.render("adminLogin");
 })
 
+app.get('/candidates', (req, res) => {
+  res.render("adminCandidate");
+})
+
+app.get('/results', (req, res) => {
+  res.render("adminResults");
+})
+
+app.get('/phase', (req, res) => {
+  res.render("adminPhase");
+})
+
+
+app.get('/start', (req, res) => {
+  res.render("adminStartVotes");
+})
+
+
 app.get('/adminOverView', (req, res) => {
   res.render("adminOverView");
 })
+
 
 
 //listen on port
