@@ -41,9 +41,11 @@ contract Election {
     // Store Candidates Count
     uint public votersCount;
 
+    string[3] c = ["registration" , "voting", "results"];
+    uint public phasePoinnter;
+
     // Admin is set once, when contract is deployed. Also saves gas fees
     address private admin;
-
     uint256 public votingStart;
     uint256 public votingEnd;
 
@@ -146,6 +148,11 @@ contract Election {
             return 0;
         }
         return votingEnd - block.timestamp;
+    }
+
+        function changePhase() onlyAdmin public view returns(bool){
+        
+    
     }
 
     //<----------------------------------- Verifies signed message -------------------------------->
