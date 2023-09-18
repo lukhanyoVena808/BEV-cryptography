@@ -17,12 +17,17 @@
         #sliders2 {
             padding-right: 40%;                
         }
+        #dashboard{
+            margin-top: 500px;
+        }
     </style>
 
   </head>
   <body id="page-top">
     <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-dark" id="mainNav">
-        <div class="sidebar-brand-icon rotate-n-15"><img class="rounded-circle img-fluid" height="70px" width="70px" src="assets_home/img/comm.jpg"></div>
+        <div class="sidebar-brand-icon rotate-n-15">
+            <img class="rounded-circle img-fluid" height="70px" width="70px" src="../assets_home/img/197562.png" alt="icon">
+        </div>
         <div class="container"><a class="navbar-brand" href="#page-top">E-VoteZ</a><button data-toggle="collapse" data-target="#navbarResponsive" class="navbar-toggler navbar-toggler-right" type="button" data-toogle="collapse" aria-controls="navbarResponsive" aria-expanded="false"
                 aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -32,20 +37,26 @@
             </div>
         </div>
     </nav>
-    <header class="masthead" style="background-image:url('../assets_home/img/im1.jpeg'); background-color:rgba(255, 255, 255, 0.5);">
-        <div class="container" id="sliders2">
-            <div class="intro-text">
-                <div class="intro-lead-in"><span>BlockChain Evoting</span></div>
-                <div class="intro-heading text-uppercase"><span>Amplify Your Voice!</span></div>
-                <form onsubmit="App.admin_Signs_In(); return false" method="post" action="admin">
-                    <div class="mb-3">
-                        <input type="text" class="form-control" id="check" style="display: none;" >                        
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger">Administrator Login</button>
-                </form>
+
+    <div id="logIns">
+        <header class="masthead" style="background-image:url('../assets_home/img/im1.jpeg'); background-color:rgba(255, 255, 255, 0.5);  background-size:cover;">
+            <div class="container" id="sliders2">
+                <div class="intro-text">
+                    <div class="intro-lead-in"><span>BlockChain Evoting</span></div>
+                    <div class="intro-heading text-uppercase"><span>Amplify Your Voice!</span></div>
+                    <form onsubmit="App.admin_Signs_In(); return false" method="post" action="admin">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="check" style="display: none;" >                        
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger">Administrator Login</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
+    </div>
+    <div id="dashboard">
+        <h1>Hello Admin</h1>
+    </div>
 
      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

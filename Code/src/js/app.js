@@ -5,6 +5,8 @@ App = {
   contracts: {},
   account: '0x0',
   voted: null,
+  adminIn: null,
+  adminView: null,
   
 
   init: function() {
@@ -58,6 +60,10 @@ App = {
     const content = $("#content");
     const regSMS = $("#isREg");
     const myform = $("#myVote");
+    adminIn = $("#logIns");
+    adminView = $("#dashboard");
+    adminIn.show();
+    adminView.hide();
     loader.show();
     content.hide();
     regSMS.hide();
@@ -192,8 +198,10 @@ App = {
             return instance.verify("elections2023_nationWideSA", result, { from: App.account });
           }).then(function(result2) {
             if(result2){  //signature valid 
-              $("#check").val("next");
+              adminIn.hide();
+              adminView.show();
               alert("Signed In!");
+              
             }
             else{
               alert("Site restricted to Admin only.");
@@ -203,7 +211,7 @@ App = {
               console.error(err);
             })
       });
-      $("#check").val("");
+
       
     } catch (error) {
         console.warn(error);
