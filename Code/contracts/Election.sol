@@ -51,7 +51,7 @@ contract Election {
 
     constructor() public { 
         admin = msg.sender;
-        phase="";
+        phase="ready";
     } 
 
     //start time of phase
@@ -137,7 +137,7 @@ contract Election {
         if (phasePointer <3) {
             phase = phases[phasePointer];
         } else {
-            phase = "";
+            phase = "end";
         }
     }
 

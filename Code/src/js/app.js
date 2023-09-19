@@ -39,6 +39,12 @@ App = {
       App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
     }
     web3 = new Web3(App.web3Provider);
+
+    adminIn = $("#logIns");
+    adminView = $("#dashboard");
+    adminIn.show();
+    adminView.hide();
+
     return App.initContract();
   },
 
@@ -60,10 +66,7 @@ App = {
     const content = $("#content");
     const regSMS = $("#isREg");
     const myform = $("#myVote");
-    adminIn = $("#logIns");
-    adminView = $("#dashboard");
-    adminIn.show();
-    adminView.hide();
+ 
     loader.show();
     content.hide();
     regSMS.hide();
@@ -92,9 +95,10 @@ App = {
             const id = candidate[0];
             const name = candidate[1];
             const party = candidate[2];
-            const voteCount = candidate[3];
+            // const voteCount = candidate[3];
             // Render candidate Result
-            const candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td><td>" + voteCount + "</td></tr>"
+            // const candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td><td>" + voteCount + "</td></tr>"
+            const candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td></tr>"
             candidatesResults.append(candidateTemplate);
     
             // Render candidate ballot option
@@ -122,6 +126,8 @@ App = {
       ).catch(function(error) {
         console.warn(error);
       });
+
+      return App.viewData();
   },
 
   castVote: function() {
@@ -243,7 +249,15 @@ App = {
   },
 
   startElections: function(){
-    alert("Helloo");
+    App.contracts.Election.deployed().then(function(instance) {
+      const electionInstance = instance;
+        return electionInstance.startElection({from: App.account});
+      }).then(function(results){
+        alert("Elections have started");
+        return App.viewData();
+      }).catch(function(err){
+        console.error(err);
+      })
   },
 
   changePhase: function(){
@@ -252,57 +266,58 @@ App = {
 
   viewData: function(){
     var electionInstance;
+    const content = $("#content2023");
+    content.show()
    
         //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
-        try {     
-       
-          ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
-            App.contracts.Election.deployed().then(function(instance) {
-              electionInstance = instance;
-               
-                return instance.verify("elections2023_nationWideSA", result, { from: App.account });
-              }).then(function(result2) {
-               
-                if(result2){  //signature valid
-                  return electionInstance.candidatesCount().then(function(candidatesCount) {
-                    const candidatesResults = $("#candidatesResults2023");
-                    candidatesResults.empty();
-                    for (let i= 1; i <= candidatesCount; i++) {
-                      electionInstance.candidates(i).then(function(candidate) {
-                        const id = candidate[0];
-                        const name = candidate[1];
-                        const party = candidate[2];
-                        const voteCount = candidate[3];
-                        // Render candidate Result
-                        const candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td><td>" + voteCount + "</td></tr>"
-                        candidatesResults.append(candidateTemplate);
-                      });
-                    }
-                    return electionInstance.phase();
-                  }).then(function(currentPhase) {
-                    console.log(currentPhase)
-                    if (currentPhase == "results"){
-                      $("#details").html("Winner: ");
-                    }
-                    else{
-                      $("#details").html("Top runnner: ");
-                    }
-                      
-                  });
-                 
+    try {     
+        
+      // ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
+        App.contracts.Election.deployed().then(function(instance) {
+          electionInstance = instance;
+         
+          //   return instance.verify("elections2023_nationWideSA", result, { from: App.account });
+          // }).then(function(result2) {
+            
+          //   if(result2){  //signature valid
+            return electionInstance.candidatesCount();
+        }).then(function(candidatesCount) {             
+                const candidatesResults = $("#candidatesResults2023");
+                candidatesResults.empty();
+                
+                for (let i= 1; i <= candidatesCount; i++) {
                   
+                  electionInstance.candidates(i).then(function(candidate) {
+                    const id = candidate[0];
+                    const name = candidate[1];
+                    const party = candidate[2];
+                    const voteCount = candidate[3];
+
+                    // Render candidate Result
+                    const candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td><td>" + voteCount + "</td></tr>"
+                    candidatesResults.append(candidateTemplate);
+                  });
+                }
+                return electionInstance.phase();
+              }).then(function(currentPhase) {
+                console.log(currentPhase)
+                if (currentPhase == "results"){
+                  $("#details").html("Winner: ");
+                }
+                else if (currentPhase == "voting"){
+                    $("#details").html("Top runnner: ");
                 }
                 else{
-                  alert("Site restricted to Admin only.");
+                  $("#details").html("Voting has not started");
                 }
-                
-                }).catch(function(err){
-                  console.error(err);
-                })
-          });
-        } catch (error) {
-            console.warn(error);
-        }
+                  
+            }).catch(function(err){
+              console.error(err);
+            })
+      // });
+    } catch (error) {
+        console.warn(error);
+    }
 
   },
 };
@@ -312,8 +327,3 @@ $(function() {
     App.init();   
   });
 });
-
-
-// to sign message ethereum.request({method: "personal_sign", param: [account, hashedMessage]}) -> return promise with PromiseResult (signature). The we call verify (address of Signer, string message, PromiseResult (signature)). The return is a boolean.
-
-// Use signature verifier, when Admin adds candidates, add voters, and changes phase.
