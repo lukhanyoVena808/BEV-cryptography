@@ -117,10 +117,18 @@ App = {
           loader.hide();
           return electionInstance.has_Voted({from: App.account});
         
-      }).then(function(next2) {
+      }).then(function(next2) {  //has voted already
+        
         if(next2) { 
           myform.hide();
         }
+
+        electionInstance.phase().then(function(thePhase) {
+          if(thePhase != "voting") { 
+            myform.hide();
+            $("#process").html("Voting has not started");
+          }
+        })
         content.show();
       }
       ).catch(function(error) {
@@ -260,8 +268,15 @@ App = {
       })
   },
 
-  changePhase: function(){
-    alert("Helloo");
+  changePhases: function(){
+    App.contracts.Election.deployed().then(function(instance) {
+      const electionInstance = instance;
+        return electionInstance.changePhase({from: App.account});
+      }).then(function(results){
+        alert("next phase");
+      }).catch(function(err){
+        console.error(err);
+      })
   },
 
   viewData: function(){
@@ -284,9 +299,7 @@ App = {
         }).then(function(candidatesCount) {             
                 const candidatesResults = $("#candidatesResults2023");
                 candidatesResults.empty();
-                
                 for (let i= 1; i <= candidatesCount; i++) {
-                  
                   electionInstance.candidates(i).then(function(candidate) {
                     const id = candidate[0];
                     const name = candidate[1];
@@ -300,7 +313,6 @@ App = {
                 }
                 return electionInstance.phase();
               }).then(function(currentPhase) {
-                console.log(currentPhase)
                 if (currentPhase == "results"){
                   $("#details").html("Winner: ");
                 }

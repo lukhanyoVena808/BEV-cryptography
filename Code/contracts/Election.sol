@@ -60,11 +60,6 @@ contract Election {
         votingEnd = block.timestamp + (180 * 1 minutes); 
     }
     
-    //change pahse of election
-    function changePhase(string memory _phase) onlyAdmin public {
-        phase = _phase;
-    }
-
 
     modifier onlyAdmin(){
 		require(msg.sender==admin, "Only Admin can perform this function");
@@ -131,15 +126,7 @@ contract Election {
         //describe everything fully-> break it down
     }
 
-    //change election phase
-    function changePhase() onlyAdmin public{
-        phasePointer++;
-        if (phasePointer <3) {
-            phase = phases[phasePointer];
-        } else {
-            phase = "end";
-        }
-    }
+    
 
     //start election
     function startElection() onlyAdmin public {
@@ -152,6 +139,16 @@ contract Election {
             startTime();
     }
 
+    //change election phase
+    function changePhase() onlyAdmin public{
+        phasePointer++;
+        if (phasePointer <3) {
+            phase = phases[phasePointer];
+        } else {
+            phase = "end";
+        }
+    }
+
 
     //hash function
     function keccak256_encrypt(string memory text) public pure returns (bytes32) {
@@ -160,11 +157,12 @@ contract Election {
 
     //get blockchain
     function getTime() public view returns(uint256){
-        require(block.timestamp >= votingStart && block.timestamp < votingEnd, "Voting not in Progress");
-        if (block.timestamp >= votingEnd){
-            return 0;
-        }
-        return votingEnd - block.timestamp;
+        // require(block.timestamp >= votingStart && block.timestamp < votingEnd, "Voting not in Progress");
+        // if (block.timestamp >= votingEnd){
+        //     return 0;
+        // }
+        // return votingEnd - block.timestamp;
+        return block.timestamp;
     }
 
 
