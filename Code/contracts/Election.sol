@@ -31,6 +31,7 @@ contract Election {
 
      // Stores encyrted ID'S
     mapping(bytes32 => address) public verifier;
+    mapping(uint => address) public recorder;
 
     // Store Candidates Count
     uint public candidatesCount;
@@ -57,7 +58,7 @@ contract Election {
     //start time of phase
     function startTime() onlyAdmin internal {
         votingStart = block.timestamp;
-        votingEnd = block.timestamp + (180 * 1 minutes); 
+        votingEnd = block.timestamp + (180 * 1 minutes); //3-hour duration
     }
     
 
@@ -81,6 +82,7 @@ contract Election {
 
             //require that personal_id is not already in use
             require(verifier[encrypt_id] == 0x0000000000000000000000000000000000000000, "Personal ID already in use");
+            recorder[votersCount] = _pAdress;
             votersCount ++;
             voters[_pAdress] = voter( {personal_id: encrypt_id, 
                             hasVoted:false, 
@@ -132,10 +134,10 @@ contract Election {
     function startElection() onlyAdmin public {
             phasePointer = 0;
             phase = phases[phasePointer]; //contract is deployed in the registration phase
-            addCandidate("Candidate 1", "EEF"); 
-            addCandidate("Candidate 2", "ABC");
-            addCandidate("Candidate 3", "BA");
-            addCandidate("Candidate 4", "NFP");
+            // addCandidate("Candidate 1", "EEF"); 
+            // addCandidate("Candidate 2", "ABC");
+            // addCandidate("Candidate 3", "BA");
+            // addCandidate("Candidate 4", "NFP");
             startTime();
     }
 
@@ -157,12 +159,33 @@ contract Election {
 
     //get blockchain
     function getTime() public view returns(uint256){
-        // require(block.timestamp >= votingStart && block.timestamp < votingEnd, "Voting not in Progress");
-        // if (block.timestamp >= votingEnd){
-        //     return 0;
-        // }
-        // return votingEnd - block.timestamp;
-        return block.timestamp;
+        require(block.timestamp >= votingStart && block.timestamp < votingEnd, "Voting not in Progress");
+        if (block.timestamp >= votingEnd){
+            return 0;
+        }
+        return votingEnd - block.timestamp;
+    }
+
+    function getStatus() public view returns(bool){
+        return(block.timestamp >= votingStart && block.timestamp < votingEnd);
+    }
+
+    function getWinner() public view returns(uint) {
+        uint winner = 0;
+        uint voterS=0;
+        for (uint index = 1; index <  candidatesCount; index++) {
+            if(candidates[index].voteCount > voterS){
+                winner = index;
+                voterS = candidates[index].voteCount;
+                for (uint index2 = index; index2 <  candidatesCount; index2++) {
+                    if(candidates[index2].voteCount > voterS){
+                        winner = index2;
+                        voterS = candidates[index2].voteCount;
+                    }
+                }
+            }
+        }
+        return winner;
     }
 
 

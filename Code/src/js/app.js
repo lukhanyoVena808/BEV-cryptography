@@ -156,16 +156,26 @@ App = {
     const result = person_id.replace(/[^a-zA-Z0-9 ]/g, '')?.length || 0;
     const result2 = person_id?.length || 0;
     const email = $("#email-reg").val();  
-
+    var electionInstance;
     // Conditions
     if (name != '' && email != ''  && person_id !='' && surname != '') {
       if (result >= 10  &&  result == result2){ 
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){             
           App.contracts.Election.deployed().then(function(instance){
-            return instance.addVoter(person_id, email, name, surname, { from: App.account });
-            }).then(function(result){        
-              voted = true;
-              alert("Your have been registered!");
+            electionInstance = instance;
+            return electionInstance.phase();
+            }).then(function(result){ 
+              if(result =="registration")  {
+                electionInstance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
+                  alert("You have been registered!");    
+                  voted = true;
+                });
+              }
+              else{
+                alert("You can only register during the registration phase.");
+                return false;
+              }
+              
             }).catch(function(err){
               console.error(err);
             })
@@ -183,6 +193,7 @@ App = {
       alert("All fields are required.....!");
       return false;
       }
+      return App.getRemainingTime();
     
   },
 
@@ -212,16 +223,23 @@ App = {
       } catch (error) {
           console.warn(error);
       }
+     
   },
 
-  getRemainingTime: function() {
+  getRemainingTime: async function() {
+    var electionInstance;
     App.contracts.Election.deployed().then(function(instance) {
-      const electionInstance = instance;
-        return electionInstance.getTime();
-      }).then(function(the_durations){
-        console.log(parseInt(the_durations, 16))
-        const timer = $('setTimer');
-        timer.text("Remaining Time: "+  the_durations);
+      electionInstance = instance;
+        return electionInstance.getStatus();
+      }).then(function(inPhase){
+        if(inPhase){
+          return electionInstance.getTime().then(function(the_durations){
+            electionInstance.phase().then(function(the_phase){
+              $("#setTimer").html("</span>Current Phase: "+the_phase+"</span><br><span>Remaining Time: "+parseInt(the_durations, 16)+" seconds</span>");
+            })
+          })
+        }
+        // console.log(parseInt(the_durations, 16))
       }).catch(function(err){
         console.error(err);
       })
@@ -330,12 +348,14 @@ App = {
     } catch (error) {
         console.warn(error);
     }
+    return App.getRemainingTime();
 
   },
 };
 
 $(function() {
   $(window).load(function() {
-    App.init();   
+    App.init();  
+   
   });
 });
