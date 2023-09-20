@@ -58,7 +58,7 @@ contract Election {
     //start time of phase
     function startTime() onlyAdmin internal {
         votingStart = block.timestamp;
-        votingEnd = block.timestamp + (180 * 1 minutes); //3-hour duration
+        votingEnd = block.timestamp + (20* 1 minutes); //
     }
     
 
@@ -83,7 +83,6 @@ contract Election {
             //require that personal_id is not already in use
             require(verifier[encrypt_id] == 0x0000000000000000000000000000000000000000, "Personal ID already in use");
             recorder[votersCount] = _pAdress;
-            votersCount ++;
             voters[_pAdress] = voter( {personal_id: encrypt_id, 
                             hasVoted:false, 
                             public_Address:_pAdress,
@@ -93,6 +92,7 @@ contract Election {
                             isRegistered:true,
                             voterPosition: votersCount
                     });
+            votersCount ++;
             verifier[encrypt_id] = _pAdress;
     }
 
@@ -146,6 +146,7 @@ contract Election {
         phasePointer++;
         if (phasePointer <3) {
             phase = phases[phasePointer];
+            startTime();
         } else {
             phase = "end";
         }

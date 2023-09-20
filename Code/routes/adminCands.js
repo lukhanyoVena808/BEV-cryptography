@@ -14,6 +14,7 @@ app.use('/css',express.static(__dirname + 'src/css'))
 // Render form
 router.get('/candidates', function(req, res, next) {
   res.render('adminCandidate');
+
 });
 
 // Retrieve User input

@@ -13,7 +13,9 @@ app.use('/css',express.static(__dirname + 'src/css'))
 
 // Render form
 router.get('/register', function(req, res, next) {
-  res.render('register');
+  setTimeout(function() {
+    res.render('register');
+}, 500); 
 });
 
 // Retrieve User input

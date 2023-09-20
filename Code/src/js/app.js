@@ -128,6 +128,9 @@ App = {
             myform.hide();
             $("#process").html("Voting has not started");
           }
+          else if (thePhase == "resulsts"){
+            $("#process").html("Voting is over");
+          }
         })
         content.show();
       }
@@ -150,10 +153,12 @@ App = {
   },
 
   registerVoter:  function() {    
-    const name =  $("#name-reg").val().replace(/[^a-zA-Z0-9 ]/g, '');
-    const surname = $("#surname-reg").val().replace(/[^a-zA-Z0-9 ]/g, '');
+    // const name =  $("#name-reg").val().replace(/[^a-zA-Z0-9 ]/g, '');
+    const name =  $("#name-reg").val();
+    const surname = $("#surname-reg").val();
     const person_id= $("#personID-reg").val();
     const result = person_id.replace(/[^a-zA-Z0-9 ]/g, '')?.length || 0;
+    console.log(result);
     const result2 = person_id?.length || 0;
     const email = $("#email-reg").val();  
     var electionInstance;
@@ -167,7 +172,7 @@ App = {
             }).then(function(result){ 
               if(result =="registration")  {
                 electionInstance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
-                  alert("You have been registered!");    
+                  console.log("You have been registered!");    
                   voted = true;
                 });
               }
@@ -209,7 +214,7 @@ App = {
                 App.contracts.Election.deployed().then(function(instance){
                   return instance.addCandidate(name+ " "+surname, party, { from: App.account });
                   }).then(function(result){        
-                    alert("Candidate Added!");
+                    console.log("Candidate Added!");
                     return App.render();
                   }).catch(function(err){
                     alert("Candidate Not Added");
@@ -226,7 +231,7 @@ App = {
      
   },
 
-  getRemainingTime: async function() {
+  getRemainingTime: function() {
     var electionInstance;
     App.contracts.Election.deployed().then(function(instance) {
       electionInstance = instance;
@@ -235,7 +240,7 @@ App = {
         if(inPhase){
           return electionInstance.getTime().then(function(the_durations){
             electionInstance.phase().then(function(the_phase){
-              $("#setTimer").html("</span>Current Phase: "+the_phase+"</span><br><span>Remaining Time: "+parseInt(the_durations, 16)+" seconds</span>");
+              $("#setTimer").html("</span>Current Phase: "+the_phase+"</span><br><span>Remaining Time till next phase: "+parseInt(the_durations, 16)+" seconds</span>");
             })
           })
         }
@@ -331,15 +336,20 @@ App = {
                 }
                 return electionInstance.phase();
               }).then(function(currentPhase) {
-                if (currentPhase == "results"){
-                  $("#details").html("Winner: ");
-                }
-                else if (currentPhase == "voting"){
-                    $("#details").html("Top runnner: ");
-                }
-                else{
-                  $("#details").html("Voting has not started");
-                }
+                    if (currentPhase == "results"){
+                      electionInstance.phase().then(function(myWinner) {
+                        $("#details").html("Winner: "+myWinner);
+                      })
+                    }
+                    else if (currentPhase == "voting"){
+                      electionInstance.phase().then(function(myWinner) {
+                        $("#details").html("Top runnner: "+myWinner);
+                      })
+                    }
+                    else{
+                      $("#details").html("Voting has not started");
+                    }
+          
                   
             }).catch(function(err){
               console.error(err);

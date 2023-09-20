@@ -18,7 +18,6 @@ router.get('/admin', function(req, res, next) {
 });
 
             
-
 // Retrieve User input
 router.post('/admin', urlencodedParser, function(req, res, next) {  
           res.render('adminLogin');     
