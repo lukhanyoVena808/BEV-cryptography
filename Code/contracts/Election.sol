@@ -42,13 +42,16 @@ contract Election {
     // Store Candidates Count
     uint public votersCount;
 
+    // Stores current time
+    uint public timeNow;
+
     string[3] phases = ["registration" , "voting", "results"];
     uint public phasePointer;
 
     // Admin is set once, when contract is deployed. Also saves gas fees
     address private admin;
-    uint256 public votingStart;
-    uint256 public votingEnd;
+    uint256 public votingStart;  //start of phase
+    uint256 public votingEnd; //end of phase
 
     constructor() public { 
         admin = msg.sender;
@@ -58,7 +61,8 @@ contract Election {
     //start time of phase
     function startTime() onlyAdmin internal {
         votingStart = block.timestamp;
-        votingEnd = block.timestamp + (20* 1 minutes); //
+        votingEnd = block.timestamp + (10* 1 minutes); //
+        timeNow = 0;
     }
     
 
@@ -70,7 +74,12 @@ contract Election {
        // Add a candidate
     function addCandidate (string memory _name, string memory _party) onlyAdmin public {
         candidatesCount ++;
-        candidates[candidatesCount] = Candidate(candidatesCount, _name, _party, 0);
+        candidates[candidatesCount] = Candidate({
+            id: candidatesCount, 
+            name: _name,
+            party: _party, 
+            voteCount: 0
+            });
     }
 
           // Add a voter
@@ -94,6 +103,7 @@ contract Election {
                     });
             votersCount ++;
             verifier[encrypt_id] = _pAdress;
+            adjustTime();
     }
 
     //returns true if voter registered
@@ -124,8 +134,8 @@ contract Election {
 
         // update candidate vote Count
         candidates[_candidateId].voteCount ++;
-        //where is the data saved
-        //describe everything fully-> break it down
+        adjustTime();
+
     }
 
     
@@ -134,15 +144,11 @@ contract Election {
     function startElection() onlyAdmin public {
             phasePointer = 0;
             phase = phases[phasePointer]; //contract is deployed in the registration phase
-            // addCandidate("Candidate 1", "EEF"); 
-            // addCandidate("Candidate 2", "ABC");
-            // addCandidate("Candidate 3", "BA");
-            // addCandidate("Candidate 4", "NFP");
             startTime();
     }
 
     //change election phase
-    function changePhase() onlyAdmin public{
+    function changePhase() onlyAdmin public {
         phasePointer++;
         if (phasePointer <3) {
             phase = phases[phasePointer];
@@ -150,6 +156,7 @@ contract Election {
         } else {
             phase = "end";
         }
+
     }
 
 
@@ -159,34 +166,29 @@ contract Election {
     }
 
     //get blockchain
-    function getTime() public view returns(uint256){
+    function adjustTime() internal{
         require(block.timestamp >= votingStart && block.timestamp < votingEnd, "Voting not in Progress");
         if (block.timestamp >= votingEnd){
-            return 0;
+            timeNow=0;
         }
-        return votingEnd - block.timestamp;
+        timeNow= votingEnd - block.timestamp;
     }
 
     function getStatus() public view returns(bool){
         return(block.timestamp >= votingStart && block.timestamp < votingEnd);
     }
 
-    function getWinner() public view returns(uint) {
-        uint winner = 0;
-        uint voterS=0;
-        for (uint index = 1; index <  candidatesCount; index++) {
+    function getWinner() public  returns(string memory) {
+        uint winner = 1;
+        uint voterS = candidates[1].voteCount;
+        for (uint index = 2; index <  candidatesCount; index++) {
             if(candidates[index].voteCount > voterS){
                 winner = index;
                 voterS = candidates[index].voteCount;
-                for (uint index2 = index; index2 <  candidatesCount; index2++) {
-                    if(candidates[index2].voteCount > voterS){
-                        winner = index2;
-                        voterS = candidates[index2].voteCount;
-                    }
                 }
-            }
         }
-        return winner;
+        adjustTime();
+        return (candidates[winner].name);
     }
 
 

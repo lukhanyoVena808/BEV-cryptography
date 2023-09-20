@@ -54,7 +54,7 @@
                                 <h4 class="text-dark mb-4">Register to Vote!</h4>
                             </div>
                             <!-- Need to add Duration, after which people cannot register -->
-                            <form onsubmit="return App.registerVoter();" method="post" action="register" >
+                            <form onsubmit="App.registerVoter(); return false;" method="post" action="register" id = "demo_form">
                                 <div class="mb-3">
                                     <label for="name-reg" class="form-label">Name</label>
                                     <input type="text" class="form-control" id="name-reg" name="name" autocomplete=off >                        
