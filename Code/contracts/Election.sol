@@ -55,15 +55,15 @@ contract Election {
 
     constructor() public { 
         admin = msg.sender;
-        phase="ready";
+        phase="Election has not started";
     } 
 
     //start time of phase
-    function startTime() onlyAdmin internal {
-        votingStart = block.timestamp;
-        votingEnd = block.timestamp + (10* 1 minutes); //
-        timeNow = 0;
-    }
+    // function startTime() onlyAdmin internal {
+    //     votingStart = block.timestamp;
+    //     votingEnd = block.timestamp + (10* 1 minutes); //
+    //     timeNow = 0;
+    // }
     
 
     modifier onlyAdmin(){
@@ -103,7 +103,7 @@ contract Election {
                     });
             votersCount ++;
             verifier[encrypt_id] = _pAdress;
-            adjustTime();
+            // adjustTime();
     }
 
     //returns true if voter registered
@@ -134,7 +134,7 @@ contract Election {
 
         // update candidate vote Count
         candidates[_candidateId].voteCount ++;
-        adjustTime();
+        // adjustTime();
 
     }
 
@@ -144,7 +144,7 @@ contract Election {
     function startElection() onlyAdmin public {
             phasePointer = 0;
             phase = phases[phasePointer]; //contract is deployed in the registration phase
-            startTime();
+            // startTime();
     }
 
     //change election phase
@@ -152,9 +152,9 @@ contract Election {
         phasePointer++;
         if (phasePointer <3) {
             phase = phases[phasePointer];
-            startTime();
+            // startTime();
         } else {
-            phase = "end";
+            phase = "Election ended";
         }
 
     }
@@ -166,19 +166,19 @@ contract Election {
     }
 
     //get blockchain
-    function adjustTime() internal{
-        require(block.timestamp >= votingStart && block.timestamp < votingEnd, "Voting not in Progress");
-        if (block.timestamp >= votingEnd){
-            timeNow=0;
-        }
-        timeNow= votingEnd - block.timestamp;
-    }
+    // function adjustTime() internal{
+    //     require(block.timestamp >= votingStart && block.timestamp < votingEnd, "Voting not in Progress");
+    //     if (block.timestamp >= votingEnd){
+    //         timeNow=0;
+    //     }
+    //     timeNow= votingEnd - block.timestamp;
+    // }
 
-    function getStatus() public view returns(bool){
-        return(block.timestamp >= votingStart && block.timestamp < votingEnd);
-    }
+    // function getStatus() public view returns(bool){
+    //     return(block.timestamp >= votingStart && block.timestamp < votingEnd);
+    // }
 
-    function getWinner() public  returns(string memory) {
+    function getWinner() public view returns(string memory) {
         uint winner = 1;
         uint voterS = candidates[1].voteCount;
         for (uint index = 2; index <  candidatesCount; index++) {
@@ -187,7 +187,7 @@ contract Election {
                 voterS = candidates[index].voteCount;
                 }
         }
-        adjustTime();
+        // adjustTime();
         return (candidates[winner].name);
     }
 

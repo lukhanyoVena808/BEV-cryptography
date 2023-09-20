@@ -237,16 +237,18 @@ App = {
     var electionInstance;
     App.contracts.Election.deployed().then(function(instance) {
       electionInstance = instance;
-        return electionInstance.getStatus();
-      }).then(function(inPhase){
-        if(inPhase){
+      //   return electionInstance.getStatus();
+      // }).then(function(inPhase){
+      //   if(inPhase){
           // return electionInstance.timeNow().then(function(the_durations){
-            electionInstance.phase().then(function(the_phase){
+      return electionInstance.phase().then(function(the_phase){
               // $("#setTimer").html("</span>Current Phase: "+the_phase+"</span><br><span>Remaining Time till next phase: "+parseInt(the_durations, 16)+" seconds</span>");
-              $("#setTimer").html("</span>Current Phase: "+the_phase+"</span>");
+              if (the_phase != "Election has not started" && the_phase !="Election ended"){
+                $("#setTimer").html("</span>Current Phase: "+the_phase+"</span>");
+              }
             })
           // })
-        }
+        // }
         // console.log(parseInt(the_durations, 16))
       }).catch(function(err){
         console.error(err);
@@ -295,11 +297,20 @@ App = {
   },
 
   changePhases: function(){
+    var electionInstance
     App.contracts.Election.deployed().then(function(instance) {
-      const electionInstance = instance;
-        return electionInstance.changePhase({from: App.account});
-      }).then(function(results){
-        alert("Next Phase");
+      electionInstance = instance;
+        return electionInstance.phase();
+      }).then(function(the_phase){
+       
+        if (the_phase != "Election has not started" && the_phase !="Election ended"){
+          return electionInstance.changePhase({from: App.account}).then(function() {
+            alert("Next Phase");
+          });
+        }
+        else{
+          alert("Election has not started");
+        }
       }).catch(function(err){
         console.error(err);
       })
