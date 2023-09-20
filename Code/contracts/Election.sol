@@ -39,8 +39,10 @@ contract Election {
     // Stores Election phase
     string public phase;
 
-    // Store Candidates Count
+    // Store number of voters
     uint public votersCount;
+
+    uint public numVotes;
 
     // Stores current time
     uint public timeNow;
@@ -135,6 +137,7 @@ contract Election {
         // update candidate vote Count
         candidates[_candidateId].voteCount ++;
         // adjustTime();
+        numVotes++;
 
     }
 
