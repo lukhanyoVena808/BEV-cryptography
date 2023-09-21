@@ -128,7 +128,7 @@ App = {
             myform.hide();
             $("#process").html("Voting has not started");
           }
-          else if (thePhase == "resulsts"){
+          else if (thePhase == "results"){
             $("#process").html("Voting is over");
           }
         })
