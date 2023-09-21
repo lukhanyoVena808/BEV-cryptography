@@ -60,14 +60,6 @@ contract Election {
         phase="Election has not started";
     } 
 
-    //start time of phase
-    // function startTime() onlyAdmin internal {
-    //     votingStart = block.timestamp;
-    //     votingEnd = block.timestamp + (10* 1 minutes); //
-    //     timeNow = 0;
-    // }
-    
-
     modifier onlyAdmin(){
 		require(msg.sender==admin, "Only Admin can perform this function");
 		_;
@@ -105,7 +97,7 @@ contract Election {
                     });
             votersCount ++;
             verifier[encrypt_id] = _pAdress;
-            // adjustTime();
+            
     }
 
     //returns true if voter registered
@@ -143,7 +135,7 @@ contract Election {
 
     
 
-    //start election
+    // start election
     function startElection() onlyAdmin public {
             phasePointer = 0;
             phase = phases[phasePointer]; //contract is deployed in the registration phase
@@ -155,7 +147,6 @@ contract Election {
         phasePointer++;
         if (phasePointer <3) {
             phase = phases[phasePointer];
-            // startTime();
         } else {
             phase = "Election ended";
         }
@@ -168,32 +159,18 @@ contract Election {
         return keccak256(abi.encode(text));
     }
 
-    //get blockchain
-    // function adjustTime() internal{
-    //     require(block.timestamp >= votingStart && block.timestamp < votingEnd, "Voting not in Progress");
-    //     if (block.timestamp >= votingEnd){
-    //         timeNow=0;
-    //     }
-    //     timeNow= votingEnd - block.timestamp;
-    // }
-
-    // function getStatus() public view returns(bool){
-    //     return(block.timestamp >= votingStart && block.timestamp < votingEnd);
-    // }
-
     function getWinner() public view returns(string memory) {
         uint winner = 1;
         uint voterS = candidates[1].voteCount;
-        for (uint index = 2; index <  candidatesCount; index++) {
+        for (uint index = 2; index <=  candidatesCount; index++) {
             if(candidates[index].voteCount > voterS){
                 winner = index;
                 voterS = candidates[index].voteCount;
                 }
         }
-        // adjustTime();
         return (candidates[winner].name);
-    }
 
+    }
 
 
     //<----------------------------------- Verifies signed message -------------------------------->

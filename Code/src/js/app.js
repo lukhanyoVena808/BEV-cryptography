@@ -1,4 +1,4 @@
-const lk = 0;
+
 App = {
 
   web3Provider: null,
@@ -95,9 +95,6 @@ App = {
             const id = candidate[0];
             const name = candidate[1];
             const party = candidate[2];
-            // const voteCount = candidate[3];
-            // Render candidate Result
-            // const candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td><td>" + voteCount + "</td></tr>"
             const candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + party + "</td></tr>"
             candidatesResults.append(candidateTemplate);
     
@@ -128,7 +125,7 @@ App = {
             myform.hide();
             $("#process").html("Voting has not started");
           }
-          else if (thePhase == "results"){
+          if (thePhase == "results"){
             $("#process").html("Voting is over");
           }
         })
@@ -209,7 +206,7 @@ App = {
     const party= $("#party-C").val();
       
     //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
-    // try {  
+    try {  
           // Conditions
           if (name != '' && party != '' && surname != '') { 
                 App.contracts.Election.deployed().then(function(instance){
@@ -227,9 +224,9 @@ App = {
                 alert("All fields are required.....!");
                 return false;
                 }
-      // } catch (error) {
-      //     console.warn(error);
-      // }
+      } catch (error) {
+          console.warn(error);
+      }
      
   },
 
@@ -237,19 +234,11 @@ App = {
     var electionInstance;
     App.contracts.Election.deployed().then(function(instance) {
       electionInstance = instance;
-      //   return electionInstance.getStatus();
-      // }).then(function(inPhase){
-      //   if(inPhase){
-          // return electionInstance.timeNow().then(function(the_durations){
       return electionInstance.phase().then(function(the_phase){
-              // $("#setTimer").html("</span>Current Phase: "+the_phase+"</span><br><span>Remaining Time till next phase: "+parseInt(the_durations, 16)+" seconds</span>");
               if (the_phase != "Election has not started" && the_phase !="Election ended"){
                 $("#setTimer").html("</span>Current Phase: "+the_phase+"</span>");
               }
             })
-          // })
-        // }
-        // console.log(parseInt(the_durations, 16))
       }).catch(function(err){
         console.error(err);
       })
@@ -258,8 +247,6 @@ App = {
 
   //admin signs in 
   admin_Signs_In: function(){
-
-    //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
     try {      
       ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
 
@@ -308,6 +295,9 @@ App = {
             alert("Next Phase");
           });
         }
+        if (the_phase == "Election ended"){
+          alert("Election ended");
+        }
         else{
           alert("Election has not started");
         }
@@ -320,18 +310,11 @@ App = {
     var electionInstance;
     const content = $("#content2023");
     content.show()
-   
-        //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
+        
     try {     
         
-      // ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
         App.contracts.Election.deployed().then(function(instance) {
           electionInstance = instance;
-         
-          //   return instance.verify("elections2023_nationWideSA", result, { from: App.account });
-          // }).then(function(result2) {
-            
-          //   if(result2){  //signature valid
             return electionInstance.candidatesCount();
         }).then(function(candidatesCount) {             
                 const candidatesResults = $("#candidatesResults2023");
@@ -362,13 +345,10 @@ App = {
                     }
                     else{
                       $("#details").html("Voting has not started");
-                    }
-          
-                  
+                    }   
             }).catch(function(err){
               console.error(err);
             })
-      // });
     } catch (error) {
         console.warn(error);
     }
