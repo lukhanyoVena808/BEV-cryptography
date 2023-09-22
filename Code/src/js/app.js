@@ -150,53 +150,61 @@ App = {
   },
 
   registerVoter:  function() {    
-    // const name =  $("#name-reg").val().replace(/[^a-zA-Z0-9 ]/g, '');
+
+    
     const name =  $("#name-reg").val();
     const surname = $("#surname-reg").val();
     const person_id= $("#personID-reg").val();
     const result = person_id.replace(/[^a-zA-Z0-9 ]/g, '')?.length || 0;
     const result2 = person_id?.length || 0;
     const email = $("#email-reg").val();  
-    var electionInstance;
-    // Conditions
-    if (name != '' && email != ''  && person_id !='' && surname != '') {
-      if (result >= 10  &&  result == result2){ 
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){             
-          App.contracts.Election.deployed().then(function(instance){
-            electionInstance = instance;
-            return electionInstance.phase();
-            }).then(function(result){ 
-              if(result =="registration")  {
-                return electionInstance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
-                  alert("You have been registered!");
-                  $("#demo_form").trigger("reset"); 
-                  voted = true;
 
-                });
-              }
-              else{
-                alert("You can only register during the registration phase.");
-                return false;
-              }
-              
-            }).catch(function(err){
-              console.error(err);
-            })
+    $.getJSON("ids.json", function(election) {
+      var electionInstance;
+      const myArray = election.data;
+      // Conditions  
+      if (name != '' && email != ''  && person_id !='' && surname != '') {
+        if (result >= 10  &&  result == result2 && JSON.stringify(myArray).includes(person_id)){ 
+          if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){             
+            App.contracts.Election.deployed().then(function(instance){
+              electionInstance = instance;
+              return electionInstance.phase();
+              }).then(function(result){ 
+                if(result =="registration")  {
+                  return electionInstance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
+                    alert("You have been registered!");
+                    $("#demo_form").trigger("reset"); 
+                    voted = true;
+                    return true;
 
-        } else {
-          alert("Invalid Email Address...!!!");
+                  });
+                }
+                else{
+                  alert("You can only register during the registration phase.");
+                  return false;
+                }
+                
+              }).catch(function(err){
+                console.error(err);
+              })
+
+          } else {
+            alert("Invalid Email Address...!!!");
+            return false;
+            }
+
+      } else {
+          alert("Invalid identification number!");
           return false;
-          }
-
+        }
     } else {
-        alert("The Indentification No. must be at least 10 digit long!");
+        alert("All fields are required.....!");
         return false;
-      }
-  } else {
-      alert("All fields are required.....!");
-      return false;
-      }
-      // return App.getRemainingTime();
+        }
+        // return App.getRemainingTime();
+        
+
+    })
     
   },
 

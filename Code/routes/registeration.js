@@ -17,8 +17,9 @@ router.get('/register', function(req, res, next) {
 
 });
 
-// Retrieve User input
-router.post('/register', urlencodedParser, function(req, res, next) {      
+
+
+router.post('/register', urlencodedParser, function(req, res, next) {    
             res.render('register');
             
 });
