@@ -39,39 +39,39 @@ app.get('', (req, res) => {
     res.render("index");
 })
 
-app.get('/vote', (req, res) => {
-  res.render("vote");
-})
+// app.get('/vote', (req, res) => {
+//   res.render("vote");
+// })
 
-app.get('/register', (req, res) => {
-  res.render("register");
-})
+// app.get('/register', (req, res) => {
+//   res.render("register");
+// })
 
-app.get('/admin', (req, res) => {
-  res.render("adminLogin");
-})
+// app.get('/admin', (req, res) => {
+//   res.render("adminLogin");
+// })
 
-app.get('/candidates', (req, res) => {
-  res.render("adminCandidate");
-})
+// app.get('/candidates', (req, res) => {
+//   res.render("adminCandidate");
+// })
 
-app.get('/results', (req, res) => {
-  res.render("adminResults");
-})
+// app.get('/results', (req, res) => {
+//   res.render("adminResults");
+// })
 
-app.get('/phase', (req, res) => {
-  res.render("adminPhase");
-})
-
-
-app.get('/start', (req, res) => {
-  res.render("adminStartVotes");
-})
+// app.get('/phase', (req, res) => {
+//   res.render("adminPhase");
+// })
 
 
-app.get('/adminOverView', (req, res) => {
-  res.render("adminOverView");
-})
+// app.get('/start', (req, res) => {
+//   res.render("adminStartVotes");
+// })
+
+
+// app.get('/adminOverView', (req, res) => {
+//   res.render("adminOverView");
+// })
 
 
 

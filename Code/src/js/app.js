@@ -1,3 +1,6 @@
+class hello {
+  
+}
 
 App = {
 
@@ -143,6 +146,12 @@ App = {
     App.contracts.Election.deployed().then(function(instance) {
       return instance.vote(candidateId, { from: App.account });
     }).then(function(result) {
+      // try {            
+      //   const parsed = JSON.parse(JSON.stringify(result)).tx;
+      //   console.log(parsed)
+      // } catch (error) {
+      //   console.log(error)
+      // }
       return App.render();
     }).catch(function(err) {
       console.error(err);
@@ -208,9 +217,10 @@ App = {
     
   },
 
-  AddCandidate:  function() {    
-    const name =  $("#name-C").val().replace(/[^a-zA-Z0-9 ]/g, '');
-    const surname = $("#surname-C").val().replace(/[^a-zA-Z0-9 ]/g, '');
+  AddCandidate:  function() {   
+    // const name =  $("#name-C").val().replace(/[^a-zA-Z0-9 ]/g, ''); 
+    const name =  $("#name-C").val();
+    const surname = $("#surname-C").val();
     const party= $("#party-C").val();
       
     //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
@@ -219,7 +229,8 @@ App = {
           if (name != '' && party != '' && surname != '') { 
                 App.contracts.Election.deployed().then(function(instance){
                   return instance.addCandidate(name+ " "+surname, party, { from: App.account });
-                  }).then(function(result){        
+                  }).then(function(result){ 
+                                      
                     alert("Candidate Added!");
                     $("#demo_form2").trigger("reset"); 
                     return App.render();
@@ -264,6 +275,7 @@ App = {
             if(result2){  //signature valid 
               adminIn.hide();
               adminView.show();
+              localStorage.setItem("auth", 1);
               alert("Signed In!");
             }
             else{

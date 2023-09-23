@@ -79,8 +79,18 @@
                                 <div class="mb-3">
                                 <button type="submit" class="btn btn-primary" id="btn-adopt">Submit</button>
                                 </div>
-
                             </form>
+                            <div>
+                                <form onsubmit="App.handleOTP(); return false;" method="post" action="register">
+                                    <div class="mb-3">
+                                        <label for="otp-reg" class="form-label">OTP Code:</label>
+                                        <input type="text" class="form-control" id="otp-reg" name="otp">
+                                    </div>
+                                    <div class="mb-3">
+                                        <button type="submit" class="btn btn-primary" id="btn-adopt">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
             </div>
