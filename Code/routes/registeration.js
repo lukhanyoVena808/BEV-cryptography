@@ -1,4 +1,4 @@
-
+const speakeasy = require('speakeasy');
 const express = require('express');
 const bodyParser = require('body-parser');
 const {check, validationResult} = require("express-validator");
@@ -19,62 +19,57 @@ router.get('/register', function(req, res, next) {
 });
 
 
-// Render form
-router.get('/registerInProgress', function(req, res, next) {
-    res.render('register2');
 
-});
 
 // email validation
-var transporter;
-// try {
-//   const nodemailer = require('nodemailer');
-//  transporter = nodemailer.createTransport({
-//     service: 'hotmail',
-//     auth: {
-//       user: 'rishfish808@outlook.com',
-//       pass: '158410Xx',
-//     },
-//   });
-
-  
-// } catch (error) {
-//   console.log(error)
-  
-// }
 
 //
 
 
-router.post('/register', urlencodedParser, async function(req, res, next) { 
-  
-            const {name, surname, personID, email} = req.body;
-            const otpGenerator = require('otp-generator');
-            const sharedSecret = 'YOUR_SHARED_SECRET';
-            const otp = "helloWord";
-    
-              const mailOptions = {
-                from: 'rishfish808@outlook.com',
-                to: 'lookmane001@gmail.com',
-                subject: 'E-VoteZ OTP for Authentication',
-                text: `Your OTP is: ${otp}`,
-              };
-              
-              // try {
-              //   await transporter.sendMail(mailOptions, (error, info) => {
-              //     if (error) {
-              //       console.error('Error sending OTP via email:', error);
-              //       // Handle the error appropriately
-              //     } else {
-              //       console.log('OTP sent via email:', info.response);
-              //       // Continue with the OTP authentication flow
-              //     }
-              //   });
+
+router.post('/registration', urlencodedParser, async function(req, res, next) { 
+              const {name, surname, personID, email} = req.body;
+              var otp;
+              try {
                 
-              // } catch (error) {
-              //   console.log(error)
-              // }
-        
+                // Generate a secret key with a length
+                // of 20 characters
+                const secret = speakeasy.generateSecret({ length: 20 });
+                  
+                // Generate a TOTP code using the secret key
+                otp = speakeasy.totp({
+                  
+                    // Use the Base32 encoding of the secret key
+                    secret: secret.base32,
+                  
+                    // Tell Speakeasy to use the Base32 
+                    // encoding format for the secret key
+                    encoding: 'base32'
+                });
+                  
+                // Log the secret key and TOTP code
+                // to the console
+                // console.log('Secret: ', secret.base32);
+                // console.log('Code: ', otp);
+                
+              } catch (error) {
+                console.log(error)
+              }
+              console.log(otp);
+              // const mailOptions = {
+              //   from: 'lxgog@mail.com',
+              //   to: 'lookmane001@gmail.com',
+              //   subject: 'E-VoteZ OTP for Authentication',
+              //   text: `Your OTP is: ${otp}`,
+              // };
+
+              var templateParams = {
+                name: name,
+                email: email,
+                message:`${otp}`,
+            };
+            
+          
             res.render('register2', {encrypted_word1: name, encrypted_word2: surname, encrypted_word3: personID, encrypted_word4:email, encrypted_word5:otp});
             
 });

@@ -12,36 +12,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700">
     <link rel="stylesheet" href="assets_home/fonts/font-awesome.min.css">
 
-    <script>
-        function validateForm(){
-            let name = document.forms["demo_form"]["name-reg"].value.trim();
-            let surname = document.forms["demo_form"]["surname-reg"].value.trim();
-            let email = document.forms["demo_form"]["email-reg"].value.trim();
-            let personID = document.forms["demo_form"]["personID-reg"].value.trim();
-            let result = personID.replace(/[^a-zA-Z0-9 ]/g, '')?.length || 0;
-            let result2 = personID?.length || 0;
-
-            if  (name != '' && email != ''  && personID !='' && surname != '') {
-                if (result >= 10  &&  result == result2){
-                    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
-                        document.forms["demo_form"].submit();
-                    }else{
-                        alert("Invalid email");
-                        return false;
-                        }
-                    
-                }else{
-                    alert("Invalid Identification number");
-                    return false;
-                    }
-              
-            }
-            else{
-                alert("All field must be filled out");
-                return false;
-            }
-          }
-    </script>
 
     <style>
         #sliders {
@@ -99,7 +69,7 @@
                             onsubmit="vibe(); return false;" 
                             onsubmit="vibe(); return false;" 
                             -->
-                            <form  method="post" action="register" id= "demo_form">
+                            <form  method="post" action="registration" id= "demo_form">
                                 <div class="mb-3">
                                     <label for="name-reg" class="form-label">Name </label>
                                     <input type="text" class="form-control" id="name-reg" name="name" autocomplete=off required>                        
