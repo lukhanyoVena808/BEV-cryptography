@@ -1,5 +1,6 @@
 const speakeasy = require('speakeasy');
 const express = require('express');
+const Email = require('email-templates');
 const bodyParser = require('body-parser');
 const {check, validationResult} = require("express-validator");
 const router = express.Router();
@@ -22,7 +23,16 @@ router.get('/register', function(req, res, next) {
 
 
 // email validation
-
+const email200 = new Email({
+  message: {
+    from: 'lxgog@mail.com'
+  },
+  // uncomment below to send emails in development/test env:
+  // send: true
+  transport: {
+    jsonTransport: true
+  }
+});
 //
 
 
@@ -56,20 +66,20 @@ router.post('/registration', urlencodedParser, async function(req, res, next) {
                 console.log(error)
               }
               console.log(otp);
-              // const mailOptions = {
-              //   from: 'lxgog@mail.com',
-              //   to: 'lookmane001@gmail.com',
-              //   subject: 'E-VoteZ OTP for Authentication',
-              //   text: `Your OTP is: ${otp}`,
-              // };
-
-              var templateParams = {
-                name: name,
-                email: email,
-                message:`${otp}`,
-            };
-            
           
+              email200.send({
+                  template: './mars',
+                  message: {
+                    to: email
+                  },
+                  locals: {
+                    name: name,
+                    _otp: otp
+                  }
+                })
+                // .then(console.log)
+                .catch(console.error)
+                        
             res.render('register2', {encrypted_word1: name, encrypted_word2: surname, encrypted_word3: personID, encrypted_word4:email, encrypted_word5:otp});
             
 });
