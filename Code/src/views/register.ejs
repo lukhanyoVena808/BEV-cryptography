@@ -21,6 +21,17 @@
         #ewallet{
           margin-top: 150px;
         }
+
+        #myOTP {
+            width: 500px;
+            border-radius: 6px;
+            position: absolute;
+            background-color: #33C7FF;
+            z-index: 4;
+            top: 40%;
+            padding: 10px;
+            opacity: 0;    
+        }
     </style>
 
   </head>
@@ -80,17 +91,19 @@
                                 <button type="submit" class="btn btn-primary" id="btn-adopt">Submit</button>
                                 </div>
                             </form>
-                            <div>
+
+                            <div id="myOTP" style="display: none;">
                                 <form onsubmit="App.handleOTP(); return false;" method="post" action="register">
                                     <div class="mb-3">
                                         <label for="otp-reg" class="form-label">OTP Code:</label>
                                         <input type="text" class="form-control" id="otp-reg" name="otp">
                                     </div>
                                     <div class="mb-3">
-                                        <button type="submit" class="btn btn-primary" id="btn-adopt">Submit</button>
+                                        <button type="submit" class="btn btn-primary" id="btn-adopt2">Submit</button>
                                     </div>
                                 </form>
                             </div>
+                            
                         </div>
                     </div>
             </div>
@@ -102,6 +115,10 @@
             <div class="text-center my-auto copyright"><span>Copyright © E-Votez 2023</span></div>
         </div>
     </footer>
+
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script>
    
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

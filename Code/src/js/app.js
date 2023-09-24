@@ -11,6 +11,7 @@ App = {
   adminIn: null,
   adminView: null,
   
+  
 
   init: function() {
     return App.initWeb3();
@@ -160,7 +161,7 @@ App = {
 
   registerVoter:  function() {    
 
-    
+   
     const name =  $("#name-reg").val();
     const surname = $("#surname-reg").val();
     const person_id= $("#personID-reg").val();
@@ -180,13 +181,16 @@ App = {
               return electionInstance.phase();
               }).then(function(result){ 
                 if(result =="registration")  {
-                  return electionInstance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
-                    alert("You have been registered!");
-                    $("#demo_form").trigger("reset"); 
-                    voted = true;
-                    return true;
+                 
+                  $("#myOTP").fadeTo( "slow" , 1);
 
-                  });
+                  // return electionInstance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
+                  //   alert("You have been registered!");
+                    $("#demo_form").trigger("reset"); 
+                  //   voted = true;
+                    // return true;
+
+                  // });
                 }
                 else{
                   alert("You can only register during the registration phase.");
@@ -375,6 +379,23 @@ App = {
     return App.getRemainingTime();
 
   },
+
+  handleOTP(){
+    const name =  $("#name-reg").val();
+    const surname = $("#surname-reg").val();
+    const person_id= $("#personID-reg").val();
+    const email = $("#email-reg").val(); 
+    $("#myOTP").fadeTo( "slow" , 0);
+    const otpCode= $("#otp-reg").val();  
+    console.log(otpCode)
+    App.contracts.Election.deployed().then(function(instance){
+      instance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
+        alert("You have been registered!");
+        $("#demo_form").trigger("reset"); 
+        voted = true;
+      });
+    })
+  }
 };
 
 $(function() {
