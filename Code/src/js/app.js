@@ -155,61 +155,60 @@ App = {
     });
   },
 
-  registerVoter:  function() {    
+  registerVoter:  function(name, surname, person_id, email, otpR, otpFk) {    
 
-   
-    const name =  $("#name-reg").val();
-    const surname = $("#surname-reg").val();
-    const person_id= $("#personID-reg").val();
-    const result = person_id.replace(/[^a-zA-Z0-9 ]/g, '')?.length || 0;
-    const result2 = person_id?.length || 0;
-    const email = $("#email-reg").val();  
-    
-
+    const result = personID.replace(/[^a-zA-Z0-9 ]/g, '')?.length || 0;
+    const result2 = personID?.length || 0;
     $.getJSON("ids.json", function(election) {
       var electionInstance;
       const myArray = election.data;
       // Conditions  
       if (name != '' && email != ''  && person_id !='' && surname != '') {
         if (result >= 10  &&  result == result2 && JSON.stringify(myArray).includes(person_id)){ 
-          if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){             
-            App.contracts.Election.deployed().then(function(instance){
-              electionInstance = instance;
-              return electionInstance.phase();
-              }).then(function(result){ 
-                if(result =="registration")  {
-                 
-                  $("#myOTP").fadeTo( "slow" , 1);
-
-                  // return electionInstance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
-                  //   alert("You have been registered!");
-                    $("#demo_form").trigger("reset"); 
-                  //   voted = true;
-                    // return true;
-
-                  // });
-                }
-                else{
-                  alert("You can only register during the registration phase.");
-                  return false;
-                }
-                
-              }).catch(function(err){
-                console.error(err);
-              })
+          if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){  
+            if ( otpR == otpFk){          
+                  App.contracts.Election.deployed().then(function(instance){
+                    electionInstance = instance;
+                    return electionInstance.phase();
+                    }).then(function(result){ 
+                      if(result =="registration")  {
+                        return electionInstance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
+                          alert("You have been registered!");
+                          // $("#demo_form").trigger("reset"); 
+                          window.location.replace("/register")
+                          voted = true;
+                          return true;
+                        });
+                      }
+                      else{
+                        alert("You can only register during the registration phase.");
+                        // return false;
+                        window.location.replace("/register")
+                      }
+                      
+                    }).catch(function(err){
+                      console.error(err);
+                    })
+                  }else{
+                      alert("Invalid OTP, please re-register")
+                      window.location.replace("/register")
+                  }
 
           } else {
             alert("Invalid Email Address...!!!");
-            return false;
+            // return false;
+            window.location.replace("/register")
             }
 
       } else {
           alert("Invalid identification number!");
-          return false;
+          // return false;
+          window.location.replace("/register")
         }
     } else {
         alert("All fields are required.....!");
-        return false;
+        // return false;
+        window.location.replace("/register")
         }
         // return App.getRemainingTime();
         
@@ -383,24 +382,62 @@ App = {
     const person_id= $("#personID-reg2").val();
     const email = $("#email-reg2").val(); 
     const checkOTP = $("#otp2000").val(); 
-    console.log(checkOTP)
+   
     $("#myOTP").fadeTo( "fast" , 0);
     const otpCode= $("#otp-reg").val();  
-    console.log(otpCode)
-    if (checkOTP == otpCode){
-      console.log("passed")
-    }
-    else{
-      alert("Invalid OTP, please re-register")
-      return false;
-    }
-    // App.contracts.Election.deployed().then(function(instance){
-    //   instance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
-    //     alert("You have been registered!");
-    //     $("#demo_form").trigger("reset"); 
-    //     voted = true;
-    //   });
-    // })
+    console.log(name)
+    const result = person_id.replace(/[^a-zA-Z0-9 ]/g, '')?.length || 0;
+    const result2 = person_id?.length || 0;
+
+    $.getJSON("ids.json", function(election) {
+      var electionInstance;
+      const myArray = election.data;
+      // Conditions  
+        if (result >= 10  &&  result == result2 && JSON.stringify(myArray).includes(person_id)){ 
+          if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){  
+            if ( checkOTP == otpCode){          
+                  App.contracts.Election.deployed().then(function(instance){
+                    electionInstance = instance;
+                    return electionInstance.phase();
+                    }).then(function(result){ 
+                      if(result =="registration")  {
+                        return electionInstance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
+                          alert("You have been registered!");
+                          // $("#demo_form").trigger("reset"); 
+                          window.location.replace("/register")
+                          voted = true;
+                          return true;
+                        });
+                      }
+                      else{
+                        alert("You can only register during the registration phase.");
+                        // return false;
+                        window.location.replace("/register")
+                      }
+                      
+                    }).catch(function(err){
+                      console.error(err);
+                    })
+                  }else{
+                      alert("Invalid OTP, please re-register")
+                      window.location.replace("/register")
+                  }
+
+          } else {
+            alert("Invalid Email Address...!!!");
+            // return false;
+            window.location.replace("/register")
+            }
+
+      } else {
+          alert("Invalid identification number!");
+          // return false;
+          window.location.replace("/register")
+        }
+        
+
+    });
+
   },
 
 };

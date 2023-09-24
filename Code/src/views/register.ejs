@@ -11,15 +11,37 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700">
     <link rel="stylesheet" href="assets_home/fonts/font-awesome.min.css">
+
     <script>
+        function validateForm(){
+            let name = document.forms["demo_form"]["name-reg"].value.trim();
+            let surname = document.forms["demo_form"]["surname-reg"].value.trim();
+            let email = document.forms["demo_form"]["email-reg"].value.trim();
+            let personID = document.forms["demo_form"]["personID-reg"].value.trim();
+            let result = personID.replace(/[^a-zA-Z0-9 ]/g, '')?.length || 0;
+            let result2 = personID?.length || 0;
 
-        function vibe (){
-            App.registerVoter();
-        }
-        
+            if  (name != '' && email != ''  && personID !='' && surname != '') {
+                if (result >= 10  &&  result == result2){
+                    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
+                        document.forms["demo_form"].submit();
+                    }else{
+                        alert("Invalid email");
+                        return false;
+                        }
+                    
+                }else{
+                    alert("Invalid Identification number");
+                    return false;
+                    }
+              
+            }
+            else{
+                alert("All field must be filled out");
+                return false;
+            }
+          }
     </script>
-    
-
 
     <style>
         #sliders {
@@ -38,6 +60,7 @@
             z-index: 4;
             top: 40%;
             padding: 10px;
+            transition: all .8s ease-in;
             opacity: 0;    
         }
     </style>
@@ -76,45 +99,32 @@
                             onsubmit="vibe(); return false;" 
                             onsubmit="vibe(); return false;" 
                             -->
-                            <form method="post" action="register" id = "demo_form">
+                            <form  method="post" action="register" id= "demo_form">
                                 <div class="mb-3">
-                                    <label for="name-reg" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="name-reg" name="name" autocomplete=off >                        
+                                    <label for="name-reg" class="form-label">Name </label>
+                                    <input type="text" class="form-control" id="name-reg" name="name" autocomplete=off required>                        
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="surname-reg" class="form-label">Surname</label>
-                                    <input type="text" class="form-control" id="surname-reg" name="surname" autocomplete=off >                        
+                                    <input type="text" class="form-control" id="surname-reg" name="surname" autocomplete=off required>                        
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="personID-reg" class="form-label">Identification Number (ID/Passport)</label>
-                                    <input type="text" class="form-control" id="personID-reg" name="personID">
+                                    <input type="text" class="form-control" id="personID-reg" name="personID" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="email-reg" class="form-label">Email</label>
-                                    <input type="text" class="form-control" id="email-reg" name="email" autocomplete=off> 
-
+                                    <input type="email" class="form-control" id="email-reg" name="email" 
+                                     autocomplete=off required> 
                                 </div>
-
+                                
                                 <div class="mb-3">
                                 <button type="submit" class="btn btn-primary" id="btn-adopt">Submit</button>
                                 </div>
-                            </form>
-
-                            <!-- <div id="myOTP" style="display: none;">
-                                <form onsubmit="App.handleOTP(); return false;" method="post" action="register">
-                                    <div class="mb-3">
-                                        <label for="otp-reg" class="form-label">OTP Code:</label>
-                                        <input type="text" class="form-control" id="otp-reg" name="otp">
-                                    </div>
-                                    <div class="mb-3">
-                                        <button type="submit" class="btn btn-primary" id="btn-adopt2">Submit</button>
-                                    </div>
-                                </form>
-                            </div>
-                             -->
+                            </form>  
                         </div>
                     </div>
             </div>
@@ -126,7 +136,6 @@
             <div class="text-center my-auto copyright"><span>Copyright © E-Votez 2023</span></div>
         </div>
     </footer>
-
    
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

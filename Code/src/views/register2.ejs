@@ -37,6 +37,8 @@
         }
     </style>
 
+
+
   </head>
   <body id="page-top">
     <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-dark" id="mainNav">
@@ -70,15 +72,15 @@
                             <!-- Need to add Duration, after which people cannot register
                             onsubmit="vibe(); return false;"  
                             -->
-                            <form  method="post" action="register" id = "demo_form">
+                            <form  method="post" action="register" id = "demo_form" >
                                 <div class="mb-3">
                                     <label for="name-reg2" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="name-reg2" value="<%= encrypted_word1 %>" autocomplete=off >                        
+                                    <input type="text" class="form-control" id="name-reg2"  value="<%= encrypted_word1 %>" autocomplete=off >                        
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="surname-reg2" class="form-label">Surname</label>
-                                    <input type="text" class="form-control" id="surname-reg2" value="<%= encrypted_word2 %>"autocomplete=off >                        
+                                    <input type="text" class="form-control" id="surname-reg2" value="<%= encrypted_word2 %>" autocomplete=off >                        
                                 </div>
 
                                 <div class="mb-3">
@@ -101,7 +103,7 @@
                             </form>
 
                             <div id="myOTP" >
-                                <form onsubmit="App.handleOTP(); return false;" method="post" action="register">
+                                <form onsubmit="App.handleOTP(); return false;" method="post" action="#">
                                     <div class="mb-3">
                                         <label for="otp-reg" class="form-label">OTP Code:</label>
                                         <input type="text" class="form-control" id="otp-reg" name="otp">
