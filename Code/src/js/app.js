@@ -382,6 +382,7 @@ App = {
     const surname = $("#surname-reg").val();
     const person_id= $("#personID-reg").val();
     const email = $("#email-reg").val(); 
+    
     $("#myOTP").fadeTo( "slow" , 0);
     const otpCode= $("#otp-reg").val();  
     console.log(otpCode)

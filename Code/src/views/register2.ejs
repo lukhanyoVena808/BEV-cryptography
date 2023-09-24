@@ -33,7 +33,7 @@
             top: 40%;
             padding: 10px;
             opacity: 1;   
-            transition: all 1s ease-in; 
+            transition: all .8s ease-in; 
         }
     </style>
 
@@ -72,28 +72,28 @@
                             -->
                             <form onsubmit="vibe(); return false;" method="post" action="register" id = "demo_form">
                                 <div class="mb-3">
-                                    <label for="name-reg" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="name-reg" name="name" autocomplete=off >                        
+                                    <label for="name-reg2" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="name-reg2" value="<%= encrypted_word1 %>" autocomplete=off >                        
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="surname-reg" class="form-label">Surname</label>
-                                    <input type="text" class="form-control" id="surname-reg" name="surname" autocomplete=off >                        
+                                    <label for="surname-reg2" class="form-label">Surname</label>
+                                    <input type="text" class="form-control" id="surname-reg2" value="<%= encrypted_word2 %>"autocomplete=off >                        
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="personID-reg" class="form-label">Identification Number (ID/Passport)</label>
-                                    <input type="text" class="form-control" id="personID-reg" name="personID">
+                                    <label for="personID-reg2" class="form-label">Identification Number (ID/Passport)</label>
+                                    <input type="text" class="form-control" id="personID-reg2" value="<%= encrypted_word3 %>" name="personID2">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="email-reg" class="form-label">Email</label>
-                                    <input type="text" class="form-control" id="email-reg" name="email" autocomplete=off> 
+                                    <label for="email-reg2" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="email-reg2" name="email2" value="<%= encrypted_word4 %>" autocomplete=off> 
 
                                 </div>
 
                                 <div class="mb-3">
-                                <button type="submit" class="btn btn-primary" id="btn-adopt">Submit</button>
+                                <button type="submit" class="btn btn-primary" id="btn-adopt2">Submit</button>
                                 </div>
                             </form>
 
