@@ -378,21 +378,22 @@ App = {
   },
 
   handleOTP:  function(){
-    const name =  $("#name-reg").val();
-    const surname = $("#surname-reg").val();
-    const person_id= $("#personID-reg").val();
-    const email = $("#email-reg").val(); 
-    
+    const name =  $("#name-reg2").val();
+    const surname = $("#surname-reg2").val();
+    const person_id= $("#personID-reg2").val();
+    const email = $("#email-reg2").val(); 
+    const checkOTP = $("#otp2000").val(); 
+    console.log(checkOTP)
     $("#myOTP").fadeTo( "slow" , 0);
     const otpCode= $("#otp-reg").val();  
     console.log(otpCode)
-    App.contracts.Election.deployed().then(function(instance){
-      instance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
-        alert("You have been registered!");
-        $("#demo_form").trigger("reset"); 
-        voted = true;
-      });
-    })
+    // App.contracts.Election.deployed().then(function(instance){
+    //   instance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
+    //     alert("You have been registered!");
+    //     $("#demo_form").trigger("reset"); 
+    //     voted = true;
+    //   });
+    // })
   },
 
 };

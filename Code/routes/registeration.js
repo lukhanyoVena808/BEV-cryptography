@@ -86,7 +86,7 @@ router.post('/register', urlencodedParser, async function(req, res, next) {
                 }
               });
              
-            res.render('register2', {encrypted_word1: name, encrypted_word2: surname, encrypted_word3: personID, encrypted_word4:email});
+            res.render('register2', {encrypted_word1: name, encrypted_word2: surname, encrypted_word3: personID, encrypted_word4:email, encrypted_word5:otp});
             
 });
 
