@@ -11,13 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700">
     <link rel="stylesheet" href="assets_home/fonts/font-awesome.min.css">
-    <script>
 
-        function vibe (){
-            App.registerVoter();
-        }
-        
-    </script>
     
 
 
@@ -38,7 +32,8 @@
             z-index: 4;
             top: 40%;
             padding: 10px;
-            opacity: 0;    
+            opacity: 1;   
+            transition: all 1s ease-in; 
         }
     </style>
 
@@ -73,10 +68,9 @@
                                 <h4 class="text-dark mb-4">Register to Vote!</h4>
                             </div>
                             <!-- Need to add Duration, after which people cannot register
-                            onsubmit="vibe(); return false;" 
-                            onsubmit="vibe(); return false;" 
+                            onsubmit="vibe(); return false;"  
                             -->
-                            <form method="post" action="register" id = "demo_form">
+                            <form onsubmit="vibe(); return false;" method="post" action="register" id = "demo_form">
                                 <div class="mb-3">
                                     <label for="name-reg" class="form-label">Name</label>
                                     <input type="text" class="form-control" id="name-reg" name="name" autocomplete=off >                        
@@ -103,7 +97,7 @@
                                 </div>
                             </form>
 
-                            <div id="myOTP" style="display: none;">
+                            <div id="myOTP" >
                                 <form onsubmit="App.handleOTP(); return false;" method="post" action="register">
                                     <div class="mb-3">
                                         <label for="otp-reg" class="form-label">OTP Code:</label>

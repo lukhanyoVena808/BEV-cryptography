@@ -1,3 +1,2 @@
 
 const auth = new Auth();
-

@@ -1,7 +1,3 @@
-class hello {
-  
-}
-
 App = {
 
   web3Provider: null,
@@ -168,6 +164,7 @@ App = {
     const result = person_id.replace(/[^a-zA-Z0-9 ]/g, '')?.length || 0;
     const result2 = person_id?.length || 0;
     const email = $("#email-reg").val();  
+    
 
     $.getJSON("ids.json", function(election) {
       var electionInstance;
@@ -380,7 +377,7 @@ App = {
 
   },
 
-  handleOTP(){
+  handleOTP:  function(){
     const name =  $("#name-reg").val();
     const surname = $("#surname-reg").val();
     const person_id= $("#personID-reg").val();
@@ -395,10 +392,12 @@ App = {
         voted = true;
       });
     })
-  }
+  },
+
 };
 
 $(function() {
+ 
   $(window).load(function() {
     App.init();  
    
