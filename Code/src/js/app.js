@@ -384,9 +384,16 @@ App = {
     const email = $("#email-reg2").val(); 
     const checkOTP = $("#otp2000").val(); 
     console.log(checkOTP)
-    $("#myOTP").fadeTo( "slow" , 0);
+    $("#myOTP").fadeTo( "fast" , 0);
     const otpCode= $("#otp-reg").val();  
     console.log(otpCode)
+    if (checkOTP == otpCode){
+      console.log("passed")
+    }
+    else{
+      alert("Invalid OTP, please re-register")
+      return false;
+    }
     // App.contracts.Election.deployed().then(function(instance){
     //   instance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
     //     alert("You have been registered!");
