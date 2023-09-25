@@ -21,8 +21,8 @@ router.get('/register', function(req, res, next) {
 
 
 
-
 // email validation
+
 // const email200 = new Email({
 //   message: {
 //     from: 'lxgog@mail.com'
@@ -34,7 +34,6 @@ router.get('/register', function(req, res, next) {
 //   }
 // });
 
-const Mailgen = require('mailgen');
 
 const nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
@@ -77,7 +76,7 @@ router.post('/registration', urlencodedParser, async function(req, res, next) {
               } catch (error) {
                 console.log(error)
               }
-              console.log(otp);
+              // console.log(otp);
           
               // email200.send({
               //     template: './mars',
@@ -92,41 +91,26 @@ router.post('/registration', urlencodedParser, async function(req, res, next) {
                 // .then(console.log)
                 // .catch(console.error)
                 // verify connection configuration
-                const mailGenerator = new Mailgen({
-                  theme: 'default',
-                  product: {
-                      // Appears in header & footer of e-mails
-                      name: 'Mailgen',
-                      link: 'https://mailgen.js/'
-                      // Optional product logo
-                      // logo: 'https://mailgen.js/img/logo.png'
-                  }
-                });
-                const email300 = {
-                  body : {
-                      name: name,
-                      intro : 'Welcome to Test Mail! We\'re very excited to have you on board: ',
-                      outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.'
-                  }
-              }
+             
               try {
-                // Generate an HTML email with the provided contents
-                // var emailBody = mailGenerator.generate(email300);y
-                const mailOptions = {
-                  from: 'lxgog@mail.com',
-                  to: email,
-                  subject: 'E-Votez OTP Code',
-                  html: "<h1>"+otp+"</h1>"
-              };
-              await transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.log(error);
-                    res.status(500).send('Error sending email');
-                } else {
-                    console.log('Email sent: ' + info.response);
-                    res.send('Email sent successfully');
-                }
-             });
+                if(name!=''){
+  
+                    const mailOptions = {
+                      from: 'lxgog@mail.com',
+                      to: email,
+                      subject: 'E-Votez OTP Code',
+                      html: "<p>Hello, <strong>"+name+"</strong></br>Use the OTP Code below to complete your registration:</p>"+"<h1>"+otp+"</h1>"
+                    };
+                    await transporter.sendMail(mailOptions, (error, info) => {
+                      if (error) {
+                          console.log(error);
+                          res.status(500).send('Error sending email');
+                      } else {
+                          console.log('Email sent: ' + info.response);
+                          res.send('Email sent successfully');
+                      }
+                    });
+               }
                                 
               } catch (error) {
                 console.log(error)
