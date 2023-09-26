@@ -16,7 +16,6 @@ contract Election {
         uint256 PublicKey1;
         uint256 PublicKey2;
         uint256 PrivateKey;
-        uint voterPosition;
     }
 
 
@@ -28,17 +27,17 @@ contract Election {
         uint voteCount;
     }
     //ECC CONSTANTS - SECPTIC256
-    uint256 internal constant GX = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798;
-    uint256 internal constant GY = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8;
-    uint256 internal constant AA = 0;
-    uint256 internal constant BB = 7;
-    uint256 internal constant PP = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F;
+    uint256 private constant GX = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798;
+    uint256 private constant GY = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8;
+    uint256 private constant AA = 0;
+    uint256 private constant BB = 7;
+    uint256 private constant PP = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F;
 
     // Read/write candidate
     mapping(uint => Candidate) public candidates;
 
     // Store accounts that have voted
-    mapping(address => voter) private voters;
+    mapping(address => voter) public voters;
 
      // Stores encyrted ID'S
     mapping(bytes32 => address) public verifier;
@@ -111,10 +110,9 @@ contract Election {
                             surname: _surname, 
                             refNUm: _ref,
                             isRegistered:true,
-                            PublicKey1:0,
-                            PublicKey2:0,
-                            PrivateKey:0,
-                            voterPosition: votersCount
+                            PublicKey1:uint256(10),
+                            PublicKey2:uint256(10),
+                            PrivateKey:uint256(10)
                     });
             votersCount ++;
             verifier[encrypt_id] = _pAdress;
@@ -132,8 +130,8 @@ contract Election {
 
     
   // https://stackoverflow.com/questions/73555009/how-to-generate-random-words-in-solidity-based-based-on-a-string-of-letters/73557284#73557284
-  function random() private view returns (uint) {
-        return uint (keccak256(abi.encodePacked (msg.sender, block.timestamp, numVotes)));
+  function random() private view returns (uint256) {
+        return uint256 (keccak256(abi.encodePacked (block.timestamp, numVotes, candidatesCount)));
      }
 
      //returns true if voter registered
@@ -156,14 +154,13 @@ contract Election {
 
         // record that voter has voted
         voters[msg.sender].hasVoted = true;
+        voters[msg.sender].PrivateKey = 548654760794296570572465070679800543;  //CREATE PRIVATE KEY
 
         // update candidate vote Count
         candidates[_candidateId].voteCount ++;
 
-        voters[msg.sender].PrivateKey = random();  //CREATE PRIVATE KEY
-
         //CREATE PUBLIC KEY
-        // (voters[msg.sender].PublicKey1, voters[msg.sender].PublicKey2) =  Secp256k1_Address.derivePubKey(voters[msg.sender].PrivateKey);
+        (voters[msg.sender].PublicKey1, voters[msg.sender].PublicKey2) =  EllipticCurve.ecMul(56,GX,GY,AA,PP);
         numVotes++;
     }
 
@@ -171,7 +168,8 @@ contract Election {
         // require(voters[msg.sender].hasVoted, "Only people who have voted get keys");
         // uint256 p1 = voters[msg.sender].PublicKey1;
         // uint256 p2 = voters[msg.sender].PublicKey2;
-        return voters[msg.sender].PrivateKey;
+        // return voters[msg.sender].PrivateKey;
+        return (voters[msg.sender].PrivateKey);
         // return (voters[msg.sender].PublicKey1, voters[msg.sender].PublicKey2);
     }
 
