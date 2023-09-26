@@ -134,10 +134,13 @@ App = {
 
           return electionInstance.has_Voted({from: App.account});
             
-          }).then(function(next2) {  //has voted already
+          }).then(function(next2) { 
             
-            if(next2) { 
+            if(next2) {  //has voted already
               myform.hide();
+              const the_voter = $("#voter_info");
+              const candidateTemplate = "<tr><th><strong>Voter Reference key</strong></th><td>0x909403289a903854</td></tr>";
+              the_voter.append(candidateTemplate);
             }
 
             electionInstance.phase().then(function(thePhase) {
