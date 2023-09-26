@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT 
 pragma solidity  >=0.5.16;
-import "./Secp256k1.sol";
+import "./EllipticCurve.sol";
 
 contract Election { 
 
@@ -27,12 +27,18 @@ contract Election {
         string party;
         uint voteCount;
     }
+    //ECC CONSTANTS - SECPTIC256
+    uint256 internal constant GX = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798;
+    uint256 internal constant GY = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8;
+    uint256 internal constant AA = 0;
+    uint256 internal constant BB = 7;
+    uint256 internal constant PP = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F;
 
     // Read/write candidate
     mapping(uint => Candidate) public candidates;
 
     // Store accounts that have voted
-    mapping(address => voter) public voters;
+    mapping(address => voter) private voters;
 
      // Stores encyrted ID'S
     mapping(bytes32 => address) public verifier;
@@ -41,9 +47,6 @@ contract Election {
 
     // Store Candidates Count
     uint public candidatesCount;
-
-    //Secp256k1
-    Secp256k1 Secp256k1_Address = new Secp256k1();
 
     // Stores Election phase
     string public phase;
@@ -127,6 +130,12 @@ contract Election {
         return voters[msg.sender].isRegistered;
     }
 
+    
+  // https://stackoverflow.com/questions/73555009/how-to-generate-random-words-in-solidity-based-based-on-a-string-of-letters/73557284#73557284
+  function random() private view returns (uint) {
+        return uint (keccak256(abi.encodePacked (msg.sender, block.timestamp, numVotes)));
+     }
+
      //returns true if voter registered
     function has_Voted() public view returns (bool){
         return voters[msg.sender].hasVoted;
@@ -151,19 +160,19 @@ contract Election {
         // update candidate vote Count
         candidates[_candidateId].voteCount ++;
 
-        voters[msg.sender].PrivateKey = Secp256k1_Address.invMod(random(), random());
-        // adjustTime();
-        numVotes++;
+        voters[msg.sender].PrivateKey = random();  //CREATE PRIVATE KEY
 
+        //CREATE PUBLIC KEY
+        // (voters[msg.sender].PublicKey1, voters[msg.sender].PublicKey2) =  Secp256k1_Address.derivePubKey(voters[msg.sender].PrivateKey);
+        numVotes++;
     }
 
-  // https://stackoverflow.com/questions/73555009/how-to-generate-random-words-in-solidity-based-based-on-a-string-of-letters/73557284#73557284
-  function random() private returns (uint) {
-        random_counter++;
-        // sha3 and now have been deprecated
-        return uint(keccak256(abi.encodePacked(block.prevrandao, block.timestamp, random_counter)));
-        // convert hash to integer
-        
+    function getPublicKeys() public view returns(uint256){
+        // require(voters[msg.sender].hasVoted, "Only people who have voted get keys");
+        // uint256 p1 = voters[msg.sender].PublicKey1;
+        // uint256 p2 = voters[msg.sender].PublicKey2;
+        return voters[msg.sender].PrivateKey;
+        // return (voters[msg.sender].PublicKey1, voters[msg.sender].PublicKey2);
     }
 
 
@@ -239,5 +248,7 @@ contract Election {
 
             }
     }
+
+    //<----------------------------------- ECC CRYPTOGRAPHY -------------------------------->
 
 }
