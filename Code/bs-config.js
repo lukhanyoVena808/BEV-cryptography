@@ -14,15 +14,16 @@ app.use('/img', express.static(__dirname +'src/images'))
 //Setting Routes
 const registrationRouter = require('./routes/registeration');
 const votingRouter = require('./routes/voting');
-
 const adminLogin = require('./routes/adminLog');
 const adminCandidate= require('./routes/adminCands');
 const adminGetResults = require('./routes/adminView');
+const getUser = require('./routes/user');
 
 
 
 app.use('/', registrationRouter);
 app.use('/', votingRouter);
+app.use('/', getUser)
 
 app.use('/', adminLogin);
 app.use('/', adminCandidate);

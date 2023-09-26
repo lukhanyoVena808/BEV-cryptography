@@ -149,6 +149,7 @@ App = {
       // } catch (error) {
       //   console.log(error)
       // }
+      alert("Voting Completed!");
       return App.render();
     }).catch(function(err) {
       console.error(err);
@@ -207,7 +208,6 @@ App = {
   admin_Signs_In: function(){
     try {      
       ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
-
         App.contracts.Election.deployed().then(function(instance) {
             return instance.verify("elections2023_nationWideSA", result, { from: App.account });
           }).then(function(result2) {
