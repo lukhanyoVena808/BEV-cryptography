@@ -106,32 +106,54 @@ App = {
      
         return electionInstance.isVoter_Registered({from: App.account});
       }).then(function(next) {
-        // Do not allow a user to vote
+        // Do not allow a user to vote, if not registered
           if(!next) { 
             regSMS.show();
             myform.hide();
           }
-          loader.hide();
-          return electionInstance.has_Voted({from: App.account});
-        
-      }).then(function(next2) {  //has voted already
-        
-        if(next2) { 
-          myform.hide();
-        }
+          else{
+            electionInstance.getVoter({from: App.account}).then(function(voter) {
+              const the_voter = $("#voter_info");
+              the_voter.empty();
+              const v_name = voter[0];
+              const v_surname= voter[1];
+              const v_email= voter[2];
+              const v_registered= voter[3];
+              const v_voted= voter[4];
+              const candidateTemplate = "<tr><th><strong>Name</strong></th><td>" +  v_name + 
+                                  "</td></tr>" +"<tr><th><strong>Surname</strong></th><td>" +  v_surname + "</td></tr>"+
+                                  "<tr><th><strong>Email</strong></th><td>" +  v_email + "</td></tr>"+
+                                  "<tr><th><strong>Is registered?</strong></th><td>" +  v_registered + "</td></tr>"+
+                                  "<tr><th><strong>Has Voted?</strong></th><td>" +  v_voted + "</td></tr>";
+              the_voter.append(candidateTemplate);
 
-        electionInstance.phase().then(function(thePhase) {
-          if(thePhase != "voting") { 
-            myform.hide();
-            $("#process").html("Voting has not started");
+            })
           }
-          if (thePhase == "results"){
-            $("#process").html("Voting is over");
-          }
-        })
+          loader.hide();
+
+
+          return electionInstance.has_Voted({from: App.account});
+            
+          }).then(function(next2) {  //has voted already
+            
+            if(next2) { 
+              myform.hide();
+            }
+
+            electionInstance.phase().then(function(thePhase) {
+              if(thePhase != "voting") { 
+                myform.hide();
+                $("#process").html("Voting has not started");
+              }
+              if (thePhase == "results"){
+                $("#process").html("Voting is over");
+              }
+            })
         content.show();
-      }
-      ).catch(function(error) {
+
+            
+
+      }).catch(function(error) {
         console.warn(error);
       });
 

@@ -100,6 +100,10 @@ contract Election {
             
     }
 
+    function getVoter() public view returns(string memory, string memory, string memory, bool, bool){
+            return(voters[msg.sender].name, voters[msg.sender].surname, voters[msg.sender].email, voters[msg.sender].isRegistered, voters[msg.sender].hasVoted);             
+    }
+
     //returns true if voter registered
     function isVoter_Registered() public view returns (bool){
         return voters[msg.sender].isRegistered;
