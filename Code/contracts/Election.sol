@@ -13,6 +13,9 @@ contract Election {
         string surname; 
         string refNUm; 
         bool isRegistered;
+        uint256 PublicKey1;
+        uint256 PublicKey2;
+        uint256 PrivateKey;
         uint voterPosition;
     }
 
@@ -34,9 +37,13 @@ contract Election {
      // Stores encyrted ID'S
     mapping(bytes32 => address) public verifier;
     mapping(uint => address) public recorder;
+     mapping(string => uint256) public ellipter;
 
     // Store Candidates Count
     uint public candidatesCount;
+
+    //Secp256k1
+    Secp256k1 Secp256k1_Address = new Secp256k1();
 
     // Stores Election phase
     string public phase;
@@ -44,7 +51,11 @@ contract Election {
     // Store number of voters
     uint public votersCount;
 
+    //number of total votes
     uint public numVotes;
+
+    //random number counter
+    uint random_counter;
 
     // Stores current time
     uint public timeNow;
@@ -78,6 +89,7 @@ contract Election {
             });
     }
 
+
           // Add a voter
     function addVoter (string memory _personal_id, string memory _email, string memory _name, string memory _surname, string memory _ref) public {
             address _pAdress = msg.sender; 
@@ -96,6 +108,9 @@ contract Election {
                             surname: _surname, 
                             refNUm: _ref,
                             isRegistered:true,
+                            PublicKey1:0,
+                            PublicKey2:0,
+                            PrivateKey:0,
                             voterPosition: votersCount
                     });
             votersCount ++;
@@ -135,12 +150,22 @@ contract Election {
 
         // update candidate vote Count
         candidates[_candidateId].voteCount ++;
+
+        voters[msg.sender].PrivateKey = Secp256k1_Address.invMod(random(), random());
         // adjustTime();
         numVotes++;
 
     }
 
-    
+  // https://stackoverflow.com/questions/73555009/how-to-generate-random-words-in-solidity-based-based-on-a-string-of-letters/73557284#73557284
+  function random() private returns (uint) {
+        random_counter++;
+        // sha3 and now have been deprecated
+        return uint(keccak256(abi.encodePacked(block.prevrandao, block.timestamp, random_counter)));
+        // convert hash to integer
+        
+    }
+
 
     // start election
     function startElection() onlyAdmin public {

@@ -9,6 +9,10 @@ contract Secp256k1 {
   uint256 public constant AA = 0;
   uint256 public constant BB = 7;
   uint256 public constant PP = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F;
+      
+      constructor() public { 
+    
+    } 
 
 /**
 Function: Inverse of a number (mod p)
