@@ -1,3 +1,3 @@
 
 
-print("hello")
+print((65**101)%997)

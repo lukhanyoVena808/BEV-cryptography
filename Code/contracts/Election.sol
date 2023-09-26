@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT 
-pragma solidity ^0.8.13;
-import "./ECC.sol";
+pragma solidity  >=0.5.16;
+import "./Secp256k1.sol";
 
 contract Election { 
 
