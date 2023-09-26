@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT 
-pragma solidity >=0.5.0;
+pragma solidity ^0.8.13;
+import "./ECC.sol";
 
 contract Election { 
 
@@ -10,6 +11,7 @@ contract Election {
         string email; //email address for communication
         string name; //name of voter 
         string surname; 
+        string refNUm; 
         bool isRegistered;
         uint voterPosition;
     }
@@ -77,7 +79,7 @@ contract Election {
     }
 
           // Add a voter
-    function addVoter (string memory _personal_id, string memory _email, string memory _name, string memory _surname) public {
+    function addVoter (string memory _personal_id, string memory _email, string memory _name, string memory _surname, string memory _ref) public {
             address _pAdress = msg.sender; 
             bytes32 encrypt_id = keccak256_encrypt(_personal_id);  //encrypt personal id
             voter storage user = voters[_pAdress];
@@ -92,6 +94,7 @@ contract Election {
                             email: _email, 
                             name:_name, 
                             surname: _surname, 
+                            refNUm: _ref,
                             isRegistered:true,
                             voterPosition: votersCount
                     });
@@ -100,8 +103,8 @@ contract Election {
             
     }
 
-    function getVoter() public view returns(string memory, string memory, string memory, bool, bool){
-            return(voters[msg.sender].name, voters[msg.sender].surname, voters[msg.sender].email, voters[msg.sender].isRegistered, voters[msg.sender].hasVoted);             
+    function getVoter() public view returns(string memory, string memory, string memory, string memory, bool, bool){
+            return(voters[msg.sender].name, voters[msg.sender].surname, voters[msg.sender].email, voters[msg.sender].refNUm, voters[msg.sender].isRegistered, voters[msg.sender].hasVoted);             
     }
 
     //returns true if voter registered

@@ -118,13 +118,15 @@ App = {
               const v_name = voter[0];
               const v_surname= voter[1];
               const v_email= voter[2];
-              const v_registered= voter[3];
-              const v_voted= voter[4];
+              const v_ref= voter[3];
+              const v_registered= voter[4];
+              const v_voted= voter[5];
               const candidateTemplate = "<tr><th><strong>Name</strong></th><td>" +  v_name + 
                                   "</td></tr>" +"<tr><th><strong>Surname</strong></th><td>" +  v_surname + "</td></tr>"+
                                   "<tr><th><strong>Email</strong></th><td>" +  v_email + "</td></tr>"+
                                   "<tr><th><strong>Is registered?</strong></th><td>" +  v_registered + "</td></tr>"+
-                                  "<tr><th><strong>Has Voted?</strong></th><td>" +  v_voted + "</td></tr>";
+                                  "<tr><th><strong>Has Voted?</strong></th><td>" +  v_voted + "</td></tr>"+
+                                  "<tr><th><strong>User Reference Number</strong></th><td>"+ v_ref+"</td></tr>";
               the_voter.append(candidateTemplate);
 
             })
@@ -139,7 +141,7 @@ App = {
             if(next2) {  //has voted already
               myform.hide();
               const the_voter = $("#voter_info");
-              const candidateTemplate = "<tr><th><strong>Voter Reference key</strong></th><td>0x909403289a903854</td></tr>";
+              const candidateTemplate = "<tr><th><strong>Voter Audting Key</strong></th><td>"+App.getVoterRefNumber()+"</td></tr>";
               the_voter.append(candidateTemplate);
             }
 
@@ -179,6 +181,17 @@ App = {
     }).catch(function(err) {
       console.error(err);
     });
+  },
+
+  getVoterRefNumber: function() {
+    // declare all characters
+    const characters ='AB0CDEF2GHIJK4LMNOP5QRS7TUVW6XYZ8abcdef1ghijklmnop9qrstuv3wxyz';
+    let result = ' ';
+    const charactersLength = characters.length;
+    for ( let i = 0; i < 6; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
   },
 
 
@@ -365,7 +378,7 @@ App = {
                     return electionInstance.phase();
                     }).then(function(result){ 
                       if(result =="registration")  {
-                        electionInstance.addVoter(person_id, email, name, surname, { from: App.account }).then(function(result){ 
+                        electionInstance.addVoter(person_id, email, name, surname, App.getVoterRefNumber(), { from: App.account }).then(function(result){ 
                           alert("You have been registered!");
                           // $("#demo_form").trigger("reset"); 
                           window.location.replace("/register")
