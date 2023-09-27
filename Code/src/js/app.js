@@ -349,8 +349,8 @@ App = {
                             const trail_time = trail[2];
         
                             // 
-                            const readData = '<td>'+refNumber+'</td><td>'+trail_date+'</td><td>'+trail_time+'</td>';
-                            const candidateTemplate = '<tr style="word-wrap: break-word" ><form action="#"><td class="input-wrap"><div class="mb-3" class="input-wrap"><span class="width-machine" aria-hidden="true"></span>'+
+                            const readData = '<td>'+refNumber+'</td><td style="margin-right:10px;">'+trail_date+'</td><td style="margin-left:10px;">'+trail_time+'</td>';
+                            const candidateTemplate = '<tr style="word-wrap: normal" ><form action="#"><td class="input-wrap"><div class="mb-3" class="input-wrap"><span class="width-machine" aria-hidden="true"></span>'+
                             '<input type="text" class="input" class="form-control" id="publicKey1-reg" name="publicKey1" autocomplete=off required><br></div></td>'+
                             '<td class="input-wrap" id=""><div class="mb-3" class="input-wrap"><span class="width-machine" aria-hidden="true"></span>'+
                             '<input type="text"  class="input" class="form-control" id="publicKey2-reg" name="publicKey2" autocomplete=off required></div></td>'+readData +'<td><div class="mb-3"><button type="submit" class="btn btn-primary" id="btn-verify">Verify</button></div></td></form></tr>';
