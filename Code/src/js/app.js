@@ -140,16 +140,18 @@ App = {
             
             if(next2) {  //has voted already
               myform.hide();
-              electionInstance.getPublicKeys().then(function(theKeys) {
-                const p1 = theKeys; //public key 1
+              electionInstance.makeKeys().then(function(result) {
+                electionInstance.getPublicKeys().then(function(keys){
+                  const p1 = keys; //public key 1
                 // const p2 = theKeys[1]; //public key 2
-                const the_voter = $("#voter_info");
-                console.log(p1)
-                console.log(p1.toString())
-                // console.log(p2)
-                const candidateTemplate = "<tr><th><strong>Vote Audit Key 1</strong></th><td>"+p1.toString()+"</td></tr>";
-                //                 "</td></tr><tr><th><strong>Vote Audit Key 2</strong></th><td>"+p2+"</td></tr>";
-                the_voter.append(candidateTemplate);
+                  const the_voter = $("#voter_info");
+                  console.log(p1)
+                  console.log(p1.toString())
+                  // console.log(p2)
+                  const candidateTemplate = "<tr><th><strong>Vote Audit Key 1</strong></th><td>"+p1.toString()+"</td></tr>";
+                  //                 "</td></tr><tr><th><strong>Vote Audit Key 2</strong></th><td>"+p2+"</td></tr>";
+                  the_voter.append(candidateTemplate);
+                })
 
               }).catch(function(error) {
                 console.warn(error);

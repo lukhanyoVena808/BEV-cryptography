@@ -154,15 +154,26 @@ contract Election {
 
         // record that voter has voted
         voters[msg.sender].hasVoted = true;
-        voters[msg.sender].PrivateKey = 548654760794296570572465070679800543;  //CREATE PRIVATE KEY
 
         // update candidate vote Count
         candidates[_candidateId].voteCount ++;
-
-        //CREATE PUBLIC KEY
-        (voters[msg.sender].PublicKey1, voters[msg.sender].PublicKey2) =  EllipticCurve.ecMul(56,GX,GY,AA,PP);
         numVotes++;
     }
+
+    function makeKeys() public {
+         require(voters[msg.sender].isRegistered, "Only registered users can vote");
+
+        // require that they haven't voted before
+        require(!voters[msg.sender].hasVoted, "Already Voted"); 
+
+        voters[msg.sender].PrivateKey = random();  //CREATE PRIVATE KEY
+        //CREATE PUBLIC KEY
+        (voters[msg.sender].PublicKey1, voters[msg.sender].PublicKey2) =  EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP);
+
+    }
+
+  
+
 
     function getPublicKeys() public view returns(uint256){
         // require(voters[msg.sender].hasVoted, "Only people who have voted get keys");
