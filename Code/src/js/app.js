@@ -61,11 +61,6 @@ App = {
   },
 
   render: function() {
-    const dt = new Date();
-    const fm = new Intl.DateTimeFormat('en-SA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Africa/Johannesburg' }).format(dt); 
-    console.log(fm.split("at")[0].trim())
-    console.log(fm.split("at")[1].trim())
-
     var electionInstance;
     const loader = $("#loader");
     const content = $("#content");
@@ -178,10 +173,12 @@ App = {
   },
 
   castVote: function() {
+    const dt = new Date();
+    const fm = new Intl.DateTimeFormat('en-SA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Africa/Johannesburg' }).format(dt);  //date && time
     const candidateId = $('#candidatesSelect').val();
     App.contracts.Election.deployed().then(function(instance) {
-      return instance.vote(candidateId, { from: App.account });
-    }).then(function(result) {
+      return instance.vote(candidateId,fm.split("at")[0].trim(), fm.split("at")[1].trim(), { from: App.account }); //cast vote
+    }).then(function(result) { 
       alert("Voting Completed!");
       return App.render();
     }).catch(function(err) {
@@ -340,6 +337,32 @@ App = {
                       electionInstance.getWinner().then(function(myWinner) {
                         electionInstance.numVotes().then(function(numVotes){
                           $("#details").html("Winner: "+myWinner+"<br> Total Election Votes: "+numVotes);
+
+                        // LOOP THROUGH VOTE TRAILS
+                        $("#dataTrail").show();
+                        const trailBody = $("#vote_trail");
+                        trailBody.empty();
+                        for (let i= 0; i < numVotes; i++) {
+                          electionInstance.votingTrails(i).then(function(trail) {
+                            const refNumber = trail[0];
+                            const trail_date = trail[1];
+                            const trail_time = trail[2];
+        
+                            // 
+                            const readData = '<td>'+refNumber+'</td><td>'+trail_date+'</td><td>'+trail_time+'</td>';
+                            const candidateTemplate = '<tr style="word-wrap: break-word" ><form action="#"><td class="input-wrap"><div class="mb-3" class="input-wrap"><span class="width-machine" aria-hidden="true"></span>'+
+                            '<input type="text" class="input" class="form-control" id="publicKey1-reg" name="publicKey1" autocomplete=off required><br></div></td>'+
+                            '<td class="input-wrap" id=""><div class="mb-3" class="input-wrap"><span class="width-machine" aria-hidden="true"></span>'+
+                            '<input type="text"  class="input" class="form-control" id="publicKey2-reg" name="publicKey2" autocomplete=off required></div></td>'+readData +'<td><div class="mb-3"><button type="submit" class="btn btn-primary" id="btn-verify">Verify</button></div></td></form></tr>';
+
+                            trailBody.append(candidateTemplate);
+                          }).catch(function(err){
+                            console.error(err);
+                          });
+                        }
+
+                
+
                         })
                       })
                     }

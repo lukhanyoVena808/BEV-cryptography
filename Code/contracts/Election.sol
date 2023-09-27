@@ -51,7 +51,7 @@ contract Election {
 
     mapping(address => keys) private pKeys; //keeps public keys
 
-    mapping(uint => votingRecords) private votingTrails;
+    mapping(uint => votingRecords) public votingTrails;
 
     // Stores encyrted ID'S
     mapping(bytes32 => address) public verifier;
