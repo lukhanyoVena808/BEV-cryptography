@@ -20,21 +20,6 @@ router.get('/register', function(req, res, next) {
 });
 
 
-
-// email validation
-
-// const email200 = new Email({
-//   message: {
-//     from: 'lxgog@mail.com'
-//   },
-//   // uncomment below to send emails in development/test env:
-//   // send: true
-//   transport: {
-//     jsonTransport: true
-//   }
-// });
-
-
 const nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
   host: "sandbox.smtp.mailtrap.io",
@@ -44,9 +29,6 @@ var transporter = nodemailer.createTransport({
     pass: "57c85151a4747e"
   }
 });
-//
-
-
 
 router.post('/registration', urlencodedParser, async function(req, res, next) { 
               const {name, surname, personID, email} = req.body;
@@ -67,57 +49,40 @@ router.post('/registration', urlencodedParser, async function(req, res, next) {
                     // encoding format for the secret key
                     encoding: 'base32'
                 });
-                  
-                // Log the secret key and TOTP code
-                // to the console
-                // console.log('Secret: ', secret.base32);
-                // console.log('Code: ', otp);
                 
               } catch (error) {
                 console.log(error)
               }
-              // console.log(otp);
-          
-              // email200.send({
-              //     template: './mars',
-              //     message: {
-              //       to: email
-              //     },
-              //     locals: {
-              //       name: name,
-              //       _otp: otp
-              //     }
-              //   })
-                // .then(console.log)
-                // .catch(console.error)
-                // verify connection configuration
-             
-              try {
-                if(name!=''){
-  
-                    const mailOptions = {
-                      from: 'lxgog@mail.com',
-                      to: email,
-                      subject: 'E-Votez OTP Code',
-                      html: "<p>Hello, <strong>"+name+"</strong></br>Use the OTP Code below to complete your registration:</p>"+"<h1>"+otp+"</h1>"
-                    };
-                    await transporter.sendMail(mailOptions, (error, info) => {
-                      if (error) {
-                          console.log(error);
-                          res.status(500).send('Error sending email');
-                      } else {
-                          console.log('Email sent: ' + info.response);
-                          res.send('Email sent successfully');
-                      }
-                    });
-               }
-                                
-              } catch (error) {
-                console.log(error)
-              }
-
-        
-            res.render('register2', {encrypted_word1: name, encrypted_word2: surname, encrypted_word3: personID, encrypted_word4:email, encrypted_word5:otp});
+         
+            if(name!='' && surname!='' && personID!='' && email!=''){
+                  try {
+                    if(name!=''){
+      
+                        const mailOptions = {
+                          from: 'lxgog@mail.com',
+                          to: email,
+                          subject: 'E-Votez OTP Code',
+                          html: "<p>Hello, <strong>"+name+"</strong></br>Use the OTP Code below to complete your registration:</p>"+"<h1>"+otp+"</h1>"
+                        };
+                        await transporter.sendMail(mailOptions, (error, info) => {
+                          if (error) {
+                              console.log(error);
+                              res.status(500).send('Error sending email');
+                          } else {
+                              console.log('Email sent: ' + info.response);
+                              res.send('Email sent successfully');
+                          }
+                        });
+                  }
+                                    
+                  } catch (error) {
+                    console.log(error)
+                  }
+                res.render('register2', {encrypted_word1: name, encrypted_word2: surname, encrypted_word3: personID, encrypted_word4:email, encrypted_word5:otp});
+            }
+            else{
+              res.render('register');
+            }
             
 });
 

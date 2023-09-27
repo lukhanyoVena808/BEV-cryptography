@@ -139,24 +139,19 @@ App = {
           }).then(function(next2) { 
             
             if(next2) {  //has voted already
-              myform.hide();
-              electionInstance.makeKeys().then(function(result) {
-                electionInstance.getPublicKeys().then(function(keys){
-                  const p1 = keys; //public key 1
-                // const p2 = theKeys[1]; //public key 2
-                  const the_voter = $("#voter_info");
-                  console.log(p1)
-                  console.log(p1.toString())
-                  // console.log(p2)
-                  const candidateTemplate = "<tr><th><strong>Vote Audit Key 1</strong></th><td>"+p1.toString()+"</td></tr>";
-                  //                 "</td></tr><tr><th><strong>Vote Audit Key 2</strong></th><td>"+p2+"</td></tr>";
-                  the_voter.append(candidateTemplate);
-                })
-
+              myform.hide();    
+              electionInstance.getKeys({from: App.account}).then(function(_keys){  //get keys
+                const p1 = _keys[0].c.join("");
+                const p2 = _keys[1].c.join("");
+                const the_voter = $("#voter_info");
+                const candidateTemplate = '<tr  style="word-wrap: break-word"><th><strong>Vote Audit Key 1</strong></th><td>'+ (p1)+'</td></tr>'+
+                        '<tr  style="word-wrap: break-word"><th><strong>Vote Audit Key 2</strong></th><td>'+p2+"</td></tr>";
+                the_voter.append(candidateTemplate);     
               }).catch(function(error) {
                 console.warn(error);
               });
-              
+            
+     
             }
 
             electionInstance.phase().then(function(thePhase) {
@@ -170,8 +165,6 @@ App = {
             })
         content.show();
 
-            
-
       }).catch(function(error) {
         console.warn(error);
       });
@@ -184,12 +177,6 @@ App = {
     App.contracts.Election.deployed().then(function(instance) {
       return instance.vote(candidateId, { from: App.account });
     }).then(function(result) {
-      // try {            
-      //   const parsed = JSON.parse(JSON.stringify(result)).tx;
-      //   console.log(parsed)
-      // } catch (error) {
-      //   console.log(error)
-      // }
       alert("Voting Completed!");
       return App.render();
     }).catch(function(err) {
@@ -432,7 +419,6 @@ App = {
   },
 
 };
-
 $(function() {
  
   $(window).load(function() {

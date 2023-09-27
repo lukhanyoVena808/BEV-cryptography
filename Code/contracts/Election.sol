@@ -13,9 +13,11 @@ contract Election {
         string surname; 
         string refNUm; 
         bool isRegistered;
+        uint256 PrivateKey;
+    }
+    struct keys {
         uint256 PublicKey1;
         uint256 PublicKey2;
-        uint256 PrivateKey;
     }
 
 
@@ -37,7 +39,9 @@ contract Election {
     mapping(uint => Candidate) public candidates;
 
     // Store accounts that have voted
-    mapping(address => voter) public voters;
+    mapping(address => voter) private voters;
+
+    mapping(address => keys) private pKeys;
 
      // Stores encyrted ID'S
     mapping(bytes32 => address) public verifier;
@@ -110,8 +114,6 @@ contract Election {
                             surname: _surname, 
                             refNUm: _ref,
                             isRegistered:true,
-                            PublicKey1:uint256(10),
-                            PublicKey2:uint256(10),
                             PrivateKey:uint256(10)
                     });
             votersCount ++;
@@ -148,7 +150,6 @@ contract Election {
         // require that they haven't voted before
         require(!voters[msg.sender].hasVoted, "Already Voted"); 
         
-
         // require a valid candidate
         require(_candidateId > 0 && _candidateId <= candidatesCount);
 
@@ -157,31 +158,19 @@ contract Election {
 
         // update candidate vote Count
         candidates[_candidateId].voteCount ++;
-        numVotes++;
-    }
-
-    function makeKeys() public {
-         require(voters[msg.sender].isRegistered, "Only registered users can vote");
-
-        // require that they haven't voted before
-        require(!voters[msg.sender].hasVoted, "Already Voted"); 
 
         voters[msg.sender].PrivateKey = random();  //CREATE PRIVATE KEY
-        //CREATE PUBLIC KEY
-        (voters[msg.sender].PublicKey1, voters[msg.sender].PublicKey2) =  EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP);
-
+        (uint p1, uint p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //CREATE Public Keys
+        pKeys[msg.sender] = keys({
+                PublicKey1:p1,
+                PublicKey2:p2
+        });
+         numVotes++;
+        
     }
 
-  
-
-
-    function getPublicKeys() public view returns(uint256){
-        // require(voters[msg.sender].hasVoted, "Only people who have voted get keys");
-        // uint256 p1 = voters[msg.sender].PublicKey1;
-        // uint256 p2 = voters[msg.sender].PublicKey2;
-        // return voters[msg.sender].PrivateKey;
-        return (voters[msg.sender].PrivateKey);
-        // return (voters[msg.sender].PublicKey1, voters[msg.sender].PublicKey2);
+      function getKeys() public view returns(uint256, uint256){
+            return(pKeys[msg.sender].PublicKey1, pKeys[msg.sender].PublicKey2);             
     }
 
 
