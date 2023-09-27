@@ -98,7 +98,7 @@ contract Election {
     }
 
 
-          // Add a voter
+     // Add a voter
     function addVoter (string memory _personal_id, string memory _email, string memory _name, string memory _surname, string memory _ref) public {
             address _pAdress = msg.sender; 
             bytes32 encrypt_id = keccak256_encrypt(_personal_id);  //encrypt personal id
@@ -119,10 +119,12 @@ contract Election {
                             PrivateKey:uint256(10)
                     });
             votersCount ++;
+            refs.push(_ref); //add ref number
             verifier[encrypt_id] = _pAdress;
             
     }
 
+    //get voter details to display to voter
     function getVoter() public view returns(string memory, string memory, string memory, string memory, bool, bool){
             return(voters[msg.sender].name, voters[msg.sender].surname, voters[msg.sender].email, voters[msg.sender].refNUm, voters[msg.sender].isRegistered, voters[msg.sender].hasVoted);             
     }

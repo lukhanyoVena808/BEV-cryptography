@@ -61,6 +61,11 @@ App = {
   },
 
   render: function() {
+    const dt = new Date();
+    const fm = new Intl.DateTimeFormat('en-SA').format(dt);
+    console.log(fm)
+    console.log(dt.getHours()+":"+dt.getMinutes()+":"+dt.getSeconds())
+
     var electionInstance;
     const loader = $("#loader");
     const content = $("#content");
