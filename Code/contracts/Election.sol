@@ -20,6 +20,14 @@ contract Election {
         uint256 PublicKey2;
     }
 
+    struct votingRecords{
+        string ref;
+        string voteDate;
+        string voteTime;
+    }
+
+    
+
 
      // Model a Candidate
     struct Candidate {
@@ -41,12 +49,14 @@ contract Election {
     // Store accounts that have voted
     mapping(address => voter) private voters;
 
-    mapping(address => keys) private pKeys;
+    mapping(address => keys) private pKeys; //keeps public keys
 
-     // Stores encyrted ID'S
+    mapping(uint => votingRecords) private votingTrails;
+
+    // Stores encyrted ID'S
     mapping(bytes32 => address) public verifier;
     mapping(uint => address) public recorder;
-     mapping(string => uint256) public ellipter;
+
 
     // Store Candidates Count
     uint public candidatesCount;
@@ -59,14 +69,6 @@ contract Election {
 
     //number of total votes
     uint public numVotes;
-
-    string [] public refs; //keeps list of user ref number
-
-    //random number counter
-    uint random_counter;
-
-    // Stores current time
-    uint public timeNow;
 
     string[3] phases = ["registration" , "voting", "results"];
     uint public phasePointer;
@@ -88,6 +90,7 @@ contract Election {
 
        // Add a candidate
     function addCandidate (string memory _name, string memory _party) onlyAdmin public {
+        require(phasePointer<=0, "Cannot add candidates during voting process");
         candidatesCount ++;
         candidates[candidatesCount] = Candidate({
             id: candidatesCount, 
@@ -118,9 +121,10 @@ contract Election {
                             isRegistered:true,
                             PrivateKey:uint256(10)
                     });
-            votersCount ++;
-            refs.push(_ref); //add ref number
+            
+           
             verifier[encrypt_id] = _pAdress;
+            votersCount ++;
             
     }
 
@@ -146,7 +150,7 @@ contract Election {
     }
 
     // voting function, all accounts can vote
-    function vote (uint _candidateId) public {
+    function vote (uint _candidateId, string memory _date, string memory _time) public {
 
         //must be registered to vote
         require(voters[msg.sender].isRegistered, "Only registered users can vote");
@@ -169,6 +173,11 @@ contract Election {
                 PublicKey1:p1,
                 PublicKey2:p2
         });
+        votingTrails[numVotes] = votingRecords({
+                                                ref:voters[msg.sender].refNUm,
+                                                voteDate:_date,
+                                                voteTime:_time
+                                         });
          numVotes++;
         
     }
@@ -177,12 +186,26 @@ contract Election {
             return(pKeys[msg.sender].PublicKey1, pKeys[msg.sender].PublicKey2);             
     }
 
+    function verifyVote(uint256 _key1, uint256 _key2) public view returns(bool){
+                 //must be registered to vote
+        require(voters[msg.sender].isRegistered, "Only registered users can vote");
+
+        // require that they haven't voted before
+        require(!voters[msg.sender].hasVoted, "Already Voted");
+
+        (uint p1, uint p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys
+        return (_key1==p1 && _key2==p2);
+
+
+    }
+
 
     // start election
     function startElection() onlyAdmin public {
+            require(phasePointer!=1 && phasePointer!=2, "Voting in progress");
             phasePointer = 0;
             phase = phases[phasePointer]; //contract is deployed in the registration phase
-            // startTime();
+    
     }
 
     //change election phase

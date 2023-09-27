@@ -62,9 +62,9 @@ App = {
 
   render: function() {
     const dt = new Date();
-    const fm = new Intl.DateTimeFormat('en-SA').format(dt);
-    console.log(fm)
-    console.log(dt.getHours()+":"+dt.getMinutes()+":"+dt.getSeconds())
+    const fm = new Intl.DateTimeFormat('en-SA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Africa/Johannesburg' }).format(dt); 
+    console.log(fm.split("at")[0].trim())
+    console.log(fm.split("at")[1].trim())
 
     var electionInstance;
     const loader = $("#loader");
