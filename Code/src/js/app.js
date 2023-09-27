@@ -333,12 +333,16 @@ App = {
               }).then(function(currentPhase) {
                     if (currentPhase == "results"){
                       electionInstance.getWinner().then(function(myWinner) {
-                        $("#details").html("Winner: "+myWinner);
+                        electionInstance.numVotes().then(function(numVotes){
+                          $("#details").html("Winner: "+myWinner+"<br> Total Election Votes: "+numVotes);
+                        })
                       })
                     }
                     else if (currentPhase == "voting"){
                       electionInstance.getWinner().then(function(myWinner) {
-                        $("#details").html("Top runnner: "+myWinner);
+                        electionInstance.numVotes().then(function(numVotes){
+                          $("#details").html("Top Runner: "+myWinner+"<br> Total Election Votes: "+numVotes);
+                        })
                       })
                     }
                     else{

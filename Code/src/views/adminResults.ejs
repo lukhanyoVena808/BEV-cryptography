@@ -52,11 +52,30 @@
                 <tbody id="candidatesResults2023">
                 </tbody>
               </table>
-           
-              <hr/>
-              <p id="details" class="text-center"></p>
             </div>
+            <hr/>
+            <p id="details" class="text-center"></p>
           </div>
+          
+            <div class="col-lg-12" >
+                <div id="auditing" class="container" style="margin-top: 60px;">
+                  <hr/><h2 class="text-center">Voting Audit Trail</h2>
+                  <table class="table" style="table-layout: fixed; width: 100%">
+                    <thead>
+                      <tr>
+                        <th scope="col">Public Key 1</th>
+                        <th scope="col">Public Key 2</th>
+                        <th scope="col">Reference Number</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Verify</th>
+                      </tr>
+                    </thead>
+                    <tbody id="vote_trail">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
         </div>
       </div>
     <!-- Use a function like render() to view results, first check phase === if not result phase, dont show results -->

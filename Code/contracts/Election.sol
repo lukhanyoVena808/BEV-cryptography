@@ -60,6 +60,8 @@ contract Election {
     //number of total votes
     uint public numVotes;
 
+    string [] public refs; //keeps list of user ref number
+
     //random number counter
     uint random_counter;
 
