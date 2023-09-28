@@ -14,6 +14,7 @@ contract Election {
         string refNUm; 
         bool isRegistered;
         uint256 PrivateKey;
+        bool  isVerifiedUser;
     }
     struct keys {
         uint256 PublicKey1;
@@ -55,8 +56,8 @@ contract Election {
     mapping(uint => votingRecords) public votingTrails;
 
     // Stores encyrted ID'S
-    mapping(bytes32 => address) public verifier;
-    mapping(uint => address) public recorder;
+    mapping(bytes32 => address) private verifier;
+    mapping(uint => address) private recorder;
 
 
     // Store Candidates Count
@@ -120,7 +121,8 @@ contract Election {
                             surname: _surname, 
                             refNUm: _ref,
                             isRegistered:true,
-                            PrivateKey:uint256(10)
+                            PrivateKey:uint256(10),
+                            isVerifiedUser:false
                     });
             
            
@@ -188,19 +190,26 @@ contract Election {
             return(pKeys[msg.sender].PublicKey1, pKeys[msg.sender].PublicKey2);             
     }
 
-    function verifyVote(uint256 _key1, uint256 _key2, uint _votePosition) public returns(bool){
+    function verifyVote(uint256 _key1, uint256 _key2, uint _votePosition) public {
                  //must be registered to vote
         require(voters[msg.sender].isRegistered, "Only registered users can vote");
 
         // require that they haven't voted before
         require(voters[msg.sender].hasVoted, "Already Voted");
 
-        (uint p1, uint p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys
-        bool isREal =  (_key1==p1 && _key2==p2);
-        votingTrails[_votePosition].isVerified = isREal;
-        return isREal;
+        require(!voters[msg.sender].isVerifiedUser, "Voter already voted");
 
+        (uint256 p1, uint256 p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys
+      
+        if(_key1==p1 && _key2==p2){
+            votingTrails[_votePosition].isVerified = true;
+            voters[msg.sender].isVerifiedUser=true;
+        }
 
+    }
+
+    function getTrailer(uint position) public view returns(bool){
+         return votingTrails[position].isVerified;
     }
 
 
