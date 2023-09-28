@@ -24,6 +24,7 @@ contract Election {
         string ref;
         string voteDate;
         string voteTime;
+        bool isVerified;
     }
 
     
@@ -176,7 +177,8 @@ contract Election {
         votingTrails[numVotes] = votingRecords({
                                                 ref:voters[msg.sender].refNUm,
                                                 voteDate:_date,
-                                                voteTime:_time
+                                                voteTime:_time,
+                                                isVerified:false
                                          });
          numVotes++;
         
@@ -186,7 +188,7 @@ contract Election {
             return(pKeys[msg.sender].PublicKey1, pKeys[msg.sender].PublicKey2);             
     }
 
-    function verifyVote(uint256 _key1, uint256 _key2) public view returns(bool){
+    function verifyVote(uint256 _key1, uint256 _key2, uint _votePosition) public returns(bool){
                  //must be registered to vote
         require(voters[msg.sender].isRegistered, "Only registered users can vote");
 
@@ -194,7 +196,12 @@ contract Election {
         require(voters[msg.sender].hasVoted, "Already Voted");
 
         (uint p1, uint p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys
-        return (_key1==p1 && _key2==p2);
+        bool isREal =  (_key1==p1 && _key2==p2);
+        if (isREal){
+             votingTrails[_votePosition].isVerified = true;
+        }
+
+        return isREal;
 
 
     }

@@ -341,28 +341,33 @@ App = {
                         // LOOP THROUGH VOTE TRAILS
                         $("#dataTrail").show();
                         const trailBody = $("#vote_trail");
-                        // trailBody.empty();
+                        trailBody.empty();
                         for (let i= 0; i < numVotes; i++) {
                           electionInstance.votingTrails(i).then(function(trail) {
                             const refNumber = trail[0];
                             const trail_date = trail[1];
-                            const trail_time = trail[2];        
+                            const trail_time = trail[2];
+                            const trail_verified = trail[3];  
+                            const btn = "";
+                            
+                            if(trail_verified){
+                                btn = '<div class="mb-3"><br><button type="submit" class="btn btn-primary" id="btn2" style="background-color:green; pointer-events: none;" >Verified</button>';
+                            }else{
+                              btn='<div class="mb-3"><br><button type="submit" class="btn btn-primary" id="btn2">Verify</button>';
+                            }
                         
                             const readData = '<td><h5>'+refNumber+'</h5></td><td style="margin-right:10px;">'+trail_date+'</td><td style="margin-left:10px;">'+trail_time+'</td></tr>';
-                            const candidateTemplate = '<tr style="word-wrap: normal"><td class="input-wrap"><form id="trailer" onSubmit="App.verify_audit(); return false;" action="/results" method="post"><div class="mb-3" class="input-wrap">'+
+                            const candidateTemplate = `<tr style="word-wrap: normal"><td class="input-wrap"><form id="trailer" onSubmit="App.verify_audit(${i}); return false;" action="/results" method="post"><div class="mb-3" class="input-wrap">`+
                             '<span class="width-machine" aria-hidden="true"></span><label for="publicKey1-reg" class="input-wrap" style="right:60%"><strong>Audit Key 1:</strong></label>'+
                             '<input type="text" class="input" class="form-control" id="publicKey1-reg" name="publicKey1" autocomplete=off required><br></div><br>'+
                             '<div class="mb-3" class="input-wrap"><span class="width-machine" aria-hidden="true"></span>'+
-                            '<label for="publicKey2-reg" class="input-wrap" style="right:60%"><strong>Audit Key 2:</strong></label><input type="text" class="input" class="form-control" id="publicKey2-reg" name="publicKey2" autocomplete=off required>'+
-                            '</div><br><div class="mb-3"><br><button type="submit" class="btn btn-primary" id="btn-verify">Verify</button></div></form></td>'+readData;
+                            '<label for="publicKey2-reg" class="input-wrap" style="right:60%"><strong>Audit Key 2:</strong></label><input type="text" class="input" class="form-control" id="publicKey2-reg" name="publicKey2" autocomplete=off required></div><br>'+btn+'</div></form></td>'+readData;
                             //  style="pointer-events: none;"
                             trailBody.append(candidateTemplate);
                           }).catch(function(err){
                             console.error(err);
                           });
                         }
-
-                
 
                         })
                       })
@@ -451,23 +456,28 @@ App = {
 
   },
 
-  verify_audit: function(){
+  verify_audit: function(pos){
     const publicKey1 =  $("#publicKey1-reg").val();
     const publicKey2 = $("#publicKey2-reg").val();
     console.log(publicKey1)
     console.log(publicKey2)
      
     App.contracts.Election.deployed().then(function(instance) {
-      return instance.verifyVote(BigInt(publicKey1), BigInt(publicKey2), {from: App.account});
+      return instance.verifyVote(BigInt(publicKey1), BigInt(publicKey2), pos, {from: App.account});
     }).then(function(result){
       console.log(result);
+      if(result){
+        alert("Verified");
+        window.location.replace("/results")
+      }
+      else{
+        alert("Not Verified");
+      }
 
     }).catch(function(err){
       console.error(err);
     });
-    alert("Verifying...")
-
-
+    
   },
 
 };
