@@ -191,7 +191,7 @@ contract Election {
         require(voters[msg.sender].isRegistered, "Only registered users can vote");
 
         // require that they haven't voted before
-        require(!voters[msg.sender].hasVoted, "Already Voted");
+        require(voters[msg.sender].hasVoted, "Already Voted");
 
         (uint p1, uint p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys
         return (_key1==p1 && _key2==p2);

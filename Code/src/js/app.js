@@ -349,7 +349,7 @@ App = {
                             const trail_time = trail[2];        
                         
                             const readData = '<td><h5>'+refNumber+'</h5></td><td style="margin-right:10px;">'+trail_date+'</td><td style="margin-left:10px;">'+trail_time+'</td></tr>';
-                            const candidateTemplate = '<tr style="word-wrap: normal"><td class="input-wrap"><form action="/results" method="post"><div class="mb-3" class="input-wrap">'+
+                            const candidateTemplate = '<tr style="word-wrap: normal"><td class="input-wrap"><form id="trailer" onSubmit="App.verify_audit(); return false;" action="/results" method="post"><div class="mb-3" class="input-wrap">'+
                             '<span class="width-machine" aria-hidden="true"></span><label for="publicKey1-reg" class="input-wrap" style="right:60%"><strong>Audit Key 1:</strong></label>'+
                             '<input type="text" class="input" class="form-control" id="publicKey1-reg" name="publicKey1" autocomplete=off required><br></div><br>'+
                             '<div class="mb-3" class="input-wrap"><span class="width-machine" aria-hidden="true"></span>'+
@@ -454,7 +454,19 @@ App = {
   verify_audit: function(){
     const publicKey1 =  $("#publicKey1-reg").val();
     const publicKey2 = $("#publicKey2-reg").val();
-    
+    console.log(publicKey1)
+    console.log(publicKey2)
+     
+    App.contracts.Election.deployed().then(function(instance) {
+      return instance.verifyVote(BigInt(publicKey1), BigInt(publicKey2), {from: App.account});
+    }).then(function(result){
+      console.log(result);
+
+    }).catch(function(err){
+      console.error(err);
+    });
+    alert("Verifying...")
+
 
   },
 
