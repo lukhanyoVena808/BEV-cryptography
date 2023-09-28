@@ -121,12 +121,15 @@ App = {
               const v_ref= voter[3];
               const v_registered= voter[4];
               const v_voted= voter[5];
+              const v_verified= voter[6];
               const candidateTemplate = "<tr><th><strong>Name</strong></th><td>" +  v_name + 
                                   "</td></tr>" +"<tr><th><strong>Surname</strong></th><td>" +  v_surname + "</td></tr>"+
                                   "<tr><th><strong>Email</strong></th><td>" +  v_email + "</td></tr>"+
                                   "<tr><th><strong>Is registered?</strong></th><td>" +  v_registered + "</td></tr>"+
                                   "<tr><th><strong>Has Voted?</strong></th><td>" +  v_voted + "</td></tr>"+
+                                  "<tr><th><strong>Vote Verified?</strong></th><td>"+ v_verified+"</td></tr>"+
                                   "<tr><th><strong>User Reference Number</strong></th><td>"+ v_ref+"</td></tr>";
+                                  
               the_voter.append(candidateTemplate);
 
             })
@@ -140,7 +143,7 @@ App = {
             
             if(next2) {  //has voted already
               myform.hide();    
-              electionInstance.getKeys({from: App.account}).then(function(_keys){  //get keys
+              electionInstance.copyKeys({from: App.account}).then(function(_keys){  //get keys
                 const p1 = _keys[0].c.join("");
                 const p2 = _keys[1].c.join("");
                 const the_voter = $("#voter_info");
@@ -350,21 +353,16 @@ App = {
                             const trail_time = trail[2];
                             const trail_verified = trail[3];
 
-                            electionInstance.getTrailer(i).then(function(truth){
-                              console.log("Answer: "+truth)
-
-                            })
-                            console.log(trail_verified)
                             var btn = "";
                             
                             if(trail_verified){
-                                btn = `<div class="mb-3"><br><button type="submit" class="btn btn-primary"  form="trailer${i}"  style="background-color:green; pointer-events: none;" >Verified</button>`;
+                                btn = `<div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style="background-color:green; pointer-events: none;" >Verified</button>`;
                             }else{
-                              btn=`<div class="mb-3"><br><button type="submit"  form="trailer${i}"  class="btn btn-primary">Verify</button>`;
+                              btn=`<div class="mb-3"><br><button type="submit" form="trailer${i}" class="btn btn-primary">Verify</button>`;
                             }
                         
                             const readData = '<td><h5>'+refNumber+'</h5></td><td style="margin-right:10px;">'+trail_date+'</td><td style="margin-left:10px;">'+trail_time+'</td></tr>';
-                            const candidateTemplate = `<tr style="word-wrap: normal"><td class="input-wrap"><form id="trailer${i}" onSubmit="App.verify_audit(${i});" action="/results" method="post"><div class="mb-3" class="input-wrap">`+
+                            const candidateTemplate = `<tr style="word-wrap: normal"><td class="input-wrap"><form id="trailer${i}" onSubmit="App.verify_audit(${i}); return false;" action="/results" method="post"><div class="mb-3" class="input-wrap">`+
                             `<span class="width-machine" aria-hidden="true"></span><label for="publicKey${i}1-reg" class="input-wrap" style="right:60%"><strong>Audit Key 1:</strong></label>`+
                             `<input type="text" class="input" class="form-control" id="publicKey${i}1-reg" name="publicKey${i}1" autocomplete=off required><br></div><br>`+
                             '<div class="mb-3" class="input-wrap"><span class="width-machine" aria-hidden="true"></span>'+
@@ -474,21 +472,22 @@ App = {
     console.log(publicKey2+"::")
     console.log("Pos: "+pos);
      
-    // App.contracts.Election.deployed().then(function(instance) {
-    //   electionInstance = instance;
-    //   return electionInstance.verifyVote(BigInt(publicKey1), BigInt(publicKey2), pos, {from: App.account});
-    // }).then(function(result){
-    //     if(result){
-    //       alert("Verified");
-    //       window.location.replace("/results")
-    //     }
-    //     else{
-    //       alert("Not Verified");
-    //     }
-    // }).catch(function(err){
-    //   alert("Not Verified");
-    //   console.error(err);
-    // });
+    App.contracts.Election.deployed().then(function(instance) {
+      electionInstance = instance;
+      return electionInstance.verifyVote((publicKey1), (publicKey2), pos, {from: App.account});
+    }).then(function(result){
+        if(result){
+          alert("Processed");
+          window.location.replace("/results")
+          
+        }
+        else{
+          alert("Not Verified");
+        }
+    }).catch(function(err){
+      alert("Not Verified");
+      console.error(err);
+    });
     
   },
 

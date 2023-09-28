@@ -13,14 +13,10 @@ contract Election {
         string surname; 
         string refNUm; 
         bool isRegistered;
-        uint256 PrivateKey;
+        uint PrivateKey;
         bool  isVerifiedUser;
     }
-    struct keys {
-        uint256 PublicKey1;
-        uint256 PublicKey2;
-    }
-
+ 
     struct votingRecords{
         string ref;
         string voteDate;
@@ -50,8 +46,6 @@ contract Election {
 
     // Store accounts that have voted
     mapping(address => voter) private voters;
-
-    mapping(address => keys) private pKeys; //keeps public keys
 
     mapping(uint => votingRecords) public votingTrails;
 
@@ -105,6 +99,8 @@ contract Election {
 
      // Add a voter
     function addVoter (string memory _personal_id, string memory _email, string memory _name, string memory _surname, string memory _ref) public {
+            
+            require(msg.sender != admin, "Admin Cannot register"); //require that the user is not registered
             address _pAdress = msg.sender; 
             bytes32 encrypt_id = keccak256_encrypt(_personal_id);  //encrypt personal id
             voter storage user = voters[_pAdress];
@@ -121,7 +117,7 @@ contract Election {
                             surname: _surname, 
                             refNUm: _ref,
                             isRegistered:true,
-                            PrivateKey:uint256(10),
+                            PrivateKey:0,
                             isVerifiedUser:false
                     });
             
@@ -132,8 +128,9 @@ contract Election {
     }
 
     //get voter details to display to voter
-    function getVoter() public view returns(string memory, string memory, string memory, string memory, bool, bool){
-            return(voters[msg.sender].name, voters[msg.sender].surname, voters[msg.sender].email, voters[msg.sender].refNUm, voters[msg.sender].isRegistered, voters[msg.sender].hasVoted);             
+    function getVoter() public view returns(string memory, string memory, string memory, string memory, bool, bool, bool){
+            return(voters[msg.sender].name, voters[msg.sender].surname, voters[msg.sender].email, 
+            voters[msg.sender].refNUm, voters[msg.sender].isRegistered, voters[msg.sender].hasVoted, voters[msg.sender].isVerifiedUser);             
     }
 
     //returns true if voter registered
@@ -143,8 +140,8 @@ contract Election {
 
     
   // https://stackoverflow.com/questions/73555009/how-to-generate-random-words-in-solidity-based-based-on-a-string-of-letters/73557284#73557284
-  function random() private view returns (uint256) {
-        return uint256 (keccak256(abi.encodePacked (block.timestamp, numVotes, candidatesCount)));
+  function random() private view returns (uint) {
+        return uint (keccak256(abi.encodePacked (block.timestamp, numVotes, candidatesCount)));
      }
 
      //returns true if voter registered
@@ -171,11 +168,11 @@ contract Election {
         candidates[_candidateId].voteCount ++;
 
         voters[msg.sender].PrivateKey = random();  //CREATE PRIVATE KEY
-        (uint p1, uint p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //CREATE Public Keys
-        pKeys[msg.sender] = keys({
-                PublicKey1:p1,
-                PublicKey2:p2
-        });
+        // (uint p1, uint p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //CREATE Public Keys
+        // pKeys[msg.sender] = keys({
+        //         PublicKey1:p1,
+        //         PublicKey2:p2
+        // });
         votingTrails[numVotes] = votingRecords({
                                                 ref:voters[msg.sender].refNUm,
                                                 voteDate:_date,
@@ -186,8 +183,12 @@ contract Election {
         
     }
 
-      function getKeys() public view returns(uint256, uint256){
-            return(pKeys[msg.sender].PublicKey1, pKeys[msg.sender].PublicKey2);             
+    // function getKeys() public view returns(uint256, uint256){
+    //         return(pKeys[msg.sender].PublicKey1, pKeys[msg.sender].PublicKey2);             
+    // }
+
+     function copyKeys() public view returns(uint256, uint256){
+            return EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP);           
     }
 
     function verifyVote(uint256 _key1, uint256 _key2, uint _votePosition) public {
@@ -199,9 +200,13 @@ contract Election {
 
         require(!voters[msg.sender].isVerifiedUser, "Voter already voted");
 
-        (uint256 p1, uint256 p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys
+        (uint256 p1, uint256 p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys from the user address
       
         if(_key1==p1 && _key2==p2){
+            votingTrails[_votePosition].isVerified = true;
+            voters[msg.sender].isVerifiedUser=true;
+        }
+        else if(_key1==p2 && _key2==p1){
             votingTrails[_votePosition].isVerified = true;
             voters[msg.sender].isVerifiedUser=true;
         }
