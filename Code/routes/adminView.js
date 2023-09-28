@@ -21,6 +21,5 @@ router.post('/results', urlencodedParser, function(req, res, next) {
             res.render('adminResults');
             
 });
-
 module.exports = router;
 

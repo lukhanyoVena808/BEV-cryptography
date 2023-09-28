@@ -33695,12 +33695,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xA8af25b8A1f431404547CC93142f2C7A416F5119",
-      "transactionHash": "0xe07e86f1e548e866748b03d88f34f7d43d1d90b4bfeb6c063ba30eb2fd705538"
+      "address": "0x9A626c30a5463Ea9C52048D65e00e4c119C14320",
+      "transactionHash": "0x3b0a955210cc0cfa9cf267d520ae13b1773f82a781b7afa7fcaa529ef2cccb22"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2023-09-27T18:25:57.988Z",
+  "updatedAt": "2023-09-28T10:49:51.151Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Witnet Foundation",
