@@ -316,7 +316,7 @@ App = {
         
     try {     
         
-        App.contracts.Election.deployed().then(function(instance) {
+      App.contracts.Election.deployed().then(function(instance) {
           electionInstance = instance;
             return electionInstance.candidatesCount();
         }).then(function(candidatesCount) {             
@@ -347,28 +347,32 @@ App = {
                         trailBody.empty();
                         
                         for (let i= 0; i < numVotes; i++) {
-                          electionInstance.votingTrails(i).then(function(trail) {
+                           electionInstance.votingTrails(i).then(function(trail) {
+                            console.log(i)
                             const refNumber = trail[0];
                             const trail_date = trail[1];
                             const trail_time = trail[2];
                             const trail_verified = trail[3];
 
+                            console.log(trail_verified)
+
                             var btn = "";
                             
                             if(trail_verified){
-                                btn = `<div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style="background-color:green; pointer-events: none;" >Verified</button>`;
+                                btn = `<div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style="background-color:green; pointer-events: none;" >Verified</button></td>`;
                             }else{
-                              btn=`<div class="mb-3"><br><button type="submit" form="trailer${i}" class="btn btn-primary">Verify</button>`;
+                              btn=`<div class="mb-3"><br><button type="submit" form="trailer${i}" class="btn btn-primary">Verify</button></td>`;
                             }
                         
-                            const readData = '<td><h5>'+refNumber+'</h5></td><td style="margin-right:10px;">'+trail_date+'</td><td style="margin-left:10px;">'+trail_time+'</td></tr>';
-                            const candidateTemplate = `<tr style="word-wrap: normal"><td class="input-wrap"><form id="trailer${i}" onSubmit="App.verify_audit(${i}); return false;" action="/results" method="post"><div class="mb-3" class="input-wrap">`+
+                            const readData = '<td><h5>'+refNumber+'</h5></td><td style="margin-right:10px;">'+trail_date+'</td><td style="margin-left:10px;">'+trail_time+'</td></tr><br>';
+                            const candidateTemplate = `<tr style="word-wrap: normal"><td class="input-wrap"><form id="trailer${i}" onsubmit="App.verify_audit(${i}); return false;" action="/results" method="post"><div class="mb-3" class="input-wrap">`+
                             `<span class="width-machine" aria-hidden="true"></span><label for="publicKey${i}1-reg" class="input-wrap" style="right:60%"><strong>Audit Key 1:</strong></label>`+
                             `<input type="text" class="input" class="form-control" id="publicKey${i}1-reg" name="publicKey${i}1" autocomplete=off required><br></div><br>`+
                             '<div class="mb-3" class="input-wrap"><span class="width-machine" aria-hidden="true"></span>'+
                             `<label for="publicKey${i}2-reg" class="input-wrap" style="right:60%"><strong>Audit Key 2:</strong></label>`+
                             `<input type="text" class="input" class="form-control" id="publicKey${i}2-reg" name="publicKey${i}2" autocomplete=off required></div><br>`+btn+'</div></form></td>'+readData;
-                            //  style="pointer-events: none;"
+                            // const candidateTemplate = btn+readData;
+                            
                             trailBody.append(candidateTemplate);
                           }).catch(function(err){
                             console.error(err);
@@ -462,21 +466,24 @@ App = {
 
   },
 
-  verify_audit: function(pos){
+  verify_audit: async function(pos){
     var electionInstance;
     const p1_name = "#publicKey"+pos+"1-reg";
     const p2_name = "#publicKey"+pos+"2-reg";
     const publicKey1 =  $(p1_name).val();
     const publicKey2 = $(p2_name).val();
-    console.log(publicKey1+"::")
-    console.log(publicKey2+"::")
-    console.log("Pos: "+pos);
      
-    App.contracts.Election.deployed().then(function(instance) {
+    await App.contracts.Election.deployed().then(function(instance) {
       electionInstance = instance;
-      return electionInstance.verifyVote((publicKey1), (publicKey2), pos, {from: App.account});
+      return electionInstance.verifyVote(BigInt(publicKey1), BigInt(publicKey2), pos, {from: App.account});
     }).then(function(result){
         if(result){
+          electionInstance.p1Holder().then(function(trail) {
+            console.log(trail.c.join(""));
+          }).catch(function(err){
+            console.error(err);
+          })
+
           alert("Processed");
           window.location.replace("/results")
           

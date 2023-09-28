@@ -20,13 +20,18 @@ router.get('/register', function(req, res, next) {
 });
 
 
+router.get('/voteAudit', function(req, res, next) {
+  res.render('verify');
+
+});
+
 const nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
   host: "sandbox.smtp.mailtrap.io",
   port: 2525,
   auth: {
-    user: "67fa86d2545cf7",
-    pass: "57c85151a4747e"
+    user: "0a870ddc03757e",
+    pass: "0f32dfe8d840ca"
   }
 });
 

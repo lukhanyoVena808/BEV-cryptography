@@ -57,6 +57,9 @@ contract Election {
     // Store Candidates Count
     uint public candidatesCount;
 
+    uint256 public p1Holder;
+    uint256 public p2Holder;
+
     // Stores Election phase
     string public phase;
 
@@ -191,12 +194,14 @@ contract Election {
             return EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP);           
     }
 
-    function verifyVote(uint256 _key1, uint256 _key2, uint _votePosition) public {
+    function verifyVote(uint256 _key1, uint256 _key2, uint _votePosition) public{
                  //must be registered to vote
         require(voters[msg.sender].isRegistered, "Only registered users can vote");
 
         // require that they haven't voted before
         require(voters[msg.sender].hasVoted, "Already Voted");
+
+        require(_votePosition>= 0 && _votePosition <numVotes);
 
         require(!voters[msg.sender].isVerifiedUser, "Voter already voted");
 
@@ -206,10 +211,8 @@ contract Election {
             votingTrails[_votePosition].isVerified = true;
             voters[msg.sender].isVerifiedUser=true;
         }
-        else if(_key1==p2 && _key2==p1){
-            votingTrails[_votePosition].isVerified = true;
-            voters[msg.sender].isVerifiedUser=true;
-        }
+       
+
 
     }
 

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registration</title>
+    <link rel="stylesheet" href="assets_home/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kaushan+Script">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700">
+    <link rel="stylesheet" href="assets_home/fonts/font-awesome.min.css">
+
+
+    <style>
+        #sliders {
+            padding-right: 40%;                
+        }
+
+        #ewallet{
+          margin-top: 150px;
+        }
+
+        #myOTP {
+            width: 500px;
+            border-radius: 6px;
+            position: absolute;
+            background-color: #33C7FF;
+            z-index: 4;
+            top: 40%;
+            padding: 10px;
+            transition: all .8s ease-in;
+            opacity: 0;    
+        }
+    </style>
+
+  </head>
+  <body id="page-top">
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-dark" id="mainNav">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <img class="rounded-circle img-fluid" height="70px" width="70px" src="../assets_home/img/197562.png" alt="icon">
+        </div>
+        <div class="container"><a class="navbar-brand" href="#page-top">E-VoteZ</a><button data-toggle="collapse" data-target="#navbarResponsive" class="navbar-toggler navbar-toggler-right" type="button" data-toogle="collapse" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="nav navbar-nav ml-auto text-uppercase">       
+                    <li class="nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href='\'>Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container" id="ewallet">
+        <div class="card shadow-lg o-hidden border-0 my-5" >
+            <div class="card-body p-0">
+                <div class="row"  >
+                   <div class="col-lg-5 d-none d-lg-flex"> 
+                        <div class="flex-grow-1 bg-register-image"  style="background-image: url('../assets_home/img/img4.jpeg'); 
+                        background-size: cover;   width: auto; height: auto; background-position: center;" ></div>
+                   
+                    </div>
+                    
+                    <div class="col-lg-7" >
+                        <div class="p-5"> 
+                            <div class="text-center">
+                                <h4 class="text-dark mb-4">Verify your Vote!</h4>
+                            </div>
+                            <!-- Need to add Duration, after which people cannot register
+                            onsubmit="vibe(); return false;" 
+                            onsubmit="vibe(); return false;" 
+                            -->
+                            <form  onsubmit="App.verify_audit(); return false;" method="post" action="results">
+                                
+                                <div class="mb-3">
+                                    <label for="name-reg" class="form-label">Vote Audit Key 1:</label>
+                                    <input type="text" class="form-control" id="name-reg" name="name" autocomplete=off required>                        
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="surname-reg" class="form-label">Vote Audit Key 1:</label>
+                                    <input type="text" class="form-control" id="surname-reg" name="surname" autocomplete=off required>                        
+                                </div>
+                                <div class="mb-3">
+                                <button type="submit" class="btn btn-primary" id="btn-adopt">Submit</button>
+                                </div>
+                            </form>  
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white sticky-footer">
+        <div class="container my-auto">
+            <div class="text-center my-auto copyright"><span>Copyright © E-Votez 2023</span></div>
+        </div>
+    </footer>
+   
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="../js/app.js"></script>
+    
+  </body>
+</html>
