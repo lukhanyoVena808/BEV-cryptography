@@ -197,10 +197,7 @@ contract Election {
 
         (uint p1, uint p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys
         bool isREal =  (_key1==p1 && _key2==p2);
-        if (isREal){
-             votingTrails[_votePosition].isVerified = true;
-        }
-
+        votingTrails[_votePosition].isVerified = isREal;
         return isREal;
 
 

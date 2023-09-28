@@ -342,13 +342,15 @@ App = {
                         $("#dataTrail").show();
                         const trailBody = $("#vote_trail");
                         trailBody.empty();
+                        console.log("Votes: "+numVotes)
                         for (let i= 0; i < numVotes; i++) {
                           electionInstance.votingTrails(i).then(function(trail) {
                             const refNumber = trail[0];
                             const trail_date = trail[1];
                             const trail_time = trail[2];
-                            const trail_verified = trail[3];  
-                            const btn = "";
+                            const trail_verified = trail[3];
+                            console.log(trail_verified)
+                            var btn = "";
                             
                             if(trail_verified){
                                 btn = '<div class="mb-3"><br><button type="submit" class="btn btn-primary" id="btn2" style="background-color:green; pointer-events: none;" >Verified</button>';
@@ -461,11 +463,12 @@ App = {
     const publicKey2 = $("#publicKey2-reg").val();
     console.log(publicKey1)
     console.log(publicKey2)
+    console.log("Pos: "+pos);
      
     App.contracts.Election.deployed().then(function(instance) {
       return instance.verifyVote(BigInt(publicKey1), BigInt(publicKey2), pos, {from: App.account});
     }).then(function(result){
-      console.log(result);
+      
       if(result){
         alert("Verified");
         window.location.replace("/results")
