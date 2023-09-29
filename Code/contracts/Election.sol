@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT 
 pragma solidity  >=0.5.16;
 import "./EllipticCurve.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract Election { 
 
@@ -13,8 +14,9 @@ contract Election {
         string surname; 
         string refNUm; 
         bool isRegistered;
-        uint PrivateKey;
+        uint256 PrivateKey;
         bool  isVerifiedUser;
+        uint position;
     }
  
     struct votingRecords{
@@ -121,7 +123,8 @@ contract Election {
                             refNUm: _ref,
                             isRegistered:true,
                             PrivateKey:0,
-                            isVerifiedUser:false
+                            isVerifiedUser:false,
+                            position:0
                     });
             
            
@@ -170,7 +173,7 @@ contract Election {
         // update candidate vote Count
         candidates[_candidateId].voteCount ++;
 
-        voters[msg.sender].PrivateKey = random();  //CREATE PRIVATE KEY
+        voters[msg.sender].PrivateKey = 100;  //CREATE PRIVATE KEY
         // (uint p1, uint p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //CREATE Public Keys
         // pKeys[msg.sender] = keys({
         //         PublicKey1:p1,
@@ -182,39 +185,51 @@ contract Election {
                                                 voteTime:_time,
                                                 isVerified:false
                                          });
-         numVotes++;
+        voters[msg.sender].position = numVotes;
+        numVotes++;
         
     }
 
-     function copyKeys() public view returns(uint256, uint256){
-            return EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP);           
+     function copyKeys() public view returns(string memory, string memory){
+            (uint256 p1, uint256 p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); 
+            while(!EllipticCurve.isOnCurve(p1, p2, AA, BB, PP)){
+                 (p1, p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); 
+            }
+            return (Strings.toString(p1), Strings.toString(p2));          
     }
 
 
 
 
-    function verifyVote(uint256 _key1, uint256 _key2, uint _votePosition) public{
+    function verifyVote(uint _key1, uint _key2) public view returns(bool){
                  //must be registered to vote
         require(voters[msg.sender].isRegistered, "Only registered users can vote");
 
         // require that they haven't voted before
         require(voters[msg.sender].hasVoted, "Already Voted");
 
-        require(_votePosition>= 0 && _votePosition <numVotes);
-
         require(!voters[msg.sender].isVerifiedUser, "Voter already voted");
 
         (uint256 p1, uint256 p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys from the user address
 
-        (p1Holder, p2Holder) = EllipticCurve.ecSub(_key1,_key2, p1, p2, AA, PP);
-      
-        if(p1Holder==0 && p2Holder==0){
-            votingTrails[_votePosition].isVerified = true;
-            voters[msg.sender].isVerifiedUser=true;
+        if(p1==_key1 && _key2==p2 ){
+        
+            return true;  
         }
-       
 
+        return false;
+      
+    // if(f1==0 ){
+    //     if(f2==0){
+    //         votingTrails[voters[msg.sender].position].isVerified = true;
+    //         voters[msg.sender].isVerifiedUser=true;
+    //         }
+    //     }
+    }
 
+    function getPr() public view returns(uint256){
+        require(voters[msg.sender].isRegistered, "Only registered users can vote");
+        return voters[msg.sender].PrivateKey;
     }
 
     function getTrailer(uint position) public view returns(bool){

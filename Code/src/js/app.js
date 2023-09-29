@@ -6,6 +6,7 @@ App = {
   voted: null,
   adminIn: null,
   adminView: null,
+  keyWin:null,
   
   
 
@@ -143,10 +144,13 @@ App = {
             
             if(next2) {  //has voted already
               myform.hide();    
-              electionInstance.copyKeys({from: App.account}).then(function(_keys){  //get keys
-                console.log(_keys[0].c.join("").trim())
-                const p1 = _keys[0].c.join("");
-                const p2 = _keys[1].c.join("");
+              electionInstance.copyKeys({from: App.account}).then(function(_keys){  //get keys              
+
+         
+                console.log(_keys[0])
+                const p1 = _keys[0];
+                const p2 = _keys[1];
+                console.log(p1)
                 const the_voter = $("#voter_info");
                 const candidateTemplate = '<tr  style="word-wrap: break-word"><th><strong>Vote Audit Key 1</strong></th><td>'+ (p1)+'</td></tr>'+
                         '<tr  style="word-wrap: break-word"><th><strong>Vote Audit Key 2</strong></th><td>'+p2+"</td></tr>";
@@ -314,6 +318,8 @@ App = {
     var electionInstance;
     const content = $("#content2023");
     content.show()
+
+    
         
     try {     
         
@@ -338,6 +344,7 @@ App = {
                 return electionInstance.phase();
               }).then(function(currentPhase) {
                     if (currentPhase == "results"){
+                      $("#lastSolution").show();
                       electionInstance.getWinner().then(function(myWinner) {
                         electionInstance.numVotes().then(function(numVotes){
                           $("#details").html("Winner: "+myWinner+"<br> Total Election Votes: "+numVotes);
@@ -346,6 +353,8 @@ App = {
                         $("#dataTrail").show();
                         var trailBody = $("#vote_trail");
                         trailBody.empty();
+
+                      
                         
                         for (let i= 0; i < numVotes; i++) {
                            electionInstance.votingTrails(i).then(function(trail) {
@@ -354,25 +363,30 @@ App = {
                             var trail_date = trail[1];
                             var trail_time = trail[2];
                             var trail_verified = trail[3];
-
                             console.log(trail_verified)
 
                             var btn = "";
                             
-                            if(trail_verified){
-                                btn = `<div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style="background-color:green; pointer-events: none;" >Verified</button></td>`;
+                            // if(trail_verified){
+                            //     btn = `<div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style="background-color:green; pointer-events: none;" >Verified</button></td>`;
+                            // }else{
+                            //     btn = `<div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" >Verify</button></td>`;
+                            // }
+
+                              if(trail_verified){
+                                btn = `<tr style="word-wrap: normal"><td class="input-wrap"><div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style="background-color:green; pointer-events: none;" >Verified</button></td>`;
                             }else{
-                                btn = `<div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" >Verify</button></td>`;
+                                btn = `<tr style="word-wrap: normal"><td class="input-wrap"><div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style=" pointer-events: none;" >Not Verified</button></td>`;
                             }
                         
                             var readData = '<td><h5>'+refNumber+'</h5></td><td style="margin-right:10px;">'+trail_date+'</td><td style="margin-left:10px;">'+trail_time+'</td></tr><br>';
-                            var candidateTemplate = `<tr style="word-wrap: normal"><td class="input-wrap"><form id="trailer${i}" onsubmit="App.verify_audit(${i}); return false;" action="/results" method="post"><div class="mb-3" class="input-wrap">`+
-                            `<span class="width-machine" aria-hidden="true"></span><label for="publicKey${i}1-reg" class="input-wrap" style="right:60%"><strong>Audit Key 1:</strong></label>`+
-                            `<input type="text" class="input" class="form-control" id="publicKey${i}1-reg" name="publicKey${i}1" autocomplete=off required><br></div><br>`+
-                            '<div class="mb-3" class="input-wrap"><span class="width-machine" aria-hidden="true"></span>'+
-                            `<label for="publicKey${i}2-reg" class="input-wrap" style="right:60%"><strong>Audit Key 2:</strong></label>`+
-                            `<input type="text" class="input" class="form-control" id="publicKey${i}2-reg" name="publicKey${i}2" autocomplete=off required></div><br>`+btn+'</div></form></td>'+readData;
-                            // const candidateTemplate = btn+readData;
+                            // var candidateTemplate = `<tr style="word-wrap: normal"><td class="input-wrap"><form id="trailer${i}" onsubmit="App.verify_audit(${i}); return false;" action="/results" method="post"><div class="mb-3" class="input-wrap">`+
+                            // `<label for="publicKey${i}1-reg" class="input-wrap" style="right:60%"><strong>Audit Key 1:</strong></label>`+
+                            // `<input type="text" class="input" class="form-control" id="publicKey${i}1-reg" name="publicKey${i}1" autocomplete=off required><br></div><br>`+
+                            // '<div class="mb-3" class="input-wrap">'+
+                            // `<label for="publicKey${i}2-reg" class="input-wrap" style="right:60%"><strong>Audit Key 2:</strong></label>`+
+                            // `<input type="text" class="input" class="form-control" id="publicKey${i}2-reg" name="publicKey${i}2" autocomplete=off required></div><br>`+btn+'</div></form></td>'+readData;
+                            const candidateTemplate = btn+readData;
                             
                             trailBody.append(candidateTemplate);
                           }).catch(function(err){
@@ -467,34 +481,25 @@ App = {
 
   },
 
-  verify_audit: function(pos){
+  verify_audit: function(){
     var electionInstance;
-    const p1_name = "#publicKey"+pos+"1-reg";
-    const p2_name = "#publicKey"+pos+"2-reg";
-    const publicKey1 =  $(p1_name).val();
-    const publicKey2 = $(p2_name).val();
+    const p1_name = "#publicKey1-reg";
+    const p2_name = "#publicKey2-reg";
+    const publicKey1 =  $(p1_name).val().trim();
+    const publicKey2 = $(p2_name).val().trim();
+
+    console.log(publicKey1)
+    
      
     App.contracts.Election.deployed().then(function(instance) {
       electionInstance = instance;
-      return electionInstance.verifyVote(BigInt(publicKey1), BigInt(publicKey2), pos, {from: App.account});
+      
+      return electionInstance.verifyVote(publicKey1,publicKey2, {from: App.account});
     }).then(function(result){
+      console.log(result)
         if(result){
-          electionInstance.p1Holder().then(function(trail) {
-            console.log(trail.c.join(""));
-          }).catch(function(err){
-            console.error(err);
-          })
-
-          electionInstance.p2Holder().then(function(trail2) {
-            console.log(trail2.c.join(""));
-          }).catch(function(err){
-            console.error(err);
-          })
-
-
           alert("Processed");
-          // window.location.replace("/results")
-          
+          window.location.replace("/results")
         }
         else{
           alert("Not Verified");
