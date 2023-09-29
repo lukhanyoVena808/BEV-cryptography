@@ -143,8 +143,8 @@ contract Election {
 
     
   // https://stackoverflow.com/questions/73555009/how-to-generate-random-words-in-solidity-based-based-on-a-string-of-letters/73557284#73557284
-  function random() private view returns (uint) {
-        return uint (keccak256(abi.encodePacked (block.timestamp, numVotes, candidatesCount)));
+  function random() public view returns (uint) {
+        return uint (keccak256(abi.encodePacked (block.timestamp, msg.sender)));
      }
 
      //returns true if voter registered
@@ -186,13 +186,12 @@ contract Election {
         
     }
 
-    // function getKeys() public view returns(uint256, uint256){
-    //         return(pKeys[msg.sender].PublicKey1, pKeys[msg.sender].PublicKey2);             
-    // }
-
      function copyKeys() public view returns(uint256, uint256){
             return EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP);           
     }
+
+
+
 
     function verifyVote(uint256 _key1, uint256 _key2, uint _votePosition) public{
                  //must be registered to vote
@@ -206,8 +205,10 @@ contract Election {
         require(!voters[msg.sender].isVerifiedUser, "Voter already voted");
 
         (uint256 p1, uint256 p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys from the user address
+
+        (p1Holder, p2Holder) = EllipticCurve.ecSub(_key1,_key2, p1, p2, AA, PP);
       
-        if(_key1==p1 && _key2==p2){
+        if(p1Holder==0 && p2Holder==0){
             votingTrails[_votePosition].isVerified = true;
             voters[msg.sender].isVerifiedUser=true;
         }
