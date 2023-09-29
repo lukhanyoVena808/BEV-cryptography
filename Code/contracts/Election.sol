@@ -237,12 +237,12 @@ contract Election {
     function changePhase() onlyAdmin public {
         phasePointer++;
         if (phasePointer <3) {
-            if(phasePointer == 0){ //from registration to voting
+            if(phasePointer == 1){ //from registration to voting
                 require(votersCount>candidatesCount, "Not Enough Voters");
                 require(candidatesCount>minimum_candidates, "Not Enough Candidates");
                 phase = phases[phasePointer];
             }
-             if(phasePointer == 1){ //from voting to results
+             if(phasePointer == 2){ //from voting to results
                 require(numVotes>minVotes, "Not Enough Votes");
                 phase = phases[phasePointer];
             }
