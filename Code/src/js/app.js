@@ -145,12 +145,9 @@ App = {
             if(next2) {  //has voted already
               myform.hide();    
               electionInstance.copyKeys({from: App.account}).then(function(_keys){  //get keys              
-
-         
-                console.log(_keys[0])
+                console.log(_keys)
                 const p1 = _keys[0];
                 const p2 = _keys[1];
-                console.log(p1)
                 const the_voter = $("#voter_info");
                 const candidateTemplate = '<tr  style="word-wrap: break-word"><th><strong>Vote Audit Key 1</strong></th><td>'+ (p1)+'</td></tr>'+
                         '<tr  style="word-wrap: break-word"><th><strong>Vote Audit Key 2</strong></th><td>'+p2+"</td></tr>";
@@ -488,7 +485,7 @@ App = {
     const publicKey1 =  $(p1_name).val().trim();
     const publicKey2 = $(p2_name).val().trim();
 
-    console.log(publicKey1)
+    console.log("KEY:"+publicKey1)
     
      
     App.contracts.Election.deployed().then(function(instance) {

@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT 
-pragma solidity  >=0.5.16;
+pragma solidity  ^0.8.0;
 import "./EllipticCurve.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+
+
 
 contract Election { 
 
@@ -201,7 +203,7 @@ contract Election {
 
 
 
-    function verifyVote(uint _key1, uint _key2) public view returns(bool){
+    function verifyVote(uint _key1, uint _key2) public{
                  //must be registered to vote
         require(voters[msg.sender].isRegistered, "Only registered users can vote");
 
@@ -212,24 +214,12 @@ contract Election {
 
         (uint256 p1, uint256 p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys from the user address
 
-        if(p1==_key1 && _key2==p2 ){
-        
-            return true;  
+        if(p1==_key1 && _key2==p2 ){ //public keys match
+         
+            votingTrails[voters[msg.sender].position].isVerified = true;
+            voters[msg.sender].isVerifiedUser = true;
         }
 
-        return false;
-      
-    // if(f1==0 ){
-    //     if(f2==0){
-    //         votingTrails[voters[msg.sender].position].isVerified = true;
-    //         voters[msg.sender].isVerifiedUser=true;
-    //         }
-    //     }
-    }
-
-    function getPr() public view returns(uint256){
-        require(voters[msg.sender].isRegistered, "Only registered users can vote");
-        return voters[msg.sender].PrivateKey;
     }
 
     function getTrailer(uint position) public view returns(bool){
