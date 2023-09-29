@@ -61,9 +61,6 @@ contract Election {
     // Store Candidates Count
     uint public candidatesCount;
 
-    uint256 public p1Holder;
-    uint256 public p2Holder;
-
     // Stores Election phase
     string public phase;
 
@@ -77,15 +74,13 @@ contract Election {
     uint public numVotes;
 
     string[3] phases = ["registration" , "voting", "results"];
-    uint public phasePointer;
+    uint private phasePointer;
 
     // Admin is set once, when contract is deployed. Also saves gas fees
     address private admin;
-    uint256 public votingStart;  //start of phase
-    uint256 public votingEnd; //end of phase
 
     constructor() public { 
-        admin = msg.sender;
+        admin = msg.sender; //the deployer of the contract is the admin
         phase="Election has not started";
     } 
 
@@ -175,25 +170,25 @@ contract Election {
         voters[msg.sender].hasVoted = true;
 
         // update candidate vote Count
-        candidates[_candidateId].voteCount ++;
+        candidates[_candidateId].voteCount ++; //add vote to candidate
 
         voters[msg.sender].PrivateKey = random();  //CREATE PRIVATE KEY *****
     
-        votingTrails[numVotes] = votingRecords({
+        votingTrails[numVotes] = votingRecords({ //keep record of vote
                                                 ref:voters[msg.sender].refNUm,
                                                 voteDate:_date,
                                                 voteTime:_time,
                                                 isVerified:false
                                          });
-        voters[msg.sender].position = numVotes;
-        numVotes++;
+        voters[msg.sender].position = numVotes; //store position of vote
+        numVotes++; //increase vote count
         
     }
 
     //Return voter keys
      function copyKeys() public view returns(string memory, string memory){
             (uint256 p1, uint256 p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); 
-            while(!EllipticCurve.isOnCurve(p1, p2, AA, BB, PP)){
+            while(!EllipticCurve.isOnCurve(p1, p2, AA, BB, PP)){ //If points returned are not on the curve, iterate again
                  (p1, p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); 
             }
             return (Strings.toString(p1), Strings.toString(p2));          
@@ -212,18 +207,10 @@ contract Election {
         (uint256 p1, uint256 p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys from the user address
 
         if(p1==_key1 && _key2==p2 ){ //public keys match
-         
             votingTrails[voters[msg.sender].position].isVerified = true;
             voters[msg.sender].isVerifiedUser = true;
         }
-
     }
-
-    //return true if voter has been audited
-    function getTrailer(uint position) public view returns(bool){
-         return votingTrails[position].isVerified;
-    }
-
 
     // start election
     function startElection() onlyAdmin public {
@@ -238,12 +225,12 @@ contract Election {
         phasePointer++;
         if (phasePointer <3) {
             if(phasePointer == 1){ //from registration to voting
-                require(votersCount>candidatesCount, "Not Enough Voters");
-                require(candidatesCount>minimum_candidates, "Not Enough Candidates");
+                require(votersCount>candidatesCount, "Not Enough Voters"); //3 VOTES, 2 CANDIDATES
+                require(candidatesCount>=minimum_candidates, "Not Enough Candidates"); //MINIMUM OF 2 CANDIDATES
                 phase = phases[phasePointer];
             }
              if(phasePointer == 2){ //from voting to results
-                require(numVotes>minVotes, "Not Enough Votes");
+                require(numVotes>=minVotes, "Not Enough Votes"); //MINIMUM OF 2 VOTES
                 phase = phases[phasePointer];
             }
             

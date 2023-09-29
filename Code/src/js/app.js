@@ -24,7 +24,7 @@ App = {
         const accounts = await window.ethereum.request({
           method: "eth_requestAccounts",
       });
-      // console.log(accounts) ;
+     
         
       } catch (error) {
         // User denied account access...
@@ -145,7 +145,7 @@ App = {
             if(next2) {  //has voted already
               myform.hide();    
               electionInstance.copyKeys({from: App.account}).then(function(_keys){  //get keys              
-                console.log(_keys)
+                
                 const p1 = _keys[0];
                 const p2 = _keys[1];
                 const the_voter = $("#voter_info");
@@ -355,12 +355,12 @@ App = {
                         
                         for (let i= 0; i < numVotes; i++) {
                            electionInstance.votingTrails(i).then(function(trail) {
-                            console.log(i)
+                         
                             var refNumber = trail[0];
                             var trail_date = trail[1];
                             var trail_time = trail[2];
                             var trail_verified = trail[3];
-                            console.log(trail_verified)
+                        
 
                             var btn = "";
                             
@@ -483,17 +483,14 @@ App = {
     const p1_name = "#publicKey1-reg";
     const p2_name = "#publicKey2-reg";
     const publicKey1 =  $(p1_name).val().trim();
-    const publicKey2 = $(p2_name).val().trim();
-
-    console.log("KEY:"+publicKey1)
-    
+    const publicKey2 = $(p2_name).val().trim();   
      
     App.contracts.Election.deployed().then(function(instance) {
       electionInstance = instance;
       
       return electionInstance.verifyVote(publicKey1,publicKey2, {from: App.account});
     }).then(function(result){
-      console.log(result)
+     
         if(result){
           alert("Processed");
           window.location.replace("/results")
