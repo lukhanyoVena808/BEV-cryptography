@@ -1,7 +1,10 @@
 const express = require('express');
+const terminatorHTTP =  require('http-terminator');
+
+
 const app = express();
 const port = 3000;
-const ejs = require("ejs");
+
 
 
 //static files
@@ -40,44 +43,26 @@ app.get('', (req, res) => {
     res.render("index");
 })
 
-// app.get('/vote', (req, res) => {
-//   res.render("vote");
-// })
 
-// app.get('/register', (req, res) => {
-//   res.render("register");
-// })
-
-// app.get('/admin', (req, res) => {
-//   res.render("adminLogin");
-// })
-
-// app.get('/candidates', (req, res) => {
-//   res.render("adminCandidate");
-// })
-
-// app.get('/results', (req, res) => {
-//   res.render("adminResults");
-// })
 
 
 
 //listen on port
-app.listen(port, ()=> console.info('listening on port ${port}'))
+const server = app.listen(port, ()=> console.info('listening on port ${port}'))
 
 
 //session
 app.use(express.urlencoded());
-const session = require('express-session');
+// const session = require('express-session');
 
 
 // web-portion --------------------------------->
-app.use(session({ 
-    secret: '@wild**blockchain__init%evote!!#system#',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 60000}
-}))
+// app.use(session({ 
+//     secret: '@wild**blockchain__init%evote!!#system#',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { maxAge: 60000}
+// }))
 
 
 module.exports = {

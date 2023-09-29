@@ -145,7 +145,6 @@ App = {
             if(next2) {  //has voted already
               myform.hide();    
               electionInstance.copyKeys({from: App.account}).then(function(_keys){  //get keys              
-                
                 const p1 = _keys[0];
                 const p2 = _keys[1];
                 const the_voter = $("#voter_info");
@@ -205,9 +204,9 @@ App = {
 
   AddCandidate:  function() {   
     // const name =  $("#name-C").val().replace(/[^a-zA-Z0-9 ]/g, ''); 
-    const name =  $("#name-C").val();
-    const surname = $("#surname-C").val();
-    const party= $("#party-C").val();
+    const name =  $("#name-C").val().trim();
+    const surname = $("#surname-C").val().trim();
+    const party= $("#party-C").val().trim();
       
     //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
     try {  
@@ -317,9 +316,7 @@ App = {
     content.show()
 
     
-        
     try {     
-        
       App.contracts.Election.deployed().then(function(instance) {
           electionInstance = instance;
             return electionInstance.candidatesCount();
@@ -354,37 +351,20 @@ App = {
                       
                         
                         for (let i= 0; i < numVotes; i++) {
-                           electionInstance.votingTrails(i).then(function(trail) {
-                         
+                           electionInstance.votingTrails(i).then(function(trail) {                         
                             var refNumber = trail[0];
                             var trail_date = trail[1];
                             var trail_time = trail[2];
                             var trail_verified = trail[3];
-                        
-
-                            var btn = "";
-                            
-                            // if(trail_verified){
-                            //     btn = `<div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style="background-color:green; pointer-events: none;" >Verified</button></td>`;
-                            // }else{
-                            //     btn = `<div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" >Verify</button></td>`;
-                            // }
-
+                            var btn;
                               if(trail_verified){
                                 btn = `<tr style="word-wrap: normal"><td class="input-wrap"><div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style="background-color:green; pointer-events: none;" >Verified</button></td>`;
                             }else{
                                 btn = `<tr style="word-wrap: normal"><td class="input-wrap"><div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style=" pointer-events: none;" >Not Verified</button></td>`;
                             }
                         
-                            var readData = '<td><h5>'+refNumber+'</h5></td><td style="margin-right:10px;">'+trail_date+'</td><td style="margin-left:10px;">'+trail_time+'</td></tr><br>';
-                            // var candidateTemplate = `<tr style="word-wrap: normal"><td class="input-wrap"><form id="trailer${i}" onsubmit="App.verify_audit(${i}); return false;" action="/results" method="post"><div class="mb-3" class="input-wrap">`+
-                            // `<label for="publicKey${i}1-reg" class="input-wrap" style="right:60%"><strong>Audit Key 1:</strong></label>`+
-                            // `<input type="text" class="input" class="form-control" id="publicKey${i}1-reg" name="publicKey${i}1" autocomplete=off required><br></div><br>`+
-                            // '<div class="mb-3" class="input-wrap">'+
-                            // `<label for="publicKey${i}2-reg" class="input-wrap" style="right:60%"><strong>Audit Key 2:</strong></label>`+
-                            // `<input type="text" class="input" class="form-control" id="publicKey${i}2-reg" name="publicKey${i}2" autocomplete=off required></div><br>`+btn+'</div></form></td>'+readData;
+                            var readData = '<td><h5>'+refNumber+'</h5></td><td style="margin-right:10px;">'+trail_date+'</td><td style="margin-left:10px;">'+trail_time+'</td></tr><br>';                  
                             const candidateTemplate = btn+readData;
-                            
                             trailBody.append(candidateTemplate);
                           }).catch(function(err){
                             console.error(err);
