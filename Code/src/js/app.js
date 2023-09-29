@@ -207,6 +207,7 @@ App = {
     const name =  $("#name-C").val().trim();
     const surname = $("#surname-C").val().trim();
     const party= $("#party-C").val().trim();
+
       
     //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
     try {  

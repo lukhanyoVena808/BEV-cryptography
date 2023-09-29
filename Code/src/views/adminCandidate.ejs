@@ -47,7 +47,7 @@
                 <h4 class="text-dark mb-4">Add Candidate</h4>
             </div>
             <!-- Need to add Duration, after which people cannot register -->
-            <form onsubmit="App.AddCandidate(); return false;" method="post" action="candidates" id = "demo_form2">
+            <form onsubmit="App.AddCandidate(); return false;" method="post" action="candidates" id = "demo_form2" enctype="application/x-www-form-urlencoded">
                 <div class="mb-3">
                     <label for="name-C" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name-C" name="name" autocomplete=off >                        
