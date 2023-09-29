@@ -67,6 +67,9 @@ contract Election {
     // Stores Election phase
     string public phase;
 
+    uint private minimum_candidates =2;
+    uint private minVotes = 2;
+
     // Store number of voters
     uint public votersCount;
 
@@ -106,7 +109,6 @@ contract Election {
 
      // Add a voter
     function addVoter (string memory _personal_id, string memory _email, string memory _name, string memory _surname, string memory _ref) public {
-            
             require(msg.sender != admin, "Admin Cannot register"); //require that the user is not registered
             address _pAdress = msg.sender; 
             bytes32 encrypt_id = keccak256_encrypt(_personal_id);  //encrypt personal id
@@ -175,12 +177,8 @@ contract Election {
         // update candidate vote Count
         candidates[_candidateId].voteCount ++;
 
-        voters[msg.sender].PrivateKey = 100;  //CREATE PRIVATE KEY
-        // (uint p1, uint p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //CREATE Public Keys
-        // pKeys[msg.sender] = keys({
-        //         PublicKey1:p1,
-        //         PublicKey2:p2
-        // });
+        voters[msg.sender].PrivateKey = random();  //CREATE PRIVATE KEY *****
+    
         votingTrails[numVotes] = votingRecords({
                                                 ref:voters[msg.sender].refNUm,
                                                 voteDate:_date,
@@ -192,6 +190,7 @@ contract Election {
         
     }
 
+    //Return voter keys
      function copyKeys() public view returns(string memory, string memory){
             (uint256 p1, uint256 p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); 
             while(!EllipticCurve.isOnCurve(p1, p2, AA, BB, PP)){
@@ -199,10 +198,8 @@ contract Election {
             }
             return (Strings.toString(p1), Strings.toString(p2));          
     }
-
-
-
-
+ 
+    //verify vote
     function verifyVote(uint _key1, uint _key2) public{
                  //must be registered to vote
         require(voters[msg.sender].isRegistered, "Only registered users can vote");
@@ -222,6 +219,7 @@ contract Election {
 
     }
 
+    //return true if voter has been audited
     function getTrailer(uint position) public view returns(bool){
          return votingTrails[position].isVerified;
     }
@@ -239,7 +237,16 @@ contract Election {
     function changePhase() onlyAdmin public {
         phasePointer++;
         if (phasePointer <3) {
-            phase = phases[phasePointer];
+            if(phasePointer == 0){ //from registration to voting
+                require(votersCount>candidatesCount, "Not Enough Voters");
+                require(candidatesCount>minimum_candidates, "Not Enough Candidates");
+                phase = phases[phasePointer];
+            }
+             if(phasePointer == 1){ //from voting to results
+                require(numVotes>minVotes, "Not Enough Votes");
+                phase = phases[phasePointer];
+            }
+            
         } else {
             phase = "Election ended";
         }
