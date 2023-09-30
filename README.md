@@ -12,7 +12,23 @@ result of being a keystone of the popular cryptocurrencies. The fact that this
 technology is decentralized and secure also makes it a perfect candidate for e-voting
 applications. 
 ## 
-A student is expected to deliver a stand-alone proof of concept blockchain evoting
-system. The system should provide a decentralised architecture to run and support
-a voting scheme that is open, fair, and independently verifiable. The student is also
-expected to deliver an extensive attack surface analysis of the system. 
+In this project, a stand-alone proof of concept blockchain evoting
+system is delivered. The system provides a decentralised architecture to run and support
+a voting scheme that is open, fair, and independently verifiable. 
+
+Requirements:
+
+- [Truffle Ganache]()
+- [Node JS]()
+- [MailTrap]()
+
+Steps to run project: <br>
+npm install -g npm@10.1.0 <br>
+npm install truffle -g <br>
+npm install <br>
+npx truffle migrate <br>
+npm run dev <br>
+
+
+
+
