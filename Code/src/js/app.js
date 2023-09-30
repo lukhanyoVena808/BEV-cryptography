@@ -57,6 +57,9 @@ App = {
       // Connect provider to interact with contract
       App.contracts.Election.setProvider(App.web3Provider);
 
+     
+      
+
       return App.render();
     });
   },
@@ -190,18 +193,6 @@ App = {
     });
   },
 
-  getVoterRefNumber: function() {
-    // declare all characters
-    const characters ='AB0CDEF2GHIJK4LMNOP5QRS7TUVW6XYZ8abcdef1ghijklmnop9qrstuv3wxyz';
-    let result = ' ';
-    const charactersLength = characters.length;
-    for ( let i = 0; i < 6; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  },
-
-
   AddCandidate:  function() {   
     // const name =  $("#name-C").val().replace(/[^a-zA-Z0-9 ]/g, ''); 
     const name =  $("#name-C").val().trim();
@@ -252,11 +243,20 @@ App = {
 
   //admin signs in 
   admin_Signs_In: function(){
-    const phraseUp = "electi"+App.getVoterRefNumber()+"ons2023_nation"+App.getVoterRefNumber()+"WideSA";
+    
+    try {
+      
+      console.log(crypto)
+      
+    } catch (error) {
+      console.log(error)
+    }
+    const smAddr = App.contracts.Election.networks[web3.personal._requestManager.provider.networkVersion].address;
+    const phraseUp = smAddr+"electi"+crypto.randomUUID()+"ons2023_nation"+crypto.randomUUID()+"WideSA"+1000;
     try {      
       ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3(phraseUp)]}).then(function(result){ //bytes of signture
         App.contracts.Election.deployed().then(function(instance) {
-            return instance.verify(phraseUp, result, nonce, { from: App.account });
+            return instance.verify(phraseUp, result, 1000, { from: App.account });
           }).then(function(result2) {
             if(result2){  //signature valid 
               adminIn.hide();
@@ -421,7 +421,7 @@ App = {
                     return electionInstance.phase();
                     }).then(function(result){ 
                       if(result =="registration")  {
-                        electionInstance.addVoter(person_id, email, name, surname, App.getVoterRefNumber(), { from: App.account }).then(function(result){ 
+                        electionInstance.addVoter(person_id, email, name, surname, crypto.randomUUID(), { from: App.account }).then(function(result){ 
                           alert("You have been registered!");
                           // $("#demo_form").trigger("reset"); 
                           window.location.replace("/register")
