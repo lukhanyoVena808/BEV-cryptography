@@ -65,7 +65,7 @@ App = {
   },
 
   render: function() {
-    var electionInstance;
+     var electionInstance;
     const loader = $("#loader");
     const content = $("#content");
     const regSMS = $("#isREg");
@@ -88,6 +88,7 @@ App = {
         electionInstance = instance;
         return electionInstance.candidatesCount();
       }).then(function(candidatesCount) {
+        $("#numOfCandidates").html("Candidates: "+candidatesCount);
         const candidatesResults = $("#candidatesResults");
         candidatesResults.empty();
     
@@ -107,6 +108,17 @@ App = {
             candidatesSelect.append(candidateOption);
           });
         }
+
+        
+
+        electionInstance.votersCount().then(function(res){
+          $("#numOfRegistrations").html("Resgistrations: "+res); 
+        })
+
+        electionInstance.numVotes().then(function(res){
+          $("#numOfVoters").html("Votes: "+res);
+        })       
+
      
         return electionInstance.isVoter_Registered({from: App.account});
       }).then(function(next) {
@@ -180,13 +192,17 @@ App = {
   },
 
   castVote: function() {
+    var electionInstance;
     const dt = new Date();
     const fm = new Intl.DateTimeFormat('en-SA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Africa/Johannesburg' }).format(dt);  //date && time
+    console.log(fm.split(" at")[0])
     const candidateId = $('#candidatesSelect').val();
     App.contracts.Election.deployed().then(function(instance) {
-      return instance.vote(candidateId,fm.split("at")[0].trim(), fm.split("at")[1].trim(), { from: App.account }); //cast vote
+      electionInstance = instance;
+      return electionInstance.vote(candidateId,fm.split(" at")[0].trim(), fm.split(" at")[1].trim(), { from: App.account }); //cast vote
     }).then(function(result) { 
       alert("Voting Completed!");
+      
       return App.render();
     }).catch(function(err) {
       console.error(err);
@@ -244,19 +260,15 @@ App = {
   //admin signs in 
   admin_Signs_In: function(){
     
-    try {
-      
-      console.log(crypto)
-      
-    } catch (error) {
-      console.log(error)
-    }
+  
     const smAddr = App.contracts.Election.networks[web3.personal._requestManager.provider.networkVersion].address;
-    const phraseUp = smAddr+"electi"+crypto.randomUUID()+"ons2023_nation"+crypto.randomUUID()+"WideSA"+1000;
+    const  nonce = crypto.getRandomValues(new Uint32Array(1))[0];
+    const phraseUp = smAddr+"electi"+crypto.randomUUID()+"ons2023_nation"+crypto.randomUUID()+"WideSA"+nonce;
+    
     try {      
       ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3(phraseUp)]}).then(function(result){ //bytes of signture
         App.contracts.Election.deployed().then(function(instance) {
-            return instance.verify(phraseUp, result, 1000, { from: App.account });
+            return instance.verify(phraseUp, result, nonce, { from: App.account });
           }).then(function(result2) {
             if(result2){  //signature valid 
               adminIn.hide();
@@ -365,7 +377,7 @@ App = {
                                 btn = `<tr style="word-wrap: normal"><td class="input-wrap"><div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style=" pointer-events: none;" >Not Verified</button></td>`;
                             }
                         
-                            var readData = '<td><h5>'+refNumber+'</h5></td><td style="margin-right:10px;">'+trail_date+'</td><td style="margin-left:10px;">'+trail_time+'</td></tr><br>';                  
+                            var readData = '<td class="input-wrap"><h5>'+refNumber+'</h5></td><td style="margin-right:10px;" class="input-wrap">'+trail_date+'</td><td style="margin-left:10px;" class="input-wrap">'+trail_time+'</td></tr><br>';                  
                             const candidateTemplate = btn+readData;
                             trailBody.append(candidateTemplate);
                           }).catch(function(err){
@@ -423,7 +435,7 @@ App = {
                       if(result =="registration")  {
                         electionInstance.addVoter(person_id, email, name, surname, crypto.randomUUID(), { from: App.account }).then(function(result){ 
                           alert("You have been registered!");
-                          // $("#demo_form").trigger("reset"); 
+                         
                           window.location.replace("/register")
                           voted = true;
                           return true;

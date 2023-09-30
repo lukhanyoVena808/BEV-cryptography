@@ -1,0 +1,24 @@
+Signature Replay Attack:
+
+Using the same signature to execute multiple transactions multiple times.
+How:
+Same Address, same signature (1)
+Same code, different address (2)
+
+Prevention:
+- (1) Using different phrase to sign each time + ***using a nounce in signature, cant use the same nounce 
+- (2) Include address of contract in signature (unique) -> Admin send to fake website to enter -> will not be able
+	to enter since the address will not be of the smart contract
+
+Test:
+Assume-> Admin knows the phrase to be signed,. After signing, admin copies the signature to perform attck
+
+
+Voting Destruction attack:
+Admin tries changing the starting voting with 1 or no voters
+
+
+vOTER Registration Late Attack/Hack
+
+- User opens form during registration but submits the form late after to manipilate system, 
+	or to cause a system failure, subbotage
