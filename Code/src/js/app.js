@@ -252,10 +252,11 @@ App = {
 
   //admin signs in 
   admin_Signs_In: function(){
+    const phraseUp = "electi"+App.getVoterRefNumber()+"ons2023_nation"+App.getVoterRefNumber()+"WideSA";
     try {      
-      ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3("elections2023_nationWideSA")]}).then(function(result){ //bytes of signture
+      ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3(phraseUp)]}).then(function(result){ //bytes of signture
         App.contracts.Election.deployed().then(function(instance) {
-            return instance.verify("elections2023_nationWideSA", result, { from: App.account });
+            return instance.verify(phraseUp, result, nonce, { from: App.account });
           }).then(function(result2) {
             if(result2){  //signature valid 
               adminIn.hide();

@@ -57,6 +57,8 @@ contract Election {
     mapping(bytes32 => address) private verifier;
     mapping(uint => address) private recorder;
 
+    mapping(bytes32 => bool) private adminSignatures; //saves history of Admin signature to curb Signature Replay Attack
+
 
     // Store Candidates Count
     uint public candidatesCount;
@@ -261,15 +263,17 @@ contract Election {
 
 
     //<----------------------------------- Verifies signed message -------------------------------->
-    function verify (string memory _message, bytes memory _sig) public view returns (bool) {
-        bytes32 hash_SMS = getHash(_message);
+    function verify (string memory _message, bytes memory _sig, uint _nonce) public returns (bool) {
+        bytes32 hash_SMS = getHash(_message, _nonce);
+        require(!adminSignatures[hash_SMS], "Has been executed"); //must be a new signature
         bytes32 ethSignedMessageHash = getEthSignedHash(hash_SMS);
+        adminSignatures[hash_SMS] = true;
         return recover(ethSignedMessageHash, _sig) == admin;
     }
     
     //has a tring
-    function getHash (string memory sms) public pure returns (bytes32){
-        return keccak256(abi.encodePacked(sms));
+    function getHash (string memory sms, uint _nonce) public view returns (bytes32){
+        return keccak256(abi.encodePacked(address(this),sms, _nonce));
     }
 
 
