@@ -195,7 +195,6 @@ App = {
     var electionInstance;
     const dt = new Date();
     const fm = new Intl.DateTimeFormat('en-SA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Africa/Johannesburg' }).format(dt);  //date && time
-    console.log(fm.split(" at")[0])
     const candidateId = $('#candidatesSelect').val();
     App.contracts.Election.deployed().then(function(instance) {
       electionInstance = instance;
