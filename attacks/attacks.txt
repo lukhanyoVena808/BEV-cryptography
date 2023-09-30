@@ -1,4 +1,4 @@
-Signature Replay Attack:
+Signature Replay Attack (Blockchain  && off-chain):
 
 Using the same signature to execute multiple transactions multiple times.
 How:
@@ -13,12 +13,79 @@ Prevention:
 Test:
 Assume-> Admin knows the phrase to be signed,. After signing, admin copies the signature to perform attck
 
-
-Voting Destruction attack:
+/////////////////////////////////////////////////////////////////
+Voting Destruction attack: (off-chain)
 Admin tries changing the starting voting with 1 or no voters
 
-
-vOTER Registration Late Attack/Hack
+/////////////////////////////////////////////////////////
+vOTER Registration Late Attack/Hack: (off-chain)
 
 - User opens form during registration but submits the form late after to manipilate system, 
 	or to cause a system failure, subbotage
+	
+/////////////////////////////////////////////////////////
+Accessing Private Data (Blockchain):
+
+Private means other contracts cannot access the variables.
+However, just coz it s private doesnt mean the is no access to the data.
+
+How:
+The is a vulnerablity -> priavte state vars can BE READ.
+hOW EVM STORES STATE VARIBALES  
+	-> Assume we have a contract with variables: bytes32 foo, bytes32 bar, uint num, address addr, bool boo.
+		Stores each var in the data atrray of a contract with len=2**256 slots. Easch slot can store up to 32 bytes.
+		Vars are stored in the order they are declred in.
+		uints stored in hexidecimal -> 32 bytes
+		**address stored in hex - stored in 20 bytes. Solidity then uses the left-over bytes to store another variable.
+		**bool needs 1 byte, is stored with address
+		
+		public fixed array[3]-> slot 3, 4,5 stores elements, Slot 6 stores length of array
+		
+		for dynamic array -> length od array is stored in slot = keccak256(6), then the elements of the array are
+		stored starting form the hash (keccak256(6)), eg struct (uint, bytes32 password) -> each element will take up 2
+		slots. So element at index=0, is stored at hash+0, element at index=1 is stored at hash+2 slots-> so address slot is
+		= keccak256(6) + index * elementSsize(= 2 slots)
+		
+		
+		mapping(uint => struct) -. entries sre stored at keccak256(key, slot) -> next available slot is 7, key=map key (aka index)
+		
+		
+		Getting private vars; truffle cli->
+						addr = "smart contract" --> storing var
+						get vars --> web3.eth.getStorageAt(addr, slot->0,console.log()) -> stored in hex
+						bytes32 password can be converted into string using web3.utils.toAscii(hex)
+						
+						get the address slot - web3.utils.soliditySha3({type: "uint", value:6}). Then to get var stored at hash,
+						perform same fucntion, to get second element of struct, increment hash by 1.
+						
+						Private data better not stored in un-encryption
+						
+						
+		
+Front Running (Blockchain):
+	How transction occurs-> sender sends transction to miners, transaction gets relayed to other miners.
+	Each miner keeps track of pending transctions in the transction pool (transactions that are yet to 
+	be icluded in a block. After some time transction gets included in a block. 
+	
+	How attack works: While transction is still inside the transaction pool, attacker sends transction and is 
+	also added to transaction pool with victim transaction. Assume miner picks victim + attacker transaction 
+	to include in the next block. And attacker's transaction will be included first (attacker paid a higher gas price).
+	Having a higher gas price allows the attacker to look into the (secret /data) of the other smarts contract (in pool).
+	Attacker sends high gas price before victim, to perform the same function faster.
+
+Solution:
+insecure randomness (blockchain) -> added contract address to random function:
+Guessing the vars used to create a random number -> keccak256(abi.encodedPack(num1, num2))
+assuming vra used are block.timestamp, block.number. The vars are easily available to all smart contracts.
+Attacker uses another smart contract to also call the same random function with same values. Eve attcker deploys 
+their contract the same time. Block.number and Block.timestamp are the same in both blocks
+
+
+Victim deploys first. Then attacker deploys
+
+Hide Malicious Code (Blockchain):
+	Hiding code the when contract is published.
+	
+Solution: 
+Seperate file, ,malicious code is put.Use function in malicios contract instead of normal contract.
+	

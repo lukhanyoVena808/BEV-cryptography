@@ -148,7 +148,7 @@ contract Election {
     
   // https://stackoverflow.com/questions/73555009/how-to-generate-random-words-in-solidity-based-based-on-a-string-of-letters/73557284#73557284
   function random() public view returns (uint) {
-        return uint (keccak256(abi.encodePacked (block.timestamp, msg.sender)));
+        return uint (keccak256(abi.encodePacked (block.timestamp, msg.sender, address(this))));
      }
 
      //returns true if voter registered
