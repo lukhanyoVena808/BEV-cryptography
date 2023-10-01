@@ -147,5 +147,18 @@ How: conract mus have code size of 0, however, when the attcker contract is bein
 	
 Different Contracts at same address (attacker):
 
+
+Front-End **************
 Links:
 https://www.youtube.com/watch?v=QSMbk2nLTBk
+
+Use sanitize to prevent attacks,
+
+ms - regular expression dns -> block long input to prevent flooding
+
+
+solutions:
+tools: snyk
+
+link:
+https://www.youtube.com/watch?v=Ud5xKCYQTjM&list=TLPQMzAwOTIwMjO4ZIyXwAapPA&index=28
