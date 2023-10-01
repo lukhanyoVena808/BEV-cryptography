@@ -190,8 +190,11 @@ User -> User tries the use the same re-register with the same personal-id, user 
 
 ************** (heavyWeight) **************
 
- SQL INJECTIONS___ + Cross Script Attack + Regress Expression DNS  (OFF-CHAUN)
+ SQL INJECTIONS___ + Cross Script Attack + Regress Expression DNS  (OFF-CHAIN) + xss Attack (javascript injection)
  Assume user is malicious and tries to perform these attacks.
+ Example;
+	<img src onerror="alert('hi')"> ***************
+	cAN ACCES DETAILS = > <img src onerror="alert(documebt.cookie)"> *************** or get session id
  
  
  Signature Replay Attack (Blockchain  && off-chain)

@@ -241,9 +241,9 @@ App = {
 
   AddCandidate:  function() {   
     // const name =  $("#name-C").val().replace(/[^a-zA-Z0-9 ]/g, ''); 
-    const name =  $("#name-C").val().trim();
-    const surname = $("#surname-C").val().trim();
-    const party= $("#party-C").val().trim();
+    const name =  $("#name-C").val().trim().replace(/(<([^>]+)>)/gi, '').replace(/[^a-zA-Z0-9 ]/g, '');
+    const surname = $("#surname-C").val().trim().replace(/(<([^>]+)>)/gi, '').replace(/[^a-zA-Z0-9 ]/g, '');
+    const party= $("#party-C").val().trim().replace(/(<([^>]+)>)/gi, '').replace(/[^a-zA-Z0-9 ]/g, '');
     //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
     try {  
           // Conditions
@@ -286,9 +286,8 @@ App = {
 
   //admin signs in 
   admin_Signs_In: function(){
-    const smAddr = App.contracts.Election.networks[web3.personal._requestManager.provider.networkVersion].address;
     const  nonce = crypto.getRandomValues(new Uint32Array(1))[0];
-    const phraseUp = smAddr+"electi"+crypto.randomUUID()+"ons2023_nation"+crypto.randomUUID()+"WideSA"+nonce;
+    const phraseUp = "electi"+crypto.randomUUID()+"ons2023_nation"+crypto.randomUUID()+"WideSA"+nonce;
     try {      
       ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3(phraseUp)]}).then(function(result){ //bytes of signture
         App.contracts.Election.deployed().then(function(instance) {

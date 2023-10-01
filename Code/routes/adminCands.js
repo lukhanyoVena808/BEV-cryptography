@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const {check, validationResult} = require("express-validator");
 const router = express.Router();
 const app = express();
+app.use(require('sanitize').middleware);
 app.use(express.static('src'))
 app.set('view engine', 'ejs');
 const urlencodedParser = bodyParser.urlencoded({ extended: true});
@@ -18,7 +19,7 @@ router.get('/candidates', function(req, res, next) {
 });
 
 // Retrieve User input
-router.post('/candidates', urlencodedParser, function(req, res, next) {      
+router.post('/candidates', urlencodedParser, function(req, res, next) {  
             res.render('adminCandidate');
             
 });

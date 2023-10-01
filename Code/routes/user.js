@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const app = express();
+app.use(require('sanitize').middleware);
 app.use(express.static('src'))
 app.set('view engine', 'ejs');
 const urlencodedParser = bodyParser.urlencoded({ extended: false});

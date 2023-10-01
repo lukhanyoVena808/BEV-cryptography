@@ -2,6 +2,7 @@ const express = require('express');
 const terminatorHTTP =  require('http-terminator');
 
 const app = express();
+app.use(require('sanitize').middleware);
 const port = 3000;
 
 //static files
