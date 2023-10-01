@@ -26,8 +26,6 @@ app.use(express.json());
 //extedned = true, objects and arrays to be encoded.
 //originally post method data can be accessed by 
 // req.body.passwprd, -> using name identifier
-//
-
 app.use(express.urlencoded({extended: true}));
 
 app.use('/', registrationRouter);

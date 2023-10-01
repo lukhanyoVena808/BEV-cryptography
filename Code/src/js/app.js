@@ -1,3 +1,4 @@
+
 App = {
 
   web3Provider: null,
@@ -46,6 +47,7 @@ App = {
     adminIn.show();
     adminView.hide();
 
+  
     return App.initContract();
   },
 
@@ -56,10 +58,6 @@ App = {
       App.contracts.Election = TruffleContract(election);
       // Connect provider to interact with contract
       App.contracts.Election.setProvider(App.web3Provider);
-
-     
-      
-
       return App.render();
     });
   },
@@ -70,11 +68,9 @@ App = {
     const content = $("#content");
     const regSMS = $("#isREg");
     const myform = $("#myVote");
- 
     loader.show();
     content.hide();
     regSMS.hide();
-
     // Load account data frist before showing process
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
@@ -82,7 +78,7 @@ App = {
         $("#accountAddress").html("Your Account: " + account);
       }
     });
-  
+
       // Load contract data
       App.contracts.Election.deployed().then(function(instance) {
         electionInstance = instance;
@@ -108,9 +104,6 @@ App = {
             candidatesSelect.append(candidateOption);
           });
         }
-
-        
-
         electionInstance.votersCount().then(function(res){
           $("#numOfRegistrations").html("Resgistrations: "+res); 
         })
@@ -118,8 +111,6 @@ App = {
         electionInstance.numVotes().then(function(res){
           $("#numOfVoters").html("Votes: "+res);
         })       
-
-     
         return electionInstance.isVoter_Registered({from: App.account});
       }).then(function(next) {
         // Do not allow a user to vote, if not registered
@@ -128,7 +119,7 @@ App = {
             myform.hide();
           }
           else{
-            electionInstance.getVoter({from: App.account}).then(function(voter) {
+            electionInstance.getVoter({from: App.account}).then(async function(voter) {
               const the_voter = $("#voter_info");
               the_voter.empty();
               const v_name = voter[0];
@@ -151,12 +142,8 @@ App = {
             })
           }
           loader.hide();
-
-
           return electionInstance.has_Voted({from: App.account});
-            
           }).then(function(next2) { 
-            
             if(next2) {  //has voted already
               myform.hide();    
               electionInstance.copyKeys({from: App.account}).then(function(_keys){  //get keys              
@@ -169,10 +156,7 @@ App = {
               }).catch(function(error) {
                 console.warn(error);
               });
-            
-     
             }
-
             electionInstance.phase().then(function(thePhase) {
               if(thePhase != "voting") { 
                 myform.hide();
@@ -183,13 +167,60 @@ App = {
               }
             })
         content.show();
-
       }).catch(function(error) {
         console.warn(error);
       });
-
       return App.viewData();
   },
+
+//   strToArrayBuffer: function(str) {
+//       var buf = new ArrayBuffer(str.length * 2);
+//       var bufView = new Uint16Array(buf);
+//       for (var i = 0, strLen = str.length; i < strLen; i++) {
+//         bufView[i] = str.charCodeAt(i);
+//       }
+//       return buf;
+//   },
+
+//   arrayBufferToString: function(buf) {
+//      return String.fromCharCode.apply(null, new Uint16Array(buf));
+//   },
+
+
+//   swiperLeft:function(){ 
+        
+//       return window.crypto.subtle
+//       .generateKey(
+//         {
+//           name: "AES-GCM",
+//           length: 256,
+//         },
+//         true,
+//         ["encrypt", "decrypt"],
+//       )
+   
+//   },
+
+//   swiperRight: function(tr){
+//     return window.crypto.subtle.exportKey("raw", tr);
+//   },
+
+//   lock: function(text){
+//     iv = window.crypto.getRandomValues(new Uint8Array(16));
+//     return window.crypto.subtle.encrypt(
+//       {
+//         name: "AES-GCM",
+//         iv: App.iv,
+//       },
+//       secretKey,
+//       App.strToArrayBuffer(text),
+//     );
+//   },
+
+// decryptMessage: function (key, ciphertext) {
+//     // The iv value is the same as that used for encryption
+//     return window.crypto.subtle.decrypt({ name: "AES-GCM", iv:App.iv }, key, ciphertext);
+//   },
 
   castVote: function() {
     var electionInstance;
@@ -213,8 +244,6 @@ App = {
     const name =  $("#name-C").val().trim();
     const surname = $("#surname-C").val().trim();
     const party= $("#party-C").val().trim();
-
-      
     //change proprty of an element in form, so the post method executes it checks that the property, if changed then render Overview else render admin login in
     try {  
           // Conditions
@@ -253,17 +282,13 @@ App = {
       }).catch(function(err){
         console.error(err);
       })
-    
   },
 
   //admin signs in 
   admin_Signs_In: function(){
-    
-  
     const smAddr = App.contracts.Election.networks[web3.personal._requestManager.provider.networkVersion].address;
     const  nonce = crypto.getRandomValues(new Uint32Array(1))[0];
     const phraseUp = smAddr+"electi"+crypto.randomUUID()+"ons2023_nation"+crypto.randomUUID()+"WideSA"+nonce;
-    
     try {      
       ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3(phraseUp)]}).then(function(result){ //bytes of signture
         App.contracts.Election.deployed().then(function(instance) {
@@ -306,7 +331,6 @@ App = {
       electionInstance = instance;
         return electionInstance.phase();
       }).then(function(the_phase){
-       
         if (the_phase != "Election has not started" && the_phase !="Election ended"){
           return electionInstance.changePhase({from: App.account}).then(function() {
             alert("Next Phase");
@@ -326,9 +350,7 @@ App = {
   viewData: function(){
     var electionInstance;
     const content = $("#content2023");
-    content.show()
-
-    
+    content.show();
     try {     
       App.contracts.Election.deployed().then(function(instance) {
           electionInstance = instance;
@@ -360,9 +382,6 @@ App = {
                         $("#dataTrail").show();
                         var trailBody = $("#vote_trail");
                         trailBody.empty();
-
-                      
-                        
                         for (let i= 0; i < numVotes; i++) {
                            electionInstance.votingTrails(i).then(function(trail) {                         
                             var refNumber = trail[0];
@@ -375,7 +394,6 @@ App = {
                             }else{
                                 btn = `<tr style="word-wrap: normal"><td class="input-wrap"><div class="mb-3"><br><button type="submit" class="btn btn-primary" form="trailer${i}" style=" pointer-events: none;" >Not Verified</button></td>`;
                             }
-                        
                             var readData = '<td class="input-wrap"><h5>'+refNumber+'</h5></td><td style="margin-right:10px;" class="input-wrap">'+trail_date+'</td><td style="margin-left:10px;" class="input-wrap">'+trail_time+'</td></tr><br>';                  
                             const candidateTemplate = btn+readData;
                             trailBody.append(candidateTemplate);
@@ -383,7 +401,6 @@ App = {
                             console.error(err);
                           });
                         }
-
                         })
                       })
                     }
@@ -407,7 +424,7 @@ App = {
 
   },
 
-  handleOTP:  function(){
+  handleOTP: function(){
     const name =  $("#name-reg2").val();
     const surname = $("#surname-reg2").val();
     const person_id= $("#personID-reg2").val();

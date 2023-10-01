@@ -81,7 +81,7 @@ contract Election {
     // Admin is set once, when contract is deployed. Also saves gas fees
     address private admin;
 
-    constructor() public { 
+    constructor(){ 
         admin = msg.sender; //the deployer of the contract is the admin
         phase="Election has not started";
     } 

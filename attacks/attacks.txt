@@ -30,7 +30,7 @@ Private means other contracts cannot access the variables.
 However, just coz it s private doesnt mean the is no access to the data.
 
 How:
-The is a vulnerablity -> priavte state vars can BE READ.
+The is a vulnerablity -> priavte state vars can BE READ. -> **********Encrypt data before arriving in Blockchain using AES *************
 hOW EVM STORES STATE VARIBALES  
 	-> Assume we have a contract with variables: bytes32 foo, bytes32 bar, uint num, address addr, bool boo.
 		Stores each var in the data atrray of a contract with len=2**256 slots. Easch slot can store up to 32 bytes.
@@ -162,3 +162,47 @@ tools: snyk
 
 link:
 https://www.youtube.com/watch?v=Ud5xKCYQTjM&list=TLPQMzAwOTIwMjO4ZIyXwAapPA&index=28
+
+
+Places where data is passed to contract -> Reg Form ->
+
+(Decryption) -> Get Users, 
+
+
+
+------------------ANALYSIS----------------------------------------
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< VALIDATION ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Admin can -> add users,
+			-> start election, change phase, view results
+			
+User -> can register, can vote, can vote, view results and submit vote for audit
+
+
+--------------------------- Attack anaylsis --------------------------------------------------------------------------------------------->
+
+*************** (light weight) ************
+Admin -> tries to start voting without candidates, ends voting voting with no votes, add candidate during voting. Sneefinng data sent by voters
+
+User -> User tries the use the same re-register with the same personal-id, user tries to register with a different public key, user tries to ender admin overview.
+		User tries to enter late
+
+
+************** (heavyWeight) **************
+
+ SQL INJECTIONS___ + Cross Script Attack + Regress Expression DNS  (OFF-CHAUN)
+ Assume user is malicious and tries to perform these attacks.
+ 
+ 
+ Signature Replay Attack (Blockchain  && off-chain)
+ Assume the voter who is malicious captures the signature of the Admin when signing in. The attcker willluse the same signature to enter contract
+ while using a different address.
+ 
+ 
+Front Running attack (blockchain)
+ Since the private key of an ECC is an uint integer. The attacker may try to guess the private key of the user, since all all blockchain users have access to block.timestamp and block.number
+ 
+Phishing with tx.origin attack (blockchain):
+Assume an attacker convinces the admin to perform a function in their malicious contract in order to capture the address of the victim and use it enter the voting contract
+as a verified user.
+tx.origin -> address of whwere the address was originated. -> wants to change phase().
