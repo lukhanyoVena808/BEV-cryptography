@@ -222,3 +222,49 @@ Before Writing:
 > lastly -> introduction -> answering why the study is done? what is its purpose? Collect relavent 
 							background information and put it in the background.
 > Producing the references.
+
+READING A PAPER:
+> 2-PHASE-> SURVEY -> kEY WORDS & Title -> abstract -> conclusions
+> Read tables, figures and captions
+> Introduction -> Results + discussion
+> experimental SECTIONS (How they did it)
+
+What makes a good paper:
+Concise title
+Standard Outline
+Useful data and results
+References -> be sure to include new tech + innovation
+
+GOOD Abstract -> concise summary of report> should explain what make your paper unique, includ significant
+				new information. state your conclusion.
+				
+Explain the methodology
+
+Support conclusions with solid evidence.
+
+DO'S AND DONTS ->>>>>>>>>>>>>>>>>
+
+DO: Simple sentences and use common language. Proof!!! > Show the contribution your paper will make.
+DONT: Make grammar or spelling ERRORS. 
+
+What lesson have you learned?
+What should the reader understand from your work?
+How does your work differ fom the similar papers?
+What useful information did you derive form the literature review?
+Who is your target audience?
+
+Audience > (Problem): Why did you conduct the project?
+			(Solution): What did you contribute to industry knowledge?
+			(Value): Why should the audience listen to you?
+
+
+Introduction => Describe the your contribution
+			 => Present nature and scope of the problem investigated.
+			 
+Results => avoid using redundancy + too mant tables and figures.
+
+Start from conclusions > methodology > results
+Ask some else to read the paper > get feedback.
+
+
+**** Time it take to call functions from blockchain.
