@@ -19,6 +19,17 @@ const adminCandidate= require('./routes/adminCands');
 const adminGetResults = require('./routes/adminView');
 const getUser = require('./routes/user');
 
+app.use(express.json());
+//exress.json, sends data in json format
+//middleware that paases url with payloads.
+//username=user&password=password
+//extedned = true, objects and arrays to be encoded.
+//originally post method data can be accessed by 
+// req.body.passwprd, -> using name identifier
+//
+
+app.use(express.urlencoded({extended: true}));
+
 app.use('/', registrationRouter);
 app.use('/', votingRouter);
 app.use('/', getUser)
@@ -44,8 +55,6 @@ const httpTerminator = terminatorHTTP.createHttpTerminator({
 });
 
 
-//session
-app.use(express.urlencoded());
 
 httpTerminator.terminate();
 

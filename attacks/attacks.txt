@@ -88,4 +88,64 @@ Hide Malicious Code (Blockchain):
 	
 Solution: 
 Seperate file, ,malicious code is put.Use function in malicios contract instead of normal contract.
+
+Prevention: 
+If a contract is using an unverified address, might be malicios. address of contracts must be verifed.
+
+
+Phishing with tx.origin attack (blockchain):
+	Happens when an attacker disguiess an a verified user.
+	tx.origin -> address of whwere the address was originated.
 	
+	How:
+	only Owner/Admin can perform certain function. If attacker can trick owner to calling the Malicious 
+	Contract -> which calls the function in the	function in the real contact, then the require function 
+	will be verified even if the attacker is executing the function. 
+	
+	in Attacker code :
+	 
+	address owner_attacker; //addres that will gain
+	Victim viction smart contract; //target
+	 
+	constructor(Wallet wallet) public{
+		wallet = Wallet(_wallet)
+		owner = msg.sender;
+		
+	}
+	
+	//trick victim to call function, that grabs the addres of the msg.sender -. which is the admin/owner
+	// using the address captured, attacker calls function in victim contract using captured address.
+	function attack() public{
+	 wallet.transfer(owner(attacker(, allMoney); <--- called by victim
+	}
+	
+Prevention: Use msg.sender instead of tx.origin. Msg.snder always points to the contract/address the called
+	contract
+	
+
+
+HoneyPot -> Trap to catch hackers (Blockchain]: using Hide Malicious Code .
+Comparing strings = hash strinsg and compare hashes. The failed transction will then reveal the addres of the 
+attcker.
+
+
+Contract with Zero Code: 
+Assume a contract protects its self by not acceptinf addresses from contracts. This is done by checking the code size
+at that address e.g:
+uint size;
+assembly{ 
+	size:= extcodesize(account)
+	}
+	size>0
+	
+How: conract mus have code size of 0, however, when the attcker contract is being deployed at the same time
+	as it is being called, the codesize will be zero. 
+	
+	So in constructor of the attacker, the victim contract (address ) is called to a execute a function. The victim
+	contract will think the address calling it as a normal address, and execute function.
+	
+	
+Different Contracts at same address (attacker):
+
+Links:
+https://www.youtube.com/watch?v=QSMbk2nLTBk
