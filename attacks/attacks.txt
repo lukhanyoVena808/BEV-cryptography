@@ -209,3 +209,16 @@ Phishing with tx.origin attack (blockchain):
 Assume an attacker convinces the admin to perform a function in their malicious contract in order to capture the address of the victim and use it enter the voting contract
 as a verified user.
 tx.origin -> address of whwere the address was originated. -> wants to change phase().
+
+
+Before Writing:
+> Have your data, tables of data, images/figures -> Arrange them in order. 
+> Do not write intro
+> Start with the experimental
+> then results and discussion
+> do the editing --> make the report into clear and concise english.
+> write the conclusions
+> then the abstract and acknowledgements
+> lastly -> introduction -> answering why the study is done? what is its purpose? Collect relavent 
+							background information and put it in the background.
+> Producing the references.
