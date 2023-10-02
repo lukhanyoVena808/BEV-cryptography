@@ -1,0 +1,18 @@
+
+Can People Access site? -> publicKey1
+
+
+User
+- Can Register? ---> Can receiev OTP?
+- Can View Profile?
+- Can Vote? ---> Can see prof of vote
+- Can Audit Vote?
+
+
+ADMIN
+- Can enter sign in- to enter restricted side?
+- Can addCandidates?
+- Can start Election?
+- Can change phase?
+
+Time Executions for reading and writing functions

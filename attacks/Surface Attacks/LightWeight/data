@@ -1,0 +1,15 @@
+
+
+User
+- Cannot Enter Admin site
+- Assume has enter admin site cannot perfom actions?
+- Cannot register with another voter's id
+- Cannot register with another public address
+- Cannot register wit fake ID
+
+
+Admin
+- Cannot See voters' info
+- Cannot vote
+- Cannot start vote without candidates or 1 
+- Cannot stop voting before reaching subminimum

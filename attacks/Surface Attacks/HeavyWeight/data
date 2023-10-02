@@ -1,0 +1,11 @@
+
+
+User
+- Captures Admin signature hash, but cannot enter (Rentrancy)
+- Regex Expresion DOS
+- XSS
+- Sniffing
+
+
+TX-Origin (Phishing)
+Front-Running
