@@ -92,7 +92,7 @@ App = {
     
         const candidatesSelect = $('#candidatesSelect');
         candidatesSelect.empty();
-        var timeS = performance.now();
+     
         for (let i= 1; i <= candidatesCount; i++) {
           electionInstance.candidates(i).then(function(candidate) {
             const id = candidate[0];
@@ -106,7 +106,7 @@ App = {
             candidatesSelect.append(candidateOption);
           });
         }
-        console.log((performance.now()-timeS)+" milliseconds");
+
         electionInstance.votersCount().then(function(res){
           $("#numOfRegistrations").html("Resgistrations: "+res); 
         })
@@ -230,10 +230,12 @@ App = {
     const dt = new Date();
     const fm = new Intl.DateTimeFormat('en-SA', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Africa/Johannesburg' }).format(dt);  //date && time
     const candidateId = $('#candidatesSelect').val();
+    var timeS = performance.now();                              //getting time  ----------------------------->
     App.contracts.Election.deployed().then(function(instance) {
       electionInstance = instance;
       return electionInstance.vote(candidateId,fm.split(" at")[0].trim(), fm.split(" at")[1].trim(), { from: App.account }); //cast vote
     }).then(function(result) { 
+      console.log((performance.now()-timeS)+" milliseconds --"); //getting time  ---------------------------->
       alert("Voting Completed!");
       
       return App.render();
@@ -360,7 +362,7 @@ App = {
         }).then(function(candidatesCount) {             
                 const candidatesResults = $("#candidatesResults2023");
                 candidatesResults.empty();
-                var timeS = performance.now();
+               
                 for (let i= 1; i <= candidatesCount; i++) {
                   electionInstance.candidates(i).then(function(candidate) {
                     const id = candidate[0];
@@ -373,7 +375,7 @@ App = {
                     candidatesResults.append(candidateTemplate);
                   });
                 }
-                console.log((performance.now()-timeS)+" milliseconds --");
+                
                 return electionInstance.phase();
               }).then(function(currentPhase) {
                     if (currentPhase == "results"){

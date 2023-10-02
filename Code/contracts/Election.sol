@@ -234,8 +234,7 @@ contract Election {
              if(phasePointer == 2){ //from voting to results
                 require(numVotes>=minVotes, "Not Enough Votes"); //MINIMUM OF 2 VOTES
                 phase = phases[phasePointer];
-            }
-            
+            }            
         } else {
             phase = "Election ended";
         }
