@@ -252,7 +252,7 @@ What should the reader understand from your work?
 How does your work differ fom the similar papers?
 What useful information did you derive form the literature review?
 Who is your target audience?
-
+https://github.com/lukhanyoVena808/BEV-cryptography
 Audience > (Problem): Why did you conduct the project?
 			(Solution): What did you contribute to industry knowledge?
 			(Value): Why should the audience listen to you?
@@ -267,4 +267,11 @@ Start from conclusions > methodology > results
 Ask some else to read the paper > get feedback.
 
 
-**** Time it take to call functions from blockchain.
+**** Wireshark *********
+Capture -> Interfaces -> start -> filter by protocol (HTTP)(http.request.method ==POST, 
+html form)
+You can click on packet and follow TCP stream.
+
+You can also click on packet, and export selected packet bytes > save it in right format.
+
+Filter by ssid, compound filter 
