@@ -18,16 +18,40 @@ a voting scheme that is open, fair, and independently verifiable.
 
 Requirements:
 
-- [Truffle Ganache]()
-- [Node JS]()
-- [MailTrap]()
+- [Truffle Ganache](https://trufflesuite.com/ganache/)
+- [Node JS](https://nodejs.org/en/download)
+- [MailTrap](https://mailtrap.io/signin)
 
-Steps to run project: <br>
-npm install -g npm@10.1.0 <br>
-npm install truffle -g <br>
-npm install <br>
-npx truffle migrate <br>
-npm run dev <br>
+## Steps to run project ([inside this directory](./Code/)): <br>
+To update your yor npm if its not the latest version:
+```
+npm install -g npm@10.1.0 
+```
+<br>
+To install truffle:
+
+```
+npm install truffle -g
+```
+
+<br>
+To install required packages and / modules:
+
+```
+npm install
+```
+<br>
+To deploy smart contact (must be done while Truffle Ganache is opened):
+
+```
+npx truffle migrate 
+```
+<br>
+To run the web app:
+
+ ```
+ npm run dev
+ ```
 
 
 

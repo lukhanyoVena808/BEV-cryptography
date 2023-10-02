@@ -44,7 +44,7 @@ router.post('/registration', urlencodedParser, check('name').notEmpty().escape()
 
       if (result.isEmpty()) {
                   const {name, surname, personID, email} = req.body;
-                    console.log(name);
+        
                     var otp;
                   try {
                     
