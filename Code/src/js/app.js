@@ -63,6 +63,8 @@ App = {
   },
 
   render: function() {
+
+    
      var electionInstance;
     const loader = $("#loader");
     const content = $("#content");
@@ -90,7 +92,7 @@ App = {
     
         const candidatesSelect = $('#candidatesSelect');
         candidatesSelect.empty();
-    
+        var timeS = performance.now();
         for (let i= 1; i <= candidatesCount; i++) {
           electionInstance.candidates(i).then(function(candidate) {
             const id = candidate[0];
@@ -104,6 +106,7 @@ App = {
             candidatesSelect.append(candidateOption);
           });
         }
+        console.log((performance.now()-timeS)+" milliseconds");
         electionInstance.votersCount().then(function(res){
           $("#numOfRegistrations").html("Resgistrations: "+res); 
         })
@@ -357,6 +360,7 @@ App = {
         }).then(function(candidatesCount) {             
                 const candidatesResults = $("#candidatesResults2023");
                 candidatesResults.empty();
+                var timeS = performance.now();
                 for (let i= 1; i <= candidatesCount; i++) {
                   electionInstance.candidates(i).then(function(candidate) {
                     const id = candidate[0];
@@ -369,6 +373,7 @@ App = {
                     candidatesResults.append(candidateTemplate);
                   });
                 }
+                console.log((performance.now()-timeS)+" milliseconds --");
                 return electionInstance.phase();
               }).then(function(currentPhase) {
                     if (currentPhase == "results"){

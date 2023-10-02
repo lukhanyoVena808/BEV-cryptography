@@ -16318,12 +16318,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xd5878E22C336B88121b4740CAa54664192Eed690",
-      "transactionHash": "0x3a4792999b331202ffe6c562bbcf6203c584be03530dfc49fb7ce4025852e7a1"
+      "address": "0xa88d7887e79A679B2E908486EcE350379C666819",
+      "transactionHash": "0x0e72a849757884e4a7b093e4249cae190d7c75d27dd26d51fb66567e97d5af21"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2023-10-02T16:27:54.246Z",
+  "updatedAt": "2023-10-02T17:52:55.316Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Witnet Foundation",

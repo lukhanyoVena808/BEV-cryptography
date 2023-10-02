@@ -16,3 +16,34 @@ ADMIN
 - Can change phase?
 
 Time Executions for reading and writing functions
+
+--------------------------- Scalability Test----------------------
+ 
+
+Nunber of Users Data >>>>>>>>>> Retrieval (Candidates)
+3 >>>> 0.09999999403953552 milliseconds
+9 >>>> 0.10000000894069672 milliseconds
+27 >>>> 0.20000000298023224 milliseconds
+36 >>>> 0.29999999701976776 milliseconds
+48 >>>> 0.30000001192092896 milliseconds
+60 >>>> 0.3999999910593033 milliseconds
+72 >>>> 0.4000000059604645 milliseconds
+81 >>>> 0.5 milliseconds
+100 >>>> 0.5999999940395355 milil
+
+Voting times
+3 >>>> 
+9 >>>> 
+27 >>>> 
+36 >>>>
+48 >>>> 
+60 >>>> 
+72 >>>> 
+81 >>>> 
+100 >>>> 
+
+
+
+
+
+
