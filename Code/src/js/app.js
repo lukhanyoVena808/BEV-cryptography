@@ -176,54 +176,6 @@ App = {
       return App.viewData();
   },
 
-//   strToArrayBuffer: function(str) {
-//       var buf = new ArrayBuffer(str.length * 2);
-//       var bufView = new Uint16Array(buf);
-//       for (var i = 0, strLen = str.length; i < strLen; i++) {
-//         bufView[i] = str.charCodeAt(i);
-//       }
-//       return buf;
-//   },
-
-//   arrayBufferToString: function(buf) {
-//      return String.fromCharCode.apply(null, new Uint16Array(buf));
-//   },
-
-
-//   swiperLeft:function(){ 
-        
-//       return window.crypto.subtle
-//       .generateKey(
-//         {
-//           name: "AES-GCM",
-//           length: 256,
-//         },
-//         true,
-//         ["encrypt", "decrypt"],
-//       )
-   
-//   },
-
-//   swiperRight: function(tr){
-//     return window.crypto.subtle.exportKey("raw", tr);
-//   },
-
-//   lock: function(text){
-//     iv = window.crypto.getRandomValues(new Uint8Array(16));
-//     return window.crypto.subtle.encrypt(
-//       {
-//         name: "AES-GCM",
-//         iv: App.iv,
-//       },
-//       secretKey,
-//       App.strToArrayBuffer(text),
-//     );
-//   },
-
-// decryptMessage: function (key, ciphertext) {
-//     // The iv value is the same as that used for encryption
-//     return window.crypto.subtle.decrypt({ name: "AES-GCM", iv:App.iv }, key, ciphertext);
-//   },
 
   castVote: function() {
     var electionInstance;
@@ -302,6 +254,8 @@ App = {
               adminIn.hide();
               adminView.show();
               localStorage.setItem("auth", 1);
+              $("#lastLog1").hide();
+              $("#lastLog2").show();
               alert("Signed In!");
             }
             else{
