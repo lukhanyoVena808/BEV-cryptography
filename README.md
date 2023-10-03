@@ -22,11 +22,8 @@ Requirements:
 - [Node JS](https://nodejs.org/en/download)
 - [MailTrap](https://mailtrap.io/signin)
 
-## Steps to run project ([inside this directory](./Code/)): <br>
-To update your yor npm if its not the latest version:
-```
-npm install -g npm@10.1.0 
-```
+## Steps to run project ([inside this directory](./Code/)):
+
 <br>
 To install truffle:
 
@@ -52,7 +49,3 @@ To run the web app:
  ```
  npm run dev
  ```
-
-
-
-

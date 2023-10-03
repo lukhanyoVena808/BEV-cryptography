@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700">
     <link rel="stylesheet" href="assets_home/fonts/font-awesome.min.css">
 
+
+    <script src="../js/init.js"></script>
+
     <style>
         #sliders2 {
             padding-right: 40%;                
@@ -41,7 +44,8 @@
                 aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="nav navbar-nav ml-auto text-uppercase">    
-                    <li class="nav-item" role="presentation"><a class="nav-link js-scroll-trigger" id="vote" href="\">Home</a></li>
+                    <li class="nav-item" role="presentation" id="lastLog1"><a class="nav-link js-scroll-trigger" id="vote" href="\">Home</a></li>
+                    <li class="nav-item" role="presentation" id="lastLog2" style="display: none;"><a class="nav-link js-scroll-trigger" href="\"  onclick="auth.logOut()" ><strong>logOut</strong></a></li>
                 </ul>
             </div>
         </div>
