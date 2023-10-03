@@ -1,11 +1,61 @@
-
-
-User
-- Captures Admin signature hash, but cannot enter (Rentrancy)
-- Regex Expresion DOS
-- XSS
-- Sniffing
-
-
+Blockchain:
 TX-Origin (Phishing)
 Front-Running
+
+DApp ( Tests based on the OWASP 2021 top-ten list):
+
+A01: Broken Access Control + A09: Secure Logging and monitoring failures
+## Scenario
+Attacker forces the browser to target the web app urls where admin rights are required in to access important functions such as changing phases, and adding candidates
+---- DONE ----- >>>>>>>>>> Passed
+<---------------- end -------------------->
+
+A02: Cryptographic Failure
+
+## Scenario
+Attacker tries to sniff information of user during registration, and audit phase
+---- DONE ----- >>>>>>>>>> Failed
+<---------------- end -------------------->
+
+A03: Injection -> XSS, Regex Expression DNS
+## Scenario
+Attacker tries to use XSS and Regex Expression DNS to flood the web app, causing it to fail.
+
+
+<---------------- end -------------------->
+
+A04: Insecure Design
+## Scenario
+
+<---------------- end -------------------->
+
+A05: Security misconfiguration
+
+## Scenario
+The application server,s configuration allows detailed error messages, eg stack traces, to be returned to users.
+
+
+<---------------- end -------------------->
+
+A07: Identification and authenticaton failures
+
+## Scenario
+Assume the attacker captures the audit keys of a voter, and tries to use them to verify their vote.
+
+<---------------- end -------------------->
+
+
+
+
+A10: Server-Side Request Forgery
+
+## Scenario
+Attcker tries tho sniff teh server ports to if they are open
+
+
+<---------------- end -------------------->
+
+
+
+
+Admin Subbotage (Insider Attacks):
