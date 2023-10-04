@@ -8,7 +8,7 @@ const app = express();
 app.use(require('sanitize').middleware);
 app.use(express.static('src'))
 app.set('view engine', 'ejs');
-const urlencodedParser = bodyParser.urlencoded({ extended: false});
+const urlencodedParser = bodyParser.urlencoded({ extended: true});
 const bcrypt = require("bcrypt");
 
 //GET ststic files
@@ -31,8 +31,8 @@ var transporter = nodemailer.createTransport({
   host: "sandbox.smtp.mailtrap.io",
   port: 2525,
   auth: {
-    user: "c7fcc5ab0eafaa",
-    pass: "58f82f974f6da3"
+    user: "90e6512217ffaf",
+    pass: "158eb9c9dfe005"
   }
 });
 

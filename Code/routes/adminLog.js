@@ -7,7 +7,7 @@ const app = express();
 app.use(require('sanitize').middleware);
 app.use(express.static('src'))
 app.set('view engine', 'ejs');
-const urlencodedParser = bodyParser.urlencoded({ extended: false});
+const urlencodedParser = bodyParser.urlencoded({ extended: true});
 
 
 //GET ststic files
