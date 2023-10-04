@@ -1,9 +1,15 @@
 const express = require('express');
 const terminatorHTTP =  require('http-terminator');
+const fs = require('fs');
+
+const spdy = require('spdy');
+
 
 const app = express();
 app.use(require('sanitize').middleware);
 const port = 3000;
+
+
 
 //static files
 app.use(express.static('src'));
@@ -21,12 +27,6 @@ const adminGetResults = require('./routes/adminView');
 const getUser = require('./routes/user');
 
 app.use(express.json());
-//exress.json, sends data in json format
-//middleware that paases url with payloads.
-//username=user&password=password
-//extedned = true, objects and arrays to be encoded.
-//originally post method data can be accessed by 
-// req.body.passwprd, -> using name identifier
 app.use(express.urlencoded({extended: true}));
 
 app.use('/', registrationRouter);
@@ -38,6 +38,7 @@ app.use('/', adminCandidate);
 app.use('/', adminGetResults)
 
 
+
 //set Views
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
@@ -46,16 +47,26 @@ app.get('', (req, res) => {
     res.render("index");
 })
 
+//// create the http2 server
+
+spdy.createServer (
+  {
+    key: fs.readFileSync('certs2/private.key'),
+    cert: fs.readFileSync('certs2/localhost-cert.cert'),
+  },
+  app
+).listen(port, ()=> console.info(`listening on port ${port}`));
+
+
 //listen on port
-const server = app.listen(port, ()=> console.info('listening on port ${port}'));
+// server.listen(port, ()=> console.info('listening on port ${port}'));
 
-const httpTerminator = terminatorHTTP.createHttpTerminator({
-  server,
-});
+// const httpTerminator = terminatorHTTP.createHttpTerminator({
+//   server,
+// });
 
 
-
-httpTerminator.terminate();
+// httpTerminator.terminate();
 
 module.exports = {
   "server": {
