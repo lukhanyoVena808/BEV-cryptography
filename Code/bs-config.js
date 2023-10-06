@@ -1,11 +1,16 @@
 const express = require('express');
 const terminatorHTTP =  require('http-terminator');
 const fs = require('fs');
+<<<<<<< HEAD
 const cors = require('cors');
+=======
+const http2 = require('https');
+const http2Express = require('http2-express-bridge')
+>>>>>>> 457ce9437ef7173cf22fed9561b0c365fa34ac65
 const spdy = require('spdy');
 
 
-const app = express();
+const app = http2Express(express);
 app.use(require('sanitize').middleware);
 app.use(cors())
 const port = 3000;
@@ -44,29 +49,39 @@ app.use('/', adminGetResults)
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
-app.get('', (req, res) => {
-    res.render("index");
+app.get('',async (req, res) => {
+    
+      res.render("index");
 })
 
 //// create the http2 server
+const options = {
+  key: fs.readFileSync('exc/localhost.decrypted.key'),
+  cert: fs.readFileSync('exc/localhost.crt'),
+  allowHTTP1: true
+};
 
+<<<<<<< HEAD
 // const server = spdy.createServer (
 //   {
 //     key: fs.readFileSync('certs2/private.key'),
 //     cert: fs.readFileSync('certs2/localhost-cert.cert'),
 //   },
   app.listen(port, ()=> console.info(`listening on port ${port}`));
+=======
+>>>>>>> 457ce9437ef7173cf22fed9561b0c365fa34ac65
 
+const server = http2.createServer(options, app);
 
 //listen on port
-// server.listen(port, ()=> console.info('listening on port ${port}'));
+server.listen(port, ()=> console.info(`listening on port ${port}`));
 
-// const httpTerminator = terminatorHTTP.createHttpTerminator({
-//   server,
-// });
+const httpTerminator = terminatorHTTP.createHttpTerminator({
+  server,
+});
 
 
-// httpTerminator.terminate();
+httpTerminator.terminate();
 
 module.exports = {
   "server": {
@@ -76,6 +91,7 @@ module.exports = {
     },
     middleware: {
       1: app,
+   
   },
 },
 port:port,

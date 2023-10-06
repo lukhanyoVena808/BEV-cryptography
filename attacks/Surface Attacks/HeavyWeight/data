@@ -20,8 +20,9 @@ Attacker tries to sniff information of user during registration, and audit phase
 A03: Injection -> XSS, Regex Expression DNS
 ## Scenario
 Attacker tries to use XSS and Regex Expression DNS to flood the web app, causing it to fail.
+XSS >>>>>>>>>> Passed
 
-
+Regex >>>>>>>>>>> Paaes
 <---------------- end -------------------->
 
 A04: Insecure Design

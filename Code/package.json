@@ -8,7 +8,7 @@
     "certs": "certs"
   },
   "scripts": {
-    "dev": "lite-server c ",
+    "dev": "lite-server c  bs-config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon tsc && concurrently \"tsc -w\" \"lite-server -c bs-config.json\" "
   },
@@ -22,9 +22,7 @@
     "otp-gen-agent": "^1.1.2",
     "pug": "^3.0.2",
     "spdy": "^4.0.2",
-    "speakeasy": "^2.0.0"
-  },
-  "dependencies": {
+    "speakeasy": "^2.0.0",
     "@openzeppelin/contracts": "^4.4.0",
     "bcrypt": "^5.1.1",
     "bignumber.js": "^9.1.2",
@@ -39,6 +37,9 @@
     "express-validator": "^7.0.1",
     "get-age": "^1.0.1",
     "http-terminator": "^3.2.0",
+    "http2": "^3.3.7",
+    "http2-express-bridge": "^1.0.7",
+    "https": "^1.0.0",
     "js-sha256": "^0.10.1",
     "jsontoxml": "^1.0.1",
     "keccak256": "^1.0.6",
@@ -56,5 +57,8 @@
     "sanitize-html": "^2.11.0",
     "tsc": "^2.0.4",
     "web3": "^4.1.1"
+  },
+  "dependencies": {
+    
   }
 }
