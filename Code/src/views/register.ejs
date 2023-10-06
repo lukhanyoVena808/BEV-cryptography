@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700">
     <link rel="stylesheet" href="assets_home/fonts/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
 
 
     <style>
@@ -66,8 +67,8 @@
                             <div class="text-center">
                                 <h4 class="text-dark mb-4">Register to Vote!</h4>
                             </div>
-                     
-                            <form  method="post" action="registration" id= "demo_form" enctype="application/x-www-form-urlencoded">
+                          
+                            <form  id= "demo_form" >
                                 <div class="mb-3">
                                     <label for="name-reg" class="form-label">Name </label>
                                     <input type="text" class="form-control" id="name-reg" name="name" autocomplete=off required>                        
@@ -104,10 +105,44 @@
             <div class="text-center my-auto copyright"><span>Copyright © E-Votez 2023</span></div>
         </div>
     </footer>
+
+    
    
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    
+    <script>
+            const myform = document.getElementById("demo_form");
+
+            myform.addEventListener('submit', function(e){
+                e.preventDefault();
+                        // Get form data
+                        var formData = {
+                            name: $('#name-reg').val(),
+                            email: $('#email-reg').val(),
+                            surname: $('#surname-reg').val() ,
+                            personID: $('#personID-reg').val() 
+                        };
+                        var e_em = CryptoJS.AES.encrypt(JSON.stringify(formData), "winner");                      
+                        
+                    //       
+                    // fetch(
+                    //     'registration',{
+                    //     method: 'POST',
+                    //     body: {data : e_em.toString()}
+                    // })
+
+                    fetch('/registration', {
+                            method: 'POST',
+                            body: {data: e_em.toString()},
+                            
+                            })
+            })
+
+                
+          
+    </script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/web3.min.js"></script>

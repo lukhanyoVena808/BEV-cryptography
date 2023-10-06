@@ -1,12 +1,13 @@
 const express = require('express');
 const terminatorHTTP =  require('http-terminator');
 const fs = require('fs');
-
+const cors = require('cors');
 const spdy = require('spdy');
 
 
 const app = express();
 app.use(require('sanitize').middleware);
+app.use(cors())
 const port = 3000;
 
 
@@ -49,13 +50,12 @@ app.get('', (req, res) => {
 
 //// create the http2 server
 
-spdy.createServer (
-  {
-    key: fs.readFileSync('certs2/private.key'),
-    cert: fs.readFileSync('certs2/localhost-cert.cert'),
-  },
-  app
-).listen(port, ()=> console.info(`listening on port ${port}`));
+// const server = spdy.createServer (
+//   {
+//     key: fs.readFileSync('certs2/private.key'),
+//     cert: fs.readFileSync('certs2/localhost-cert.cert'),
+//   },
+  app.listen(port, ()=> console.info(`listening on port ${port}`));
 
 
 //listen on port
