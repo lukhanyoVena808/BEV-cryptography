@@ -1,16 +1,9 @@
 const express = require('express');
-const terminatorHTTP =  require('http-terminator');
+// const terminatorHTTP =  require('http-terminator');
 const fs = require('fs');
-<<<<<<< HEAD
 const cors = require('cors');
-=======
-const http2 = require('https');
-const http2Express = require('http2-express-bridge')
->>>>>>> 457ce9437ef7173cf22fed9561b0c365fa34ac65
 const spdy = require('spdy');
-
-
-const app = http2Express(express);
+const app = express();
 app.use(require('sanitize').middleware);
 app.use(cors())
 const port = 3000;
@@ -61,27 +54,24 @@ const options = {
   allowHTTP1: true
 };
 
-<<<<<<< HEAD
 // const server = spdy.createServer (
 //   {
 //     key: fs.readFileSync('certs2/private.key'),
 //     cert: fs.readFileSync('certs2/localhost-cert.cert'),
 //   },
-  app.listen(port, ()=> console.info(`listening on port ${port}`));
-=======
->>>>>>> 457ce9437ef7173cf22fed9561b0c365fa34ac65
+app.listen(port, ()=> console.info(`listening on port ${port}`));
 
-const server = http2.createServer(options, app);
+// const server = http2.createServer(options, app);
 
 //listen on port
-server.listen(port, ()=> console.info(`listening on port ${port}`));
+// server.listen(port, ()=> console.info(`listening on port ${port}`));
 
-const httpTerminator = terminatorHTTP.createHttpTerminator({
-  server,
-});
+// const httpTerminator = terminatorHTTP.createHttpTerminator({
+//   server,
+// });
 
 
-httpTerminator.terminate();
+// httpTerminator.terminate();
 
 module.exports = {
   "server": {
