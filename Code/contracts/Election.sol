@@ -160,6 +160,7 @@ contract Election {
 
     // voting function, all accounts can vote
     function vote (uint _candidateId, string memory _date, string memory _time) public {
+        require(msg.sender != admin, "Admin Cannot vote");
 
         //must be registered to vote
         require(voters[msg.sender].isRegistered, "Only registered users can vote");
@@ -201,10 +202,7 @@ contract Election {
  
     //verify vote
     function verifyVote(uint _key1, uint _key2) public{
-                 //must be registered to vote
-        require(voters[msg.sender].isRegistered, "Only registered users can vote");
-
-        // require that they haven't voted before
+        // require that they have voted before
         require(voters[msg.sender].hasVoted, "Already Voted");
 
         require(!voters[msg.sender].isVerifiedUser, "Voter already verified");

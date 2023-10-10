@@ -50,7 +50,7 @@ contract("Election", function(accounts) {
       })
     });
 
-    it("throws an exception when users same id for registration ", function() {
+    it("throws an exception when users use same id for registration ", function() {
       return Election.deployed().then(function(instance) {
         electionInstance = instance;
         return electionInstance.addVoter("AAA3210E", "workHard@gmail.com", "Lux", "Musica", "a45C63", { from: accounts[2] });
@@ -61,6 +61,39 @@ contract("Election", function(accounts) {
           });
         });
       });
+
+
+      it("throws an exception when users use same public address for registration ", function() {
+        return Election.deployed().then(function(instance) {
+          electionInstance = instance;
+          return electionInstance.addVoter("AWE10E", "workSamrt@gmail.com", "Jack", "Beanstock", "a45C63", { from: accounts[3] });
+        }).then(function() {
+          //Try using the same ID
+          electionInstance.addVoter("AQ00030E", "winer@gmail.com", "Ron", "Don", "ZX67SW", { from: accounts[3] }).then(assert.fail).catch(function(error) {
+            assert(error, "The public address already in use");
+            });
+          });
+        });
+
+    it("allows the admin to start an election", function() {
+      return Election.deployed().then(function(instance) {
+        electionInstance = instance;
+        return electionInstance.startElection({ from: accounts[0] });
+      }).then(function() {
+        return electionInstance.phase();
+      }).then(function(phase) {
+          assert.equal(phase, "registration",  "election phase is registration");
+        })
+    });
+  
+    it("throws an exception for user trying to start an election", function() {
+      return Election.deployed().then(function(instance) {
+        electionInstance = instance;
+        return electionInstance.startElection({ from: accounts[0] });
+      }).then(assert.fail).catch(function(error) {
+        assert(error, "Only Admin can perform this function");
+        })
+    });
    
 
   it("allows a voter to cast a vote", function() {
@@ -136,5 +169,26 @@ contract("Election", function(accounts) {
         assert.equal(trail[3], true,  "vote is verified");
       })
   });
+
+  it("throws an exception for admin trying to vote", function() {
+    return Election.deployed().then(function(instance) {
+      electionInstance = instance;
+      return electionInstance.vote(candidateId, "Tuesday October 10, 2023", "7:12:22 PM GMT+2", { from: accounts[0] });
+    }).then(assert.fail).catch(function(error) {
+      assert(error, "Admin Cannot vote");
+      })
+  });
+
+
+  it("allows for election winner to be retrieved", function() {
+    return Election.deployed().then(function(instance) {
+      electionInstance = instance;
+      return electionInstance.getWinner();
+    }).then(function(winner) {
+        assert.equal(winner, "Candidate 1",  "winner retrieved");
+      })
+  });
+ 
+
 
 });
