@@ -94,6 +94,18 @@ contract("Election", function(accounts) {
         assert(error, "Only Admin can perform this function");
         })
     });
+
+    
+  it("checks if random function has randomness", function() {
+    return Election.deployed().then(function(instance) {
+      electionInstance = instance;
+      return electionInstance.random({ from: accounts[1] });
+    }).then(function(random1) {
+      electionInstance.random({ from: accounts[1] }).then(function(random2) {
+        assert.notEqual(random1, random2, "Numbers are different");
+      });
+      })
+  });
    
 
   it("allows a voter to cast a vote", function() {
@@ -188,7 +200,6 @@ contract("Election", function(accounts) {
         assert.equal(winner, "Candidate 1",  "winner retrieved");
       })
   });
- 
 
 
 });
