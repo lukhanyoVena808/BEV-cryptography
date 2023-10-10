@@ -38,70 +38,68 @@ var transporter = nodemailer.createTransport({
   }
 });
   
-router.post('/registration', urlencodedParser, function(req, res) {  
-        
-        res.render('register');
-        
+router.post('/registration', urlencodedParser, async function(req, res) {  
+                
                 // let de = cj.AES.decrypt(req.body.data, "winner");
                 // let d_data = JSON.parse(de.toString(cj.enc.Utf8));
-
                 // const name = d_data.name;
                 // const surname = d_data.surname;
                 // const personID = d_data.personID;
                 // const email = d_data.email;
+                const {name, surname, personID, email} = req.body;
                 
-                //     var otp;
-                //   try { 
+                  let  otp;
+                  try { 
                     
-                //     // Generate a secret key with a length
-                //     // of 20 characters
-                //     const secret = speakeasy.generateSecret({ length: 20 });
+                    // Generate a secret key with a length
+                    // of 20 characters
+                    const secret = speakeasy.generateSecret({ length: 20 });
                       
-                //     // Generate a TOTP code using the secret key
-                //     otp = speakeasy.totp({
+                    // Generate a TOTP code using the secret key
+                    otp = speakeasy.totp({
                       
-                //         // Use the Base32 encoding of the secret key
-                //         secret: secret.base32,
+                        // Use the Base32 encoding of the secret key
+                        secret: secret.base32,
                       
-                //         // Tell Speakeasy to use the Base32 
-                //         // encoding format for the secret key
-                //         encoding: 'base32'
-                //     });
+                        // Tell Speakeasy to use the Base32 
+                        // encoding format for the secret key
+                        encoding: 'base32'
+                    });
                     
                     
-                //   } catch (error) {
-                //     console.log(error) 
-                //   }
+                  } catch (error) {
+                    console.log(error) 
+                  }
                 
-                // if(name!='' && surname!='' && personID!='' && email!=''){
-                //       try { 
-                //         if(name!=''){
+                if(name!='' && surname!='' && personID!='' && email!=''){
+                      try { 
+                        if(name!=''){
  
-                //             const mailOptions = {
-                //               from: 'lxgog@mail.com',
-                //               to: email,
-                //               subject: 'E-Votez OTP Code',
-                //               html: "<p>Hello, <strong>"+name+"</strong></br>Use the OTP Code below to complete your registration:</p>"+"<h1>"+otp+"</h1>"
-                //             };
-                //              transporter.sendMail(mailOptions, (error, info) => {
-                //               if (error) {
-                //                   console.log(error);
-                //                   res.status(500).send('Error sending email');
-                //               } else {
-                //                   console.log('Email sent: ' + info.response);
-                //                   res.send('Email sent successfully');
-                //               }
-                //             });   
-                //          }
+                            const mailOptions = {
+                              from: 'lxgog@mail.com',
+                              to: email,
+                              subject: 'E-Votez OTP Code',
+                              html: "<p>Hello, <strong>"+name+"</strong></br>Use the OTP Code below to complete your registration:</p>"+"<h1>"+otp+"</h1>"
+                            };
+                             await transporter.sendMail(mailOptions, (error, info) => {
+                              if (error) {
+                                  console.log(error);
+                                  res.status(500).send('Error sending email');
+                              } else {
+                                  console.log('Email sent: ' + info.response);
+                                  res.send('Email sent successfully');
+                              }
+                            });   
+                         }
                                         
-                //         } catch (error) {
-                //           console.log(error)
-                //         }
-                //       res.render('register2', {encrypted_word1: name, encrypted_word2: surname, encrypted_word3: personID, encrypted_word4:email, encrypted_word5:otp});
-                //   }
-                //   else{
-                   
-                //   }
+                        } catch (error) {
+                          console.log(error)
+                        }
+                      res.render('register2', {encrypted_word1: name, encrypted_word2: surname, encrypted_word3: personID, encrypted_word4:email, encrypted_word5:otp});
+                  }
+                  else{
+                    res.render('register');
+                  }
  
       
 

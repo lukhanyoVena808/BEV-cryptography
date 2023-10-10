@@ -391,9 +391,11 @@ App = {
     const person_id= $("#personID-reg2").val();
     const email = $("#email-reg2").val(); 
     const checkOTP = $("#otp2000").val(); 
+  
    
     $("#myOTP").fadeTo( "fast" , 0);
-    const otpCode= $("#otp-reg").val();  
+    const otpCode= $("#otp-reg").val(); 
+ 
  
     const result = person_id.replace(/[^a-zA-Z0-9 ]/g, '')?.length || 0;
     const result2 = person_id?.length || 0;

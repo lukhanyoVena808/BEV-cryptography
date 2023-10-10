@@ -53,6 +53,8 @@ contract Election {
 
     mapping(uint => votingRecords) public votingTrails;
 
+    mapping(uint => string) private candidateToVoter;
+
     // Stores encyrted ID'S
     mapping(bytes32 => address) private verifier;
     mapping(uint => address) private recorder;
@@ -166,13 +168,14 @@ contract Election {
         require(!voters[msg.sender].hasVoted, "Already Voted"); 
         
         // require a valid candidate
-        require(_candidateId > 0 && _candidateId <= candidatesCount);
+        require(_candidateId > 0 && _candidateId <= candidatesCount, "invalid candidate");
 
         // record that voter has voted
         voters[msg.sender].hasVoted = true;
 
         // update candidate vote Count
         candidates[_candidateId].voteCount ++; //add vote to candidate
+        candidateToVoter[_candidateId] = voters[msg.sender].refNUm;
 
         voters[msg.sender].PrivateKey = random();  //CREATE PRIVATE KEY *****
     
@@ -204,7 +207,7 @@ contract Election {
         // require that they haven't voted before
         require(voters[msg.sender].hasVoted, "Already Voted");
 
-        require(!voters[msg.sender].isVerifiedUser, "Voter already voted");
+        require(!voters[msg.sender].isVerifiedUser, "Voter already verified");
 
         (uint256 p1, uint256 p2) = EllipticCurve.ecMul(voters[msg.sender].PrivateKey,GX,GY,AA,PP); //creating public keys from the user address
 

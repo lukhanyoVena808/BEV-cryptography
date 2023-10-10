@@ -68,7 +68,7 @@
                                 <h4 class="text-dark mb-4">Register to Vote!</h4>
                             </div>
                           
-                            <form  id= "demo_form" >
+                            <form  method="post" action="registration" id= "demo_form" >
                                 <div class="mb-3">
                                     <label for="name-reg" class="form-label">Name </label>
                                     <input type="text" class="form-control" id="name-reg" name="name" autocomplete=off required>                        
@@ -111,39 +111,6 @@
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    
-    <script>
-            const myform = document.getElementById("demo_form");
-
-            myform.addEventListener('submit', function(e){
-                e.preventDefault();
-                        // Get form data
-                        var formData = {
-                            name: $('#name-reg').val(),
-                            email: $('#email-reg').val(),
-                            surname: $('#surname-reg').val() ,
-                            personID: $('#personID-reg').val() 
-                        };
-                        var e_em = CryptoJS.AES.encrypt(JSON.stringify(formData), "winner");                      
-                        
-                    //       
-                    // fetch(
-                    //     'registration',{
-                    //     method: 'POST',
-                    //     body: {data : e_em.toString()}
-                    // })
-
-                    fetch('/registration', {
-                            method: 'POST',
-                            body: {data: e_em.toString()},
-                            
-                            })
-            })
-
-                
-          
-    </script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
