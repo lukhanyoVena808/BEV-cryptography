@@ -16,7 +16,7 @@ f.close()
 
 
 
-aList = {"data":[]}
+aList = {"data"-:[]}
 # jsonString = json.dumps(aList)
 # jsonFile = open("data.json", "w")
 # jsonFile.write(jsonString)
