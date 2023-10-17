@@ -1,14 +1,14 @@
 var txOrg= artifacts.require("./Attack.sol"); //attack smart contract
 
-contract("OriginAttack", function(accounts) {
+contract("Spoofing Attack", function(accounts) {
     var attackInstance;
     
-  it("prevent phishing attack", function() {
+  it("test spoofing attack", function() {
     return txOrg.deployed().then(function(instance) {
         attackInstance = instance;
-        return attackInstance.attack({from: accounts[0]}); 
+        return attackInstance.attack({from: accounts[0]});  //attacker utililez admin address
     }).then(assert.fail).catch(function(error) {
-        assert(error, "Only Admin can perform this function");
+        assert.equal(error.data.message, "revert");
     });
   })
 

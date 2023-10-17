@@ -202,6 +202,10 @@ contract Election {
             }
             return (Strings.toString(p1), Strings.toString(p2));          
     }
+
+    function testEncryption() public {
+        EllipticCurve.ecMul(random(),GX,GY,AA,PP);
+    }
  
     //verify vote
     function verifyVote(uint _key1, uint _key2) public{
@@ -275,7 +279,7 @@ contract Election {
         return recover(ethSignedMessageHash, _sig) == admin;
     }
     
-    //has a tring
+    //turns string to hash
     function getHash (string memory sms, uint _nonce) public pure returns (bytes32){
         return keccak256(abi.encodePacked(sms, _nonce));
     }
