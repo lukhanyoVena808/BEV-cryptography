@@ -22,6 +22,8 @@ Requirements:
 - [Node JS](https://nodejs.org/en/download)
 - [MailTrap](https://mailtrap.io/signin)
 
+CSS and HTML of the system was adapted from: [Repo](https://github.com/dhruti-patel/BlockVote-Truffle)
+
 ## Steps to run project ([inside this directory](./Code/)):
 
 <br>

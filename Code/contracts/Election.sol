@@ -203,8 +203,9 @@ contract Election {
             return (Strings.toString(p1), Strings.toString(p2));          
     }
 
-    function testEncryption() public {
-        EllipticCurve.ecMul(random(),GX,GY,AA,PP);
+    function testEncryption() public returns(string memory, string memory){
+       (uint256 p1, uint256 p2) = EllipticCurve.ecMul(random,GX,GY,AA,PP);
+       return (Strings.toString(p1), Strings.toString(p2));   
     }
  
     //verify vote
