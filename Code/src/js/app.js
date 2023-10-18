@@ -63,25 +63,7 @@ App = {
     });
   },
 
-  render: function() {
-    console.log("Original: "+web3.sha3("41053923690398663856426393240713656583148349259372247155299776854504028481244"))
-    const arr = [ "41053923690398663856426393240713656583148349259372247155299776854504028481240", //1
-                  "41053923690398663856426393240713656583148349259372247155299776854504029086877", //7
-                  "41053923690398663856426393240713656583148349259372247155299776852864772338690", //13
-                  "41053923690398663856426393240713656583148349259372247155290085463353999641179", //19
-                  "41053923690398663856426393240713656583148349259372248533370002356799940026666", //25
-                  "41053923690398663856426393240713656583148349259555588888800001125877770000677", //31
-                  "41053923690398663856426393240713656583148666666666633333355552222888111779777", //37
-                  "41053923690398663856426393240713656657896866666666663333678564859456494779777", //43
-                  "41053923690398663856426393240713768545040284812446565822471314834925937550000", //49
-                  "41053923690398663856426389008800013656587685450402848124465658293240724784812", //55
-                  "41053923690398663808247155252864700882440007758314834555692550402848937299776", //61
-                  "41053923677685450638569865299737224742639324071365658314834924028481295990315"]; //70
-    for(let i=0; i<arr.length;i++){
-      console.log(web3.sha3(arr[i]))
-    }
-
-    
+  render: function() {    
     var electionInstance;
     const loader = $("#loader");
     const content = $("#content");
@@ -263,10 +245,16 @@ App = {
     const  nonce = crypto.getRandomValues(new Uint32Array(1))[0];
     const phraseUp = "electi"+crypto.randomUUID()+"ons2023_nation"+crypto.randomUUID()+"WideSA"+nonce;
     try {      
+      const start = Date.now();
       ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3(phraseUp)]}).then(function(result){ //bytes of signture
+        console.log("Gen. Time: "+ (Date.now() - start));
+        const rstart = Date.now()
         App.contracts.Election.deployed().then(function(instance) {
-            return instance.verify(phraseUp, result, nonce, { from: App.account });
+            
+            return instance.verify(phraseUp , result, { from: App.account });
+            
           }).then(function(result2) {
+            console.log("Ver. Time: "+ (Date.now() - rstart));
             if(result2){  //signature valid 
               adminIn.hide();
               adminView.show();
@@ -283,6 +271,7 @@ App = {
               console.error(err);
             })
       });
+      
     } catch (error) {
         console.warn(error);
     }

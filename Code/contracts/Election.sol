@@ -272,8 +272,8 @@ contract Election {
 
 
     //<----------------------------------- Verifies signed message -------------------------------->
-    function verify (string memory _message, bytes memory _sig, uint _nonce) onlyAdmin public returns (bool) {
-        bytes32 hash_SMS = getHash(_message, _nonce);
+    function verify (string memory _message, bytes memory _sig) onlyAdmin public returns (bool) {
+        bytes32 hash_SMS = getHash(_message);
         require(!adminSignatures[hash_SMS], "Has been executed"); //must be a new signature
         bytes32 ethSignedMessageHash = getEthSignedHash(hash_SMS);
         adminSignatures[hash_SMS] = true;
@@ -281,8 +281,8 @@ contract Election {
     }
     
     //turns string to hash
-    function getHash (string memory sms, uint _nonce) public pure returns (bytes32){
-        return keccak256(abi.encodePacked(sms, _nonce));
+    function getHash (string memory sms) public pure returns (bytes32){
+        return keccak256(abi.encodePacked(sms));
     }
 
 
