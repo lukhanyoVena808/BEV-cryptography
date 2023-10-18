@@ -3,6 +3,7 @@ const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
 const spdy = require('spdy');
+const start = Date.now();
 const app = express();
 app.use(require('sanitize').middleware);
 app.use(cors())
@@ -59,7 +60,7 @@ const options = {
 //     key: fs.readFileSync('certs2/private.key'),
 //     cert: fs.readFileSync('certs2/localhost-cert.cert'),
 //   },
-app.listen(port, ()=> console.info(`listening on port ${port}`));
+app.listen(port, ()=> console.info(`listening on port ${port}, time: ${Date.now()-start}`));
 
 // const server = http2.createServer(options, app);
 

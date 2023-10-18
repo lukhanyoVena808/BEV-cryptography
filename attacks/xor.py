@@ -4,7 +4,7 @@ import base64
 # similarity between strings
 # using SequenceMatcher.ratio()
 from difflib import SequenceMatcher
-import numpy as np
+# import numpy as np
 # for ECC -> use integration tests, create private, XOR with one public key
 # Differential Cryto-Analysis
 base64_ciphertext = 'bVkmcyU2L14RKiBjMiddVSY9YzgrVV40'
@@ -106,11 +106,32 @@ keys = [ ["410539236903986638564263932407136565831483492593722471552997768545040
 # print ("The similarity between 2 strings is : " + str(similar(str(41053923690398663856426393240713656583148349259372247155299776854504028481244), #private key
 #                                                                str(108082178384805549811787633190460994321479416138153729745245365967533631621189)) *100))
 
-sum =0
-for j in range(len(keys)):
-      sim = similar(str(keys[j][0]), str(keys[j][1]))
-      sim2 = similar(str(keys[j][0]), str(keys[j][2]))
-      sum =sum+sim+sim2
-      print ("The similarity between 2 strings is (key 1): " + str(sim *100))
-      print ("The similarity between 2 strings is (key 2): " + str(sim2 *100))
-print("Average: "+str((sum/(len(keys) * 2)) *100))
+# sum =0
+# for j in range(len(keys)):
+#       sim = similar(str(keys[j][0]), str(keys[j][1]))
+#       sim2 = similar(str(keys[j][0]), str(keys[j][2]))
+#       sum =sum+sim+sim2
+#       print ("The similarity between 2 strings is (key 1): " + str(sim *100))
+#       print ("The similarity between 2 strings is (key 2): " + str(sim2 *100))
+# print("Average: "+str((sum/(len(keys) * 2)) *100))
+
+org =  "0xf118e26033440f708d6f48ad295de971d97fb5482f8d005f5fc79ed02a42cd64"
+hashes =[
+"0xe4ae0d7a4ba86defeb8222e7e4f4411cec5fc722dbe9645e227c48c69de09e25",
+"0x66fbade40bb1b73e0e3416e67a09556504c146db5acd9a0c4fb9b161785f6681",
+"0xc861250c77f1fe36257727c82b64759f21c29370921f19d6a17b09fb8075c934",
+"0x9d3f2f46e78b997a58cd54c3626598a648b9d7b17d75a3003297a54fe66de0eb",
+"0xa8089e6426b2ca346824f9cf39afb568615c2312a673a21611fa60675310eaf4",
+"0x94786d2a6b9b83094ac341fbc8f02f01613102a88c845c28e3aa5ab6b9fffcae",
+"0xac527fb578030a0f567e70aa569d50dc84e88c471bb4fb1bc7d2b2aa9c871500",
+"0x0249fafc7cfd5bafb0ae8689e706599f08a1dc7ef6b86e0b8759008c1994f7ee",
+"0x0fac3f89fad443d1771e230d0d54790a4605ff7a107d6578c905899d8d239c60",
+"0xcec238d3df02106abda443f0936af4b6f65f3e8c2a9d62b53ec4c46ace0daf67",
+"0x906c38c28e8ca92ab3fc2979b43591d6a296284ca0cd15eedfb00be00fe3771d",
+"0xa10f9d655ed2bcc05b91ee0a285ca77e5bbb9c45ba2a04d76e701f7a57d9d862"
+]
+
+
+for j in range(len(hashes)):
+    print ("The similarity between 2 strings is : " + str(similar(org, hashes[j]) *100))
+  
