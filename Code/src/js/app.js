@@ -244,33 +244,36 @@ App = {
   admin_Signs_In: function(){
     const  nonce = crypto.getRandomValues(new Uint32Array(1))[0];
     const phraseUp = "electi"+crypto.randomUUID()+"ons2023_nation"+crypto.randomUUID()+"WideSA"+nonce;
+
     try {      
-      const start = Date.now();
+     
+      
       ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3(phraseUp)]}).then(function(result){ //bytes of signture
-        console.log("Gen. Time: "+ (Date.now() - start));
-        const rstart = Date.now()
-        App.contracts.Election.deployed().then(function(instance) {
-            
-            return instance.verify(phraseUp , result, { from: App.account });
-            
-          }).then(function(result2) {
-            console.log("Ver. Time: "+ (Date.now() - rstart));
-            if(result2){  //signature valid 
-              adminIn.hide();
-              adminView.show();
-              localStorage.setItem("auth", 1);
-              $("#lastLog1").hide();
-              $("#lastLog2").show();
-              alert("Signed In!");
-            }
-            else{
-              alert("Site restricted to Admin only.");
-            }
-            
-            }).catch(function(err){
-              console.error(err);
-            })
-      });
+          
+          App.contracts.Election.deployed().then(function(instance) {
+              return instance.verify(phraseUp , result, { from: App.account }).then(function(result2) {
+                  console.log(result2)
+                  if(result2){  //signature valid 
+                    adminIn.hide();
+                    adminView.show();
+                    // window.localStorage.setItem("auth", 1);
+                    $("#lastLog1").hide();
+                    $("#lastLog2").show();
+                    alert("Signed In!");
+                  }
+                  else{
+                    alert("Site restricted to Admin only.");
+                  }
+                  
+                  }).catch(function(err){
+                    console.error(err);
+                  })
+            });
+    
+      }).catch(function(err){
+        console.error(err);
+      })
+      
       
     } catch (error) {
         console.warn(error);

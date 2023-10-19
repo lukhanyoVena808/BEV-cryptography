@@ -53,7 +53,7 @@ contract Election {
 
     mapping(uint => votingRecords) public votingTrails;
 
-    mapping(uint => string) private candidateToVoter;
+    mapping(string => uint) private candidateToVoter;
 
     // Stores encyrted ID'S
     mapping(bytes32 => address) private verifier;
@@ -179,7 +179,7 @@ contract Election {
 
         // update candidate vote Count
         candidates[_candidateId].voteCount ++; //add vote to candidate
-        candidateToVoter[_candidateId] = voters[msg.sender].refNUm;
+        candidateToVoter[voters[msg.sender].refNUm] = _candidateId;
 
         voters[msg.sender].PrivateKey = random();  //CREATE PRIVATE KEY *****
     
@@ -272,12 +272,13 @@ contract Election {
 
 
     //<----------------------------------- Verifies signed message -------------------------------->
-    function verify (string memory _message, bytes memory _sig) onlyAdmin public returns (bool) {
+    function verify (string memory _message, bytes memory _sig) public onlyAdmin returns (bool) {
         bytes32 hash_SMS = getHash(_message);
         require(!adminSignatures[hash_SMS], "Has been executed"); //must be a new signature
         bytes32 ethSignedMessageHash = getEthSignedHash(hash_SMS);
         adminSignatures[hash_SMS] = true;
-        return recover(ethSignedMessageHash, _sig) == admin;
+        if (recover(ethSignedMessageHash, _sig) == admin){return true;}
+        return false;
     }
     
     //turns string to hash

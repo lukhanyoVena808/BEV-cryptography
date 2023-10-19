@@ -20,24 +20,40 @@ Time Executions for reading and writing functions
 --------------------------- Scalability Test----------------------
  
 
-Nunber of Users Data >>>>>>>>>> Retrieval (Candidates)
-3 >>>> 0.09999999403953552 milliseconds
-9 >>>> 0.10000000894069672 milliseconds
-27 >>>> 0.20000000298023224 milliseconds
-36 >>>> 0.29999999701976776 milliseconds
-48 >>>> 0.30000001192092896 milliseconds
-60 >>>> 0.3999999910593033 milliseconds
-72 >>>> 0.4000000059604645 milliseconds
-81 >>>> 0.5 milliseconds
-100 >>>> 0.5999999940395355 milil
+Size: 108
+app.js:253 Gen. Time: 2790
+app.js:260 Ver. Time: 3255
 
-Voting computation >>>>>>>>>>
-3 >>>> 
-9 >>>> 
-12 >>>> 
-15 >>>>
-18 >>>> 
-21 >>>> 
-27 >>>> 
-30 >>>> 
-36 >>>> 
+Size: 157
+app.js:253 Gen. Time: 2953
+app.js:260 Ver. Time: 3616
+
+Size: 198
+app.js:253 Gen. Time: 2744
+app.js:260 Ver. Time: 5611
+
+Size: 200
+Gen. Time: 2687
+app.js:260 Ver. Time: 5753
+
+Size: 292
+app.js:253 Gen. Time: 3584
+app.js:260 Ver. Time: 6525
+
+
+Size: 383
+app.js:253 Gen. Time: 3914
+app.js:260 Ver. Time: 4303
+
+Size: 476
+app.js:253 Gen. Time: 3657
+app.js:260 Ver. Time: 5816
+
+Size: 475
+app.js:253 Gen. Time: 3286
+app.js:260 Ver. Time: 5695
+
+Size: 660
+app.js:253 Gen. Time: 4961
+app.js:260 Ver. Time: 5001
+
