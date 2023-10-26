@@ -46,17 +46,17 @@ contract Election {
     uint256 private constant PP = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F;
 
     // Read/write candidate
-    mapping(uint => Candidate) public candidates;
+    mapping(uint => Candidate) public candidates; //maps and id to a candidate
 
     // Store accounts that have voted
-    mapping(address => voter) private voters;
+    mapping(address => voter) private voters; //maps addreess to a voter profile
 
-    mapping(uint => votingRecords) public votingTrails;
+    mapping(uint => votingRecords) public votingTrails; //Audit trail
 
-    mapping(string => uint) private candidateToVoter;
+    mapping(string => uint) private candidateToVoter; //stores mapping of user references to candidateID
 
     // Stores encyrted ID'S
-    mapping(bytes32 => address) private verifier;
+    mapping(bytes32 => address) private verifier; 
     mapping(uint => address) private recorder;
 
     mapping(bytes32 => bool) private adminSignatures; //saves history of Admin signature to curb Signature Replay Attack
@@ -68,7 +68,7 @@ contract Election {
     // Stores Election phase
     string public phase;
 
-    uint private randomiser;
+    uint private randomiser; //randomiser for rabdom number generation
 
     uint private minimum_candidates =2;
     uint private minVotes = 2;
@@ -90,6 +90,7 @@ contract Election {
         phase="Election has not started";
     } 
 
+    // only admin modifier
     modifier onlyAdmin(){
 		require(msg.sender==admin, "Only Admin can perform this function");
 		_;
@@ -257,6 +258,7 @@ contract Election {
         return keccak256(abi.encode(text));
     }
 
+    // retrun the winner 
     function getWinner() public view returns(string memory) {
         uint winner = 1;
         uint voterS = candidates[1].voteCount;
@@ -272,6 +274,7 @@ contract Election {
 
 
     //<----------------------------------- Verifies signed message -------------------------------->
+    //verify signature
     function verify (string memory _message, bytes memory _sig) public onlyAdmin returns (bool) {
         bytes32 hash_SMS = getHash(_message);
         require(!adminSignatures[hash_SMS], "Has been executed"); //must be a new signature
@@ -287,6 +290,7 @@ contract Election {
     }
 
 
+    // mkae has of string
     function getEthSignedHash (bytes32 sms) public pure returns (bytes32){
         return keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", sms));
     }
@@ -298,6 +302,7 @@ contract Election {
             return ecrecover(_ethSignedMessageHash, v, r, s); //returns the address of the signer given the signed message
     }
 
+    //retrieve the public adddres of the signature
     function _split(bytes memory _sig) internal pure returns (bytes32 r, bytes32 s, uint8 v){
             require(_sig.length == 65, "invalid signature length");
 

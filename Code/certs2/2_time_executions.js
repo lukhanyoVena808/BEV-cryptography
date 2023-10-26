@@ -3,14 +3,14 @@ var Election = artifacts.require("./Election.sol");
 contract("Time_Executions", function(accounts) {
   var electionInstance;
 
-//   it("adding 6 candidate", function() {
-//     return Election.deployed().then(function(instance) {
-//         electionInstance = instance;
-//         for (let i= 0; i < 6; i++) {
-//             electionInstance.addCandidate(`Candidate ${i}`, `ABC${i}`, {from: accounts[0]});
-//         }
-//     })
-//   })
+  it("adding 6 candidate", function() {
+    return Election.deployed().then(function(instance) {
+        electionInstance = instance;
+        for (let i= 0; i < 6; i++) {
+            electionInstance.addCandidate(`Candidate ${i}`, `ABC${i}`, {from: accounts[0]});
+        }
+    })
+  })
 
 // it("adding 16 candidate", function() {
 //     return Election.deployed().then(function(instance) {

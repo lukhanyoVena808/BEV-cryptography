@@ -11,6 +11,6 @@ contract Attack {
     }
     
     function attack() public {
-        election.addCandidate("MJ", "WFC") ;
+        election.addCandidate("Myself", "MyParty") ;
     }
 }
