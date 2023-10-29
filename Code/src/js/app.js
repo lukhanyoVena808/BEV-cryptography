@@ -1,3 +1,13 @@
+// un hashed ID's, Hashed ID's in JSON file
+// "data":["123456789A","BCDEFGHIJK",
+//     "LMNOPQRSTU","987654321B", "VWXYZABCDE",
+//     "FGHIJKLMNOP","246813579C","QRSTUVWXYZA",
+//     "135792468D","XYZABCDEF12","876543210E",
+//     "GHIJKLMNOPQ","314159265F","ABCDEFGHIJKL",
+//     "9876543210G","MNOPQRSTUVWXYZ","0123456789H",
+//     "UVWXYZABCD","567890123I","EFGHIJKLMNOPQ",
+//     "4321098765J"]
+
 
 App = {
 
@@ -64,6 +74,7 @@ App = {
   },
 
   render: function() {    
+
     var electionInstance;
     const loader = $("#loader");
     const content = $("#content");
@@ -245,8 +256,9 @@ App = {
     const  nonce = crypto.getRandomValues(new Uint32Array(1))[0];
     const phraseUp = "electi"+crypto.randomUUID()+"ons2023_nation"+crypto.randomUUID()+"WideSA"+nonce;
 
+    
+   
     try {      
-     
       
       ethereum.request({method: "personal_sign", params: [App.account,  web3.sha3(phraseUp)]}).then(function(result){ //bytes of signture
           
@@ -256,7 +268,6 @@ App = {
                   if(result2){  //signature valid 
                     adminIn.hide();
                     adminView.show();
-                    // window.localStorage.setItem("auth", 1);
                     $("#lastLog1").hide();
                     $("#lastLog2").show();
                     alert("Signed In!");
@@ -412,7 +423,7 @@ App = {
       var electionInstance;
       const myArray = election.data;
       // Conditions  
-        if (result >= 10  &&  result == result2 && JSON.stringify(myArray).includes(person_id)){ 
+        if (result >= 10  &&  result == result2 && JSON.stringify(myArray).includes(web3.sha3(person_id))){ 
           if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){  
             if ( checkOTP == otpCode){          
                   App.contracts.Election.deployed().then(function(instance){

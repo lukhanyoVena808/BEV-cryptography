@@ -28,13 +28,17 @@ router.get('/voteAudit', function(req, res, next) {
 
 });
 
+
+
 const nodemailer = require('nodemailer');
+
+//  *************** USE YOUR MAIL-TRAP CREDENTIALS HERE  *************
 var transporter = nodemailer.createTransport({
   host: "sandbox.smtp.mailtrap.io",
   port: 2525, 
   auth: {
-    user: "6b75e5b20eae06",   
-    pass: "20617bba3dc305"
+    user: "",  // PUT USE DETAILS HERE
+    pass: ""  //PUT YOUR PASSWORD HERE
   }
 });
   
@@ -72,6 +76,8 @@ router.post('/registration', urlencodedParser, async function(req, res) {
                   }
                 
                 if(name!='' && surname!='' && personID!='' && email!=''){
+
+                      // checks if name is not empty and sents the OTP to the MAIL-TRAP INBOX
                       try { 
                         if(name!=''){
  
@@ -85,7 +91,7 @@ router.post('/registration', urlencodedParser, async function(req, res) {
                               if (error) {
                                   console.log(error);
                                   res.status(500).send('Error sending email');
-                              } else {
+                              } else {                                           //This appers on your console if email us successful
                                   console.log('Email sent: ' + info.response);
                                   res.send('Email sent successfully');
                               }

@@ -1,5 +1,5 @@
-# Cryptography
-## Building an Evoting System using Blockchain
+# Network Security
+## Building a Decentralized E-voting System using Blockchain
 
 The COVID19 pandemic has reignited a debate about the use of e-voting systems
 with detractors citing security concerns as the primary reason why they are against
@@ -40,14 +40,110 @@ To install required packages and / modules:
 npm install
 ```
 <br>
+
+Before deploying system make sure to sign with [MailTrap](https://mailtrap.io/signin) to setup the mail testing. After signing up, head to the email testing portal as shown below:
+
+
+![alt text](./Testing/readme/mailtrap.png)
+
+You will have to create an inbox to receive your messages. Select the integration to be Nodemailer and click on "show credentails" to get your credentials for the API. [Update this file with your credentials](./Code/routes/registeration.js).
+
+
+Also ensure to add the [Truffle Ganache](https://trufflesuite.com/ganache/) network to metamask.
 To deploy smart contact (must be done while Truffle Ganache is opened):
 
 ```
 npx truffle migrate 
 ```
 <br>
+if "npx truffle migrate" gives an error, try removing "npx".
 To run the web app:
+
 
  ```
  npm run dev
  ```
+
+ The first address on your [Truffle Ganache](https://trufflesuite.com/ganache/) interface as shown below(your addresses will be different) is the vote administrator, and is the only one that can log into the admin interface.
+
+ ![alt text](./Testing/readme/Screenshot%20(318).png)
+
+
+ Once the system is deployed, it should look like this:
+
+  ![alt text](./Testing/Usability/img/webApp.png)
+ 
+ 
+ use the wallet of the administrator to login into the admin interface:
+
+ ![alt text](./Testing/Usability/img/adminSignIn.png)
+
+ The admin interface should look like:
+
+  ![alt text](./Testing/Usability/img/adminOverView.png)
+
+  From here, you begin add candidates or start an election. The election starts in registration phase. From there, your can change the phase form regsistration to voting, to results. Do note that, the smart contract code is set up such that:
+
+  - A minimum of 2 candidates have to be added by the admin, to allow the admin to change.
+  - The number of register start user should be > than number of candidates, eg 2 candidates, 3 voters.
+  - The admin can only add candidtes before starting election and during regsistration.
+
+  In registration, the other accounts in [Truffle Ganache](https://trufflesuite.com/ganache/) can be used as the voter wallets.
+
+  To register, go to registration view:
+  - For test purposes, use the commented test IDs in [app.js](./Code/src/js/app.js). Note each ID cannot only be used once, to simulate real voting. Each wallet address also can only be used once.
+
+  - Fill in the details and submit, a OTP form should pop up (OTP is sent to the [MailTrap](https://mailtrap.io/signin) inbox you created). Fill form with OTP to complet registration.
+
+  
+ ![alt text](./Testing/Usability/img/getOTP.png)
+
+ OTP in [MailTrap](https://mailtrap.io/signin):
+
+
+ ![alt text](./Testing/Usability/img/otp.png)
+
+
+
+  Afer registering, heard over to the profile view to see your profile:
+
+   ![alt text](./Testing/Usability/img/afterRegistration.png)
+
+
+  When the admin (first addrees in [Truffle Ganache](https://trufflesuite.com/ganache/)) changes the phase to voting, voters can cast their votes in the votes view. Preliminary results can be viewed by going adding /results to the home url. 
+
+  Voting portal (voter selected preffered candidate and smart contract is called for interaction):
+
+   ![alt text](./Testing/Usability/img/voteContract.png)
+
+  After voting, each voter receives two ECC (Elliptic Curve Cryptography) public keys which can be viewed in their profile portal (as shown below). These keys will be used to audit votes in the results phase.
+
+ ![alt text](./Testing/Usability/img/getAuditKeys.png)
+
+
+When admin changes the phase to results, no voters will not be able to cast votes anymore. Heard to results portal to see results and audit trail:
+
+ ![alt text](./Testing/Usability/img/voteTrail.png)
+
+ The audit trail shown above is not verified. This is where the audit keys come in. In the home page, a new option called "verify-your-vote" should appear. WHen this option is clicked, it shouls take you to this form:
+
+  ![alt text](./Testing/Usability/img/auditForm.png)
+
+  Each voter can use their audit keys to verify their votes:
+
+   ![alt text](./Testing/Usability/img/auditContract.png)
+
+After verifying, the your profile will say true for vote verified and, the verification stamp for your vote will turn green in the audit tail.
+
+Voet turned green after being verified:
+
+![alt text](./Testing/Usability/img/verificationDone.png)
+
+
+Voter is verified:
+
+![alt text](./Testing/Usability/img/voterVerified.png)
+
+
+The audit trail is a way of allowing public verification of votes to uphold integrity, while not compromising the identity of a voter to provide confidentiality (motivated by CIA Triad).
+

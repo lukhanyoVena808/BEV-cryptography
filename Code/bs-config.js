@@ -1,14 +1,9 @@
 const express = require('express');
-// const terminatorHTTP =  require('http-terminator');
-const fs = require('fs');
 const cors = require('cors');
-const spdy = require('spdy');
-const start = Date.now();
 const app = express();
 app.use(require('sanitize').middleware);
 app.use(cors())
 const port = 3000;
-
 
 
 //static files
@@ -48,31 +43,9 @@ app.get('',async (req, res) => {
       res.render("index");
 })
 
-//// create the http2 server
-const options = {
-  key: fs.readFileSync('exc/localhost.decrypted.key'),
-  cert: fs.readFileSync('exc/localhost.crt'),
-  allowHTTP1: true
-};
 
-// const server = spdy.createServer (
-//   {
-//     key: fs.readFileSync('certs2/private.key'),
-//     cert: fs.readFileSync('certs2/localhost-cert.cert'),
-//   },
-app.listen(port, ()=> console.info(`listening on port ${port}, time: ${Date.now()-start}`));
+app.listen(port, ()=> console.info(`listening on port ${port}`));
 
-// const server = http2.createServer(options, app);
-
-//listen on port
-// server.listen(port, ()=> console.info(`listening on port ${port}`));
-
-// const httpTerminator = terminatorHTTP.createHttpTerminator({
-//   server,
-// });
-
-
-// httpTerminator.terminate();
 
 module.exports = {
   "server": {
