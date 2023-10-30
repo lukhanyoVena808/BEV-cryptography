@@ -111,7 +111,7 @@ After registering, head over to the profile view to see your profile:
    ![alt text](./Testing/Usability/img/afterRegistration.png)
 
 
-  When the admin (first addrees in [Truffle Ganache](https://trufflesuite.com/ganache/)) changes the phase to voting, voters can cast their votes in the votes view. Preliminary results can be viewed by going to "/results" on the home page.
+  When the admin (first address in [Truffle Ganache](https://trufflesuite.com/ganache/)) changes the phase to voting, voters can cast their votes in the votes view. Preliminary results can be viewed by going to "/results" on the home page.
 
 Voting portal (voter selects preferred candidate and smart contract is called for interaction):
 
